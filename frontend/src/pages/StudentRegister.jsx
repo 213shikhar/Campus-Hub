@@ -1,6 +1,19 @@
 import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import axios from 'axios';
+
 
 const StudentRegister = () => {
+    // write the axios code here
+    const [student, setStudent] = useState({
+        session: "",
+        course: "",
+        branch: "",
+        addmissionNo: "",
+        studentname: "",
+        
+    })
+
     return(
         <div>
             <h1 style={{textAlign:'center'}}>Inderprastha Engineering College, Ghaziabad</h1>
