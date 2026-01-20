@@ -12,13 +12,12 @@ import com.campushub.service.StudentService;
 
 @RestController
 @RequestMapping("api/students")
-@CrossOrigin(origins = "https://localhost:3000")
 public class StudentController {
 	
 	@Autowired
 	private StudentService studentService;
 	
-	@PostMapping("/studentRegister")
+	@PostMapping("/register")
 	public String registerStudent(@RequestBody Student student) {
 		studentService.registerStudent(student);
 		return "Student registered successfully";

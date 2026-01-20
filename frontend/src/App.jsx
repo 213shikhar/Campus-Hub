@@ -4,24 +4,25 @@ import Home from './pages/Home';
 import StudentRegister from './pages/StudentRegister';
 import EmployeeRegister from './pages/EmployeeRegister';
 import Login from './pages/Login';
-import About from './pages/About';
-import Contact from './pages/Contact';
+import StudentDashboard from './pages/StudentDashboard';
 
 function App() {
   return (
+    // 1. You MUST wrap everything in BrowserRouter
+    <BrowserRouter>
       <Routes>
-        {/* When the path is exactly '/', show Home */}
+        {/* 2. Use specific path "/" for Home, not "*" */}
         <Route path="/" element={<Home />} />
-        
-        {/* When the path is '/register', show Register */}
         <Route path="/studentRegister" element={<StudentRegister />} />
         <Route path="/employeeRegister" element={<EmployeeRegister />} />
-        
-        {/* Add your other routes here */}
         <Route path="/login" element={<Login />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
+        
+        {/* The Dashboard Route */}
+        <Route path="/student-dashboard" element={<StudentDashboard />} />
+
+        {/* <Route path="*" element={<h2>Page Not Found</h2>} /> */}
       </Routes>
+    </BrowserRouter>
   );
 }
 

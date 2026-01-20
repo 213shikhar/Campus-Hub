@@ -9,3 +9,28 @@ What's done till now?
 - no issue so far.
 
 Jan 20th, 2026
+- done with C from CRUD operations successfully!
+- encountered several errors:
+	- Postgres database permission denied - SOLUTION: granted permission to the database user
+		psql -U postgres -d campushub
+		Password for user postgres:
+		campushub=# GRANT USAGE, CREATE ON SCHEMA public TO campushub_user;
+		GRANT
+		campushub=# ALTER DATABASE campushub OWNER TO campushub_user;
+		ALTER DATABASE
+	
+- Cors related error - http req has been blocked by cors policy -> SOLUTION: added a SecurityConfigCors Class
+	- NullPointerExcepstion - in StudentService class @Autowired missing above StudentRepository object. So i added the annotations
+- student is able to register, database showing the data.
+- Hurray, i am able to go to dashboard after registering and login in.
+- updated StudentRegister, Home.jsx files. Created a StudentDashboard.jsx file for verifying student's credentials from database and navigating to the dashboard.
+- so many errors to handle especially in React:
+	1. Backend Error - Caused by: org.springframework.data.mapping.PropertyReferenceException: No property 'userIdPassword' found for type 'Student'
+	custom method name (shown in above line) was incorrect so i changed it to findByAdmissionNoAndPassword (this was ok).
+	2. Frontend Error - first of all i updated the wrong file for task = Login -> Dashboard. In this i should be updating the Home.jsx file but I have been keeping on updating the Login.jsx file. 	And wondering why when i am entering the data inside the Login form (that is in Home.jsx) i am not able to go to dashboard and the data that i entered was shown in address bar. 
+	This silly mistake has wasted a few hours.
+
+- now everything is working fine and next task is:
+	1. do same things with Employee (registering, login to EmployeeDashboard).
+	2. add links in dashboard (Profile, change password, view attendance, etc.).
+	3. perform remaining CRUD operations.

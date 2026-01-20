@@ -68,7 +68,18 @@ li {
   align-items: center;
 }
 
+.register-form {
+  display: grid;
+  grid-template-columns:max-content 250px; /* label | input */
+  gap: 10px 15px;
+  align-items: center;
+}
+
 .login-form input, .login-form select {
+  padding: 4px;
+}
+
+.register-form input, .register-form select {
   padding: 4px;
 }
 

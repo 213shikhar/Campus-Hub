@@ -1,10 +1,60 @@
-import { Routes, Route, Link} from "react-router-dom";
-import About from "./About";
-import Contact from "./Contact";
-import Login from "./Login";
-import Register from "./StudentRegister";
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Home = () => {
+    const navigate = useNavigate();
+
+    // 1. State to hold form data
+    const [credentials, setCredentials] = useState({
+        role: "",
+        userid: "", // This will map to 'admissionNo' for students
+        password: ""
+    });
+
+    // 2. Handle Input Change
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setCredentials({ ...credentials, [name]: value });
+    };
+
+    // 3. Handle Form Submission
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        
+        // Basic validation
+        if (!credentials.role || !credentials.userid || !credentials.password) {
+            alert("Please fill in all fields.");
+            return;
+        }
+
+        try {
+            // Sending login request to backend
+            const response = await axios.post("http://localhost:8080/api/login", credentials);
+
+            // Assuming backend returns the full user object (including name)
+            const userData = response.data; 
+
+            if (userData) {
+                alert("Login Successful!");
+
+                // Logic to redirect based on Role
+                if (credentials.role === "student") {
+                    navigate('/student-dashboard', { 
+                        state: { studentName: userData.studentname } // key must match backend JSON key
+                    });
+                } else if (credentials.role === "admin") {
+                    // navigate('/admin-dashboard');
+                    alert("Admin dashboard not created yet");
+                } else {
+                    alert("Dashboard for this role is under construction.");
+                }
+            }
+        } catch (error) {
+            console.error("Login Error:", error);
+            alert("Invalid Credentials! Please check User ID or Password.");
+        }
+    };
     return(
         <div>
             {/* <Header/> */}
@@ -13,9 +63,9 @@ const Home = () => {
             <div className='main-container'>
                 <h2 style={{textAlign:'center'}}>Inderprastha Engineering College, Ghaziabad</h2>
                 <div className='form-container'>
-                    <form className='login-form' action="#">
+                    <form className='login-form' onSubmit={handleSubmit}>
                         <label htmlFor="role">Role: </label>
-                        <select name="role" id="role" required>
+                        <select name="role" id="role" value={credentials.role} onChange={handleChange} required>
                             <option value="">-- select role --</option>
                             <option value="student" >Registrar</option>
                             <option value="student" >Student</option>
@@ -24,10 +74,10 @@ const Home = () => {
                         </select>
                     
                         <label htmlFor="userid">User ID: </label>
-                        <input type="text" name="userid" id="userid" required/>
+                        <input type="text" name="userid" id="userid" value={credentials.userid} onChange={handleChange} required/>
                     
                         <label htmlFor="password">Password: </label>
-                        <input type="password" name="password" id="password" required/>
+                        <input type="password" name="password" id="password" value={credentials.password} onChange={handleChange} required/>
                         <br/>
                         <div className='btn-row'>
                             <button type='submit'>Login</button>
@@ -40,12 +90,7 @@ const Home = () => {
             </div>
             <hr/>
             <br/><p style={{textAlign:'center', fontSize:'small'}}>&copy; Shikhar Sharma 2026</p>
-            <Routes>
-                <Route path="/about" element={<About />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-            </Routes>
+            
         </div>
     )
 }
