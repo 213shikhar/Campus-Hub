@@ -63,6 +63,7 @@ const StudentRegister = () => {
             <br/><hr/>
             <div className='main-container'>
                 <h2 style={{textAlign:'center'}}>Student Registration</h2><br/>
+                
                 <div className='form-container'>
                     <form className='register-form' onSubmit={handleSubmit}>
                         
@@ -115,7 +116,7 @@ const StudentRegister = () => {
                         <input type="password" name="password" id="password" value={student.password} onChange={handleChange} required/>
                         
                         <label htmlFor="confirmPassword">Confirm Password: </label>
-                        <input type="password" name="password" id="confirmPassword" required/>
+                        <input type="password" name="confirmPassword" id="confirmPassword" required/>
 
                         <label htmlFor="photo">Photo: </label>
                         <input type="file" name="photo" id="photo" value={student.photo} onChange={handleChange} />
@@ -125,6 +126,7 @@ const StudentRegister = () => {
                         <div className='btn-row'>
                             <button type='submit'>Submit</button>
                         </div>
+                    
                     </form>
                 </div>
                 <br/><p>Already a User? <Link style={{textDecoration:'none'}} to="/">Login Here</Link>!</p>

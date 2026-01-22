@@ -43,10 +43,18 @@ const Home = () => {
                     navigate('/student-dashboard', { 
                         state: { studentName: userData.studentname } // key must match backend JSON key
                     });
-                } else if (credentials.role === "admin") {
+                } 
+                
+                else if (credentials.role == "employee") {
+                    navigate('/employee-dashboard', {state: {employeeName: userData.employeeName}});
+                }
+
+                else if (credentials.role === "admin") {
                     // navigate('/admin-dashboard');
                     alert("Admin dashboard not created yet");
-                } else {
+                } 
+                
+                else {
                     alert("Dashboard for this role is under construction.");
                 }
             }
@@ -67,7 +75,7 @@ const Home = () => {
                         <label htmlFor="role">Role: </label>
                         <select name="role" id="role" value={credentials.role} onChange={handleChange} required>
                             <option value="">-- select role --</option>
-                            <option value="student" >Registrar</option>
+                            <option value="registrar" >Registrar</option>
                             <option value="student" >Student</option>
                             <option value="employee" >Employee</option>
                             <option value="parent" >Parent</option>

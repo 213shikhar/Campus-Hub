@@ -34,3 +34,16 @@ Jan 20th, 2026
 	1. do same things with Employee (registering, login to EmployeeDashboard).
 	2. add links in dashboard (Profile, change password, view attendance, etc.).
 	3. perform remaining CRUD operations.
+
+Jan 22, 2026
+- Employee can register, login and go to their dashboard
+- Error Occurred: java.lang.NullPointerException: Cannot invoke "com.campushub.repository.EmployeeRepository.findByEidAndPassword(String, String)" because "this.employeeRepository" is null
+	because in LoginController.java i have applied @Autowired to multiple lines at once like:
+		@Autowired
+		Type varName;
+		Type2 varName2;
+	which is not allowed, so resolved by autowiring separately:-
+		@Autowired
+		Type varName;
+		@Autowired
+		Type2 varName2;
