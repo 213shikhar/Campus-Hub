@@ -1,14 +1,24 @@
-import React from "react";
+import React, {useState} from "react";
 // these are router hooks for managing url state
 import { useLocation, useNavigate } from "react-router-dom";
 import './DashboardStyling.css';
 
-const EmployeeDashboard = () => {
+const HodDashboard = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    // catching the employee name
-    const employeeName = location.state?.employeeName || "Employee";
+    const user = location.state?.user;
+    // Security Check
+    // If no user data is found redirect to login
+    React.useEffect(
+      () => {
+        if(!user) {
+          alert("No user data found. Please Login!");
+          navigate('/');
+      }
+    }, [user, navigate]);
+
+    if (!user) return null;
 
     const handleLogout = () => {
         navigate('/');
@@ -21,10 +31,14 @@ const EmployeeDashboard = () => {
                 <button onClick={handleLogout} className='logoutBtn'>Logout</button>
             </header>
             <main className='main'>
-                <h2>Hello, {employeeName}</h2>
+                <h2>Hello, {user.employeeName}</h2>
+                <h3>Department: {user.department}</h3>
+                <p>Employee ID: {user.eid}</p>
             </main>
+            <hr/>
         </div>
     );
+
 }
 
-export default EmployeeDashboard;
+export default HodDashboard;

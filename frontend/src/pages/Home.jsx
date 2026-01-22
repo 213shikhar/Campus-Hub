@@ -22,45 +22,61 @@ const Home = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        // Basic validation
+        // 1. Basic Validation
         if (!credentials.role || !credentials.userid || !credentials.password) {
             alert("Please fill in all fields.");
             return;
         }
 
         try {
-            // Sending login request to backend
-            const response = await axios.post("http://localhost:8080/api/login", credentials);
+            // 2. Prepare the Payload
+            // We need to tell the backend TWO things:
+            // A. The "Category" (Student vs Employee) -> mapped to 'role'
+            // B. The "Specific Type" (Faculty, HOD, etc.) -> mapped to 'type'
 
-            // Assuming backend returns the full user object (including name)
-            const userData = response.data; 
+            let category = "employee"; // Default category
+            if (credentials.role === "student") category = "student";
+            else if (credentials.role === "parent") category = "parent";
+            const loginPayload = {
+                role: category,            // "student", "employee", or "parent"
+                type: credentials.role,    // "faculty", "hod", "registrar", etc.
+                userid: credentials.userid,
+                password: credentials.password
+            };
 
-            if (userData) {
-                alert("Login Successful!");
+            // 3. Send Request
+            const response = await axios.post("http://localhost:8080/api/login", loginPayload);
+            const user = response.data;
 
-                // Logic to redirect based on Role
-                if (credentials.role === "student") {
-                    navigate('/student-dashboard', { 
-                        state: { studentName: userData.studentname } // key must match backend JSON key
-                    });
-                } 
-                
-                else if (credentials.role == "employee") {
-                    navigate('/employee-dashboard', {state: {employeeName: userData.employeeName}});
-                }
-
-                else if (credentials.role === "admin") {
-                    // navigate('/admin-dashboard');
-                    alert("Admin dashboard not created yet");
-                } 
-                
-                else {
-                    alert("Dashboard for this role is under construction.");
+            if (user) {
+                // 4. Dynamic Navigation based on specific selection
+                switch (credentials.role) {
+                    case "student":
+                        navigate('/student-dashboard', { state: { user: user } });
+                        break;
+                    case "faculty":
+                        navigate('/faculty-dashboard', { state: { user: user } });
+                        break;
+                    case "hod":
+                        navigate('/hod-dashboard', { state: { user: user } });
+                        break;
+                    case "registrar":
+                        navigate('/registrar-dashboard', { state: { user: user } });
+                        break;
+                    case "examController":
+                        navigate('/exam-contr-dashboard', { state: { user: user } });
+                        break;
+                    case "parent":
+                        navigate('/parent-dashboard', { state: { user: user } });
+                        break;
+                    default:
+                        alert("Dashboard not found for this role.");
                 }
             }
-        } catch (error) {
+        }
+        catch (error) {
             console.error("Login Error:", error);
-            alert("Invalid Credentials! Please check User ID or Password.");
+            alert("Invalid Credentials or Server Error");
         }
     };
     return(
@@ -77,7 +93,9 @@ const Home = () => {
                             <option value="">-- select role --</option>
                             <option value="registrar" >Registrar</option>
                             <option value="student" >Student</option>
-                            <option value="employee" >Employee</option>
+                            <option value="faculty" >Faculty</option>
+                            <option value="hod" >HOD</option>
+                            <option value="examController" >Exam Controller</option>
                             <option value="parent" >Parent</option>
                         </select>
                     

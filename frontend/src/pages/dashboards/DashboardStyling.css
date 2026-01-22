@@ -2,7 +2,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #ccc;
     padding-bottom: 10px;
 }
 
@@ -16,4 +15,10 @@
 }
 .main{
     margin: 20px;
+}
+.type-specific-tasks {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }

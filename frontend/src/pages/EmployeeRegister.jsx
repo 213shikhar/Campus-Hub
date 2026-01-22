@@ -31,11 +31,33 @@ const EmployeeRegister = () => {
         console.log("Sending Data:", employee);
 
         try{
-            await axios.post("http://localhost:8080/api/employees/register", employee);
-
+            const response = await axios.post("http://localhost:8080/api/employees/register", employee);
             alert("Employee registered successfully!");
 
-            navigate('/employee-dashboard', {state: {employeeName: employee.employeeName}});
+            // 2. Determine where to navigate based on the Employee Type
+            // Note: Ensure these case strings match the value="" in your <select> tag exactly.
+            switch (employee.type) {
+                case "faculty":
+                    navigate('/faculty-dashboard', { state: { user: employee } });
+                    break;
+                
+                case "hod":
+                    navigate('/hod-dashboard', { state: { user: employee } });
+                    break;
+
+                case "examController":
+                    navigate('/exam-contr-dashboard', { state: { user: employee } });
+                    break;
+                
+                case "registrar": 
+                    navigate('/registrar-dashboard', { state: { user: employee } });
+                    break;
+
+                default:
+                    // Fallback if type is not recognized or generic
+                    alert("Registration successful, but no specific dashboard found for this role.");
+                    navigate('/'); 
+            }
         }
         catch (error){
             console.error("Error: ", error);
@@ -55,7 +77,7 @@ const EmployeeRegister = () => {
                         
                         <label htmlFor="type">Type: </label>
                         <select name="type" id="type" value={employee.type} onChange={handleChange} required>
-                            <option value="">-- select session --</option>
+                            <option value="">-- select type --</option>
                             <option value="faculty" >Faculty</option>
                             <option value="hod" >HOD</option>
                             <option value="examController" >Exam Controller</option>

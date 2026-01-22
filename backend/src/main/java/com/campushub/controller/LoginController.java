@@ -1,5 +1,7 @@
 package com.campushub.controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,38 +24,52 @@ public class LoginController {
 	
 	@Autowired
 	EmployeeRepository employeeRepository;
+
+    // @Autowired
+    // ParentRepository parentRepository; // You will need this later
 	
 	@PostMapping("/login")
 	public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
-		// 1. Check if the role is STUDENT
+		
+        // 1. STUDENT LOGIN
         if ("student".equalsIgnoreCase(loginRequest.getRole())) {
-            // Check database for matching Admission No and Password
-            Student student = studentRepository.findByAdmissionNoAndPassword(loginRequest.getUserid(), loginRequest.getPassword());
-            if (student != null) {
-                // User found! Return the student object (contains name, email, etc.)
-                return ResponseEntity.ok(student);
-            } 
-            else {
+            Optional<Student> student = studentRepository.findByAdmissionNoAndPassword(
+                loginRequest.getUserid(), 
+                loginRequest.getPassword()
+            );
+            
+            // Fix: Use .isPresent() for Optional, not != null
+            if (student.isPresent()) {
+                return ResponseEntity.ok(student.get());
+            } else {
                 return ResponseEntity.status(401).body("Invalid Student Credentials");
             }
         }
         
+        // 2. EMPLOYEE LOGIN (Faculty, HOD, Registrar, Exam Controller)
+        // We check 'role' (which is 'employee') to enter this block
         else if ("employee".equalsIgnoreCase(loginRequest.getRole())) {
-            Employee employee = employeeRepository.findByEidAndPassword(loginRequest.getUserid(), loginRequest.getPassword());
-            if (employee != null) {
-                return ResponseEntity.ok(employee);
-            } 
-            else {
+            
+            // We use 'type' (e.g., 'faculty', 'hod') to query the DB
+            Optional<Employee> employee = employeeRepository.findByTypeAndEidAndPassword(
+                loginRequest.getType(), 
+                loginRequest.getUserid(), 
+                loginRequest.getPassword()
+            );
+            
+            if (employee.isPresent()) {
+                return ResponseEntity.ok(employee.get());
+            } else {
                 return ResponseEntity.status(401).body("Invalid Employee Credentials");
             }
         }
-        
-        // 2. Check if the role is ADMIN (Example placeholder)
-        else if ("admin".equalsIgnoreCase(loginRequest.getRole())) {
-            // Add AdminRepository logic here later
-            return ResponseEntity.status(401).body("Admin login not implemented yet");
-        }
 
-        return ResponseEntity.badRequest().body("Role not recognized");
+        // 3. PARENT LOGIN (Placeholder)
+        else if ("parent".equalsIgnoreCase(loginRequest.getRole())) {
+            // Optional<Parent> parent = parentRepository.findBy...
+            return ResponseEntity.status(503).body("Parent login logic not implemented yet in Controller");
+        }
+        
+        return ResponseEntity.badRequest().body("Role category not recognized");
 	}
 }

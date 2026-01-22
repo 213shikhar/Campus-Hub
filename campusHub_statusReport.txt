@@ -47,3 +47,9 @@ Jan 22, 2026
 		Type varName;
 		@Autowired
 		Type2 varName2;
+
+- there was the need of some changes in sending employee to dashboard. specific employee (like faculty, hod, etc.) are required to go to their respective dashboards. so i have to change a lot with backend and front.
+- there was issue with login because of Role(student, parent, faculty, hod, etc.) and Type (of employee).
+- now everything is ok. i have to make 2 more employee dashboards hod and exam controller now. then work on 'parent login'
+
+- hod and exam controller dashboard navigation done.
