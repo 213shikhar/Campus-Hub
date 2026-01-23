@@ -7,18 +7,18 @@ const ExamControllerDashboard = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const user = location.state?.employee;
+    const examController = location.state?.employee;
     // Security Check
-    // If no user data is found redirect to login
+    // If no examController data is found redirect to login
     React.useEffect(
       () => {
-        if(!user) {
-          alert("No user data found. Please Login!");
+        if(!examController) {
+          alert("No examController data found. Please Login!");
           navigate('/');
       }
-    }, [user, navigate]);
+    }, [examController, navigate]);
 
-    if (!user) return null;
+    if (!examController) return null;
 
     const handleLogout = () => {
         navigate('/');
@@ -31,8 +31,8 @@ const ExamControllerDashboard = () => {
                 <button onClick={handleLogout} className='logoutBtn'>Logout</button>
             </header>
             <main className='main'>
-                <h2>Hello, {user.employeeName}</h2>
-                <p>Employee ID: {user.eid}</p>
+                <h2>Hello, {examController.employeeName}</h2>
+                <p>Employee ID: {examController.eid}</p>
             </main>
             <hr/>
         </div>

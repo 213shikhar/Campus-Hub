@@ -7,18 +7,18 @@ const HodDashboard = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const user = location.state?.employee;
+    const hod = location.state?.employee;
     // Security Check
-    // If no user data is found redirect to login
+    // If no hod data is found redirect to login
     React.useEffect(
       () => {
-        if(!user) {
-          alert("No user data found. Please Login!");
+        if(!hod) {
+          alert("No HOD data found. Please Login!");
           navigate('/');
       }
-    }, [user, navigate]);
+    }, [hod, navigate]);
 
-    if (!user) return null;
+    if (!hod) return null;
 
     const handleLogout = () => {
         navigate('/');
@@ -31,9 +31,9 @@ const HodDashboard = () => {
                 <button onClick={handleLogout} className='logoutBtn'>Logout</button>
             </header>
             <main className='main'>
-                <h2>Hello, {user.employeeName}</h2>
-                <p>Department: {user.department}</p>
-                <p>Employee ID: {user.eid}</p>
+                <h2>Hello, {hod.employeeName}</h2>
+                <p>Department: {hod.department}</p>
+                <p>Employee ID: {hod.eid}</p>
             </main>
             <hr/>
         </div>

@@ -7,6 +7,7 @@ What's done till now?
 - backend -> project created in STS for backend. some packages already added, class are not built yet.
 - both frontend and backend project are added to the GitHub, updates are being reflected properly.
 - no issue so far.
+==================================================================
 
 Jan 20th, 2026
 - done with C from CRUD operations successfully!
@@ -34,6 +35,7 @@ Jan 20th, 2026
 	1. do same things with Employee (registering, login to EmployeeDashboard).
 	2. add links in dashboard (Profile, change password, view attendance, etc.).
 	3. perform remaining CRUD operations.
+==================================================================
 
 Jan 22, 2026
 - Employee can register, login and go to their dashboard
@@ -53,7 +55,23 @@ Jan 22, 2026
 - now everything is ok. i have to make 2 more employee dashboards hod and exam controller now. then work on 'parent login'
 
 - hod and exam controller dashboard navigation done.
+==================================================================
 
-23 jan 2026
+Jan 23, 2026
 - client side validations applied, so many errors occurred but resolved eventually, 
+
 - 'photo' field removed for simplification.
+
+- server side validation added using annotations like @NotBlank, @Email, @Size, @Pattern for both Student and Employee registration fields.
+- checked working of client side validations using Postman.
+- files modified -> StudentService, StudentController, 
+- StudentRequest (added in dto package)
+- similarly for Employee
+- a GlobalExceptionHandler file created in exception package to handle exceptions globally.
+
+NEXT WORK TO BE DONE
+- some issue with Login occurred. will resolve tomorrow.
+- password hashing and some database table constraints
+==================================================================
+
+Jan 24, 2026
