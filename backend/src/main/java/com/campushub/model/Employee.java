@@ -26,5 +26,4 @@ public class Employee {
 	private String mobile;
 	private String email;
 	private String password;
-	private String photo;
 }

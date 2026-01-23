@@ -1,15 +1,13 @@
-import { Link } from "react-router-dom";
 import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom'; // 1. Import useNavigate
-
+import { validateRegistrationForm } from './studentFormValidator'; 
 
 const StudentRegister = () => {
-    // write the axios code here
-    // 2. Initialize the navigate hook
     const navigate = useNavigate();
 
-    const [student, setStudent] = useState({
+    // 1. Unified State
+    const [formData, setFormData] = useState({
         session: "",
         course: "",
         branch: "",
@@ -19,122 +17,168 @@ const StudentRegister = () => {
         email: "",
         address: "",
         password: "",
-        photo: ""
+        confirmPassword: "", 
     });
 
-    // handle change function
+    const [errors, setErrors] = useState({});
+
+    // 2. Handle Change
     const handleChange = (e) => {
-        const {name, value} = e.target;
-        setStudent({
-            ...student, // keep existing values
-            [name]: value   // updates only changed field
-        });
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+
+        // Clear error for this field
+        if (errors[name]) {
+            setErrors({ ...errors, [name]: '' });
+        }
     };
 
-    // handle form submission
+    // 3. Handle Submission
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Sending Data:", student);
+
+        // A. Run Validations
+        const validationErrors = validateRegistrationForm(formData);
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return; 
+        }
+
+        // B. Prepare JSON payload (Exclude confirmPassword)
+        const dataToSend = {
+            session: formData.session,
+            course: formData.course,
+            branch: formData.branch,
+            admissionNo: formData.admissionNo,
+            studentname: formData.studentname,
+            mobile: formData.mobile,
+            email: formData.email,
+            address: formData.address,
+            password: formData.password
+        };
 
         try {
-            await axios.post("http://localhost:8080/api/students/register", student);
-            
-            // 3. Success Feedback
-            alert("Student Registered Successfully!");
-            
-            // 4. Redirect to Dashboard with the student's name
-            // We pass 'studentName' in the state object so the Dashboard can read it
-            navigate('/student-dashboard', { 
-                state: { studentName: student.studentname } 
+            const response = await axios.post("http://localhost:8080/api/students/register", dataToSend, {
+                headers: { "Content-Type": "application/json" }
             });
 
-            // Note: We don't need to reset the form here anymore 
-            // because the user is moving to a new page.
-        }
-        catch (error) {
+            // DEBUGGING: Log the response to see what the backend actually sent
+            console.log("Backend Response:", response.data);
+
+            // C. CRITICAL CHECK: Ensure response has data before navigating
+            if (response.data && response.status === 200) {
+                alert("Student Registered Successfully!");
+                
+                // Pass the 'response.data' (which contains the full student object with ID)
+                navigate('/student-dashboard', { state: { student: response.data } });
+            }
+
+        } catch (error) {
             console.error("Error:", error);
-            alert("Registration Failed!");
+            // Check if backend sent a specific error message
+            if (error.response && error.response.data) {
+                alert("Registration Failed: " + (error.response.data.message || "Unknown Error"));
+            } else {
+                alert("Registration Failed! Please check your server.");
+            }
         }
     };
 
-    return(
+    return (
         <div>
-            <h1 style={{textAlign:'center'}}>Inderprastha Engineering College, Ghaziabad</h1>
-            <br/><hr/>
+            <h1 style={{ textAlign: 'center' }}>Center for Development of Advanced Computing, Noida</h1>
+            <br /><hr />
             <div className='main-container'>
-                <h2 style={{textAlign:'center'}}>Student Registration</h2><br/>
-                
+                <h2 style={{ textAlign: 'center' }}>Student Registration</h2><br />
                 <div className='form-container'>
                     <form className='register-form' onSubmit={handleSubmit}>
-                        
-                        <label htmlFor="session">Session: </label>
-                        <select name="session" id="session" value={student.session} onChange={handleChange} required>
+
+                        <label htmlFor="session"><span className='asterik'>*</span>Session: </label>
+                        <select name="session" id="session" value={formData.session} onChange={handleChange} >
                             <option value="">-- select session --</option>
-                            <option value="2025-2029" >2025-2029</option>
-                            <option value="2029-2033" >2029-2033</option>
-                            <option value="2033-2037" >2033-2037</option>
+                            <option value="2025-2029">2025-2029</option>
+                            <option value="2029-2033">2029-2033</option>
+                            <option value="2033-2037">2033-2037</option>
                         </select>
 
-                        <label htmlFor="course">Course: </label>
-                        <select name="course" id="course" value={student.course} onChange={handleChange} required>
+                        <span className='error'>
+                            {errors.session && <span>{errors.session}</span>}
+                        </span>
+
+                        <label htmlFor="course"><span className='asterik'>*</span>Course: </label>
+                        <select name="course" id="course" value={formData.course} onChange={handleChange} >
                             <option value="">-- select course --</option>
-                            <option value="btech" >B.Tech</option>
-                            <option value="mtech" >M.Tech</option>
-                            <option value="bca" >BCA</option>
-                            <option value="mca" >MCA</option>
+                            <option value="btech">B.Tech</option>
+                            <option value="mtech">M.Tech</option>
+                            <option value="bca">BCA</option>
+                            <option value="mca">MCA</option>
                         </select>
-                        
-                        <label htmlFor="branch">Branch: </label>
-                        <select name="branch" id="branch" value={student.branch} onChange={handleChange} required>
+                        <span className='error'>
+                            {errors.course && <span>{errors.course}</span>}
+                        </span>
+
+                        <label htmlFor="branch"><span className='asterik'>*</span>Branch: </label>
+                        <select name="branch" id="branch" value={formData.branch} onChange={handleChange} >
                             <option value="">-- select branch --</option>
-                            <option value="cse" >Computer Science Engineering</option>
-                            <option value="ds" >Data Science</option>
-                            <option value="aiml" >AI & ML</option>
-                            <option value="it" >Information Technology</option>
-                            <option value="ece" >Electronics & Communication Engineering</option>
-                            <option value="ee" >Electrical Engineering</option>
-                            <option value="me" >Mechanical Engineering</option>
-                            <option value="ce" >Civil Engineering</option>
+                            <option value="cse">Computer Science Engineering</option>
+                            <option value="ds">Data Science</option>
+                            <option value="aiml">AI & ML</option>
                         </select>
-                        
-                        <label htmlFor="admissionNo">Admission No: </label>
-                        <input type="number" name="admissionNo" id="admissionNo" value={student.admissionNo} onChange={handleChange} required/>
-                        
-                        <label htmlFor="studentname">Student Name: </label>
-                        <input type="text" name="studentname" id="studentname" value={student.studentname} onChange={handleChange} required/>
-                        
-                        <label htmlFor="mobile">Mobile No: </label>
-                        <input type="number" name="mobile" id="mobile" value={student.mobile} onChange={handleChange} required/>
 
-                        <label htmlFor="email">Email: </label>
-                        <input type="email" name="email" id="email" value={student.email} onChange={handleChange} required/>
-                        
-                        <label htmlFor="address">Address: </label>
-                        <textarea type="text" name="address" id="address" rows={5} cols={30} value={student.address} onChange={handleChange} required/>
+                        <span className='error'>
+                            {errors.branch && <span>{errors.branch}</span>}
+                        </span>
 
-                        <label htmlFor="password">Password: </label>
-                        <input type="password" name="password" id="password" value={student.password} onChange={handleChange} required/>
-                        
-                        <label htmlFor="confirmPassword">Confirm Password: </label>
-                        <input type="password" name="confirmPassword" id="confirmPassword" required/>
+                        <label htmlFor="admissionNo"><span className='asterik'>*</span>Admission No: </label>
+                        <input type="text" name="admissionNo" id="admissionNo" value={formData.admissionNo} onChange={handleChange} />
+                        <span className='error'>
+                            {errors.admissionNo && <span>{errors.admissionNo}</span>}
+                        </span>
 
-                        <label htmlFor="photo">Photo: </label>
-                        <input type="file" name="photo" id="photo" value={student.photo} onChange={handleChange} />
-                        <br/><p style={{fontSize:'small'}}><u>Note:</u> filename should be like <b>Firstname_Lastname</b>.
-                        <br/>Size: <b>50KB - 100KB</b></p>
-                        
+                        <label htmlFor="studentname"><span className='asterik'>*</span>Student Name: </label>
+                        <input type="text" name="studentname" id="studentname" value={formData.studentname} onChange={handleChange} />
+                        <span className='error'>
+                            {errors.studentname && <span>{errors.studentname}</span>}
+                        </span>
+
+                        <label htmlFor="mobile"><span className='asterik'>*</span>Mobile No: </label>
+                        <input type="text" name="mobile" id="mobile" value={formData.mobile} onChange={handleChange} />
+                        <span className='error'>
+                            {errors.mobile && <span>{errors.mobile}</span>}
+                        </span>
+
+                        <label htmlFor="email"><span className='asterik'>*</span>Email: </label>
+                        <input type="email" name="email" id="email" value={formData.email} onChange={handleChange} />
+                        <span className='error'>
+                            {errors.email && <span>{errors.email}</span>}
+                        </span>
+
+                        <label htmlFor="address"><span className='asterik'>*</span>Address: </label>
+                        <textarea name="address" id="address" rows={5} cols={30} value={formData.address} onChange={handleChange} />
+
+                        <label htmlFor="password"><span className='asterik'>*</span>Password: </label>
+                        <input type="password" name="password" id="password" value={formData.password} onChange={handleChange} />
+                        <span className='error'>
+                            {errors.password && <span>{errors.password}</span>}
+                        </span>
+
+                        <label htmlFor="confirmPassword"><span className='asterik'>*</span>Confirm Password: </label>
+                        <input type="password" name="confirmPassword" id="confirmPassword" value={formData.confirmPassword} onChange={handleChange} />
+                        <span className='error'>
+                            {errors.confirmPassword && <span>{errors.confirmPassword}</span>}
+                        </span>
+
                         <div className='btn-row'>
                             <button type='submit'>Submit</button>
                         </div>
-                    
                     </form>
                 </div>
-                <br/><p>Already a User? <Link style={{textDecoration:'none'}} to="/">Login Here</Link>!</p>
+                <br /><p>Already a User? <Link style={{ textDecoration: 'none' }} to="/">Login Here</Link>!</p>
             </div>
-            <hr/>
-            <br/> <p style={{textAlign:'center', fontSize:'small'}}>&copy; Shikhar Sharma 2026</p>
+            <hr />
+            <br /> <p style={{ textAlign: 'center', fontSize: 'small' }}>&copy; Shikhar Sharma 2026</p>
         </div>
-    )
+    );
 }
 
 export default StudentRegister;

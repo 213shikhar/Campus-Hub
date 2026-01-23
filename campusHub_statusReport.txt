@@ -53,3 +53,7 @@ Jan 22, 2026
 - now everything is ok. i have to make 2 more employee dashboards hod and exam controller now. then work on 'parent login'
 
 - hod and exam controller dashboard navigation done.
+
+23 jan 2026
+- client side validations applied, so many errors occurred but resolved eventually, 
+- 'photo' field removed for simplification.

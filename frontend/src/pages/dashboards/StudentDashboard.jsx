@@ -1,5 +1,5 @@
 // StudentDashboard.jsx
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './DashboardStyling.css';
 
@@ -7,36 +7,42 @@ const StudentDashboard = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // 1. Retrieve the user object from navigation state
-  // Use optional chaining (?.) to prevent crashing if someone goes directly to the URL
-  const user = location.state?.user;
-  
+  // 1. Retrieve the student object using the correct key 'student'
+  // We check location.state first to avoid errors if state is null
+  const student = location.state?.student;
+
   // 2. Security Check
-  // If no user data is found (e.g., user refreshed the page or typed url directly), redirect to login
-  React.useEffect(() => {
-      if (!user) {
+  // If no student data is found, redirect to login
+  useEffect(() => {
+      if (!student) {
+          // Optional: Add a small delay or console log for debugging
+          console.error("Dashboard access denied: No student data in state.");
           alert("No user data found. Please login.");
           navigate('/');
       }
-  }, [user, navigate]);
-  
-  if (!user) return null; // Don't render anything while redirecting
+  }, [student, navigate]);
+
+  // Don't render anything while checking or redirecting
+  if (!student) return null; 
 
   const handleLogout = () => {
-    // Clear any stored tokens if you use them
-    // localStorage.removeItem('token'); 
+    // Clear session/local storage if used
     navigate('/');
   };
 
   return (
     <div>
       <header className='header'>
-        <h1>Inderprastha Engineering College</h1>
+        <h1>Center for Development of Advanced Computing, Noida</h1>
         <button onClick={handleLogout} className='logoutBtn'>Logout</button>
       </header>
+
       <main className='main'>
-        <h2>Hello, {user.studentname}!</h2>
-        <p>Admission No: {user.admissionNo}</p>
+        {/* Access properties using 'student' variable */}
+        <h2>Hello, {student.studentname}!</h2>
+        <p><strong>Admission No:</strong> {student.admissionNo}</p>
+        <p><strong>Course:</strong> {student.course.toUpperCase()}</p>
+        <p><strong>Branch:</strong> {student.branch.toUpperCase()}</p>
       </main>
       <hr/>
     </div>

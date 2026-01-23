@@ -18,26 +18,19 @@ import com.campushub.repository.StudentRepository;
 @RestController
 @RequestMapping("/api")
 public class LoginController {
-	
 	@Autowired
 	StudentRepository studentRepository;
-	
 	@Autowired
 	EmployeeRepository employeeRepository;
-
     // @Autowired
     // ParentRepository parentRepository; // You will need this later
 	
 	@PostMapping("/login")
 	public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
 		
-        // 1. STUDENT LOGIN
+        // student login
         if ("student".equalsIgnoreCase(loginRequest.getRole())) {
-            Optional<Student> student = studentRepository.findByAdmissionNoAndPassword(
-                loginRequest.getUserid(), 
-                loginRequest.getPassword()
-            );
-            
+            Optional<Student> student = studentRepository.findByAdmissionNoAndPassword(loginRequest.getUserid(), loginRequest.getPassword());
             // Fix: Use .isPresent() for Optional, not != null
             if (student.isPresent()) {
                 return ResponseEntity.ok(student.get());

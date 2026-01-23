@@ -7,7 +7,7 @@ const HodDashboard = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const user = location.state?.user;
+    const user = location.state?.employee;
     // Security Check
     // If no user data is found redirect to login
     React.useEffect(
@@ -27,12 +27,12 @@ const HodDashboard = () => {
     return(
         <div>
             <header className='header'>
-                <h1>Inderprastha Engineering College</h1>
+                <h1>Center for Development of Advanced Computing, Noida</h1>
                 <button onClick={handleLogout} className='logoutBtn'>Logout</button>
             </header>
             <main className='main'>
                 <h2>Hello, {user.employeeName}</h2>
-                <h3>Department: {user.department}</h3>
+                <p>Department: {user.department}</p>
                 <p>Employee ID: {user.eid}</p>
             </main>
             <hr/>

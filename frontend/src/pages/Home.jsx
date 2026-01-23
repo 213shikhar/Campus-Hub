@@ -85,7 +85,7 @@ const Home = () => {
             <h1 style={{textAlign:'center'}}>Welcome to CampusHub</h1><br/>
             <hr/>
             <div className='main-container'>
-                <h2 style={{textAlign:'center'}}>Inderprastha Engineering College, Ghaziabad</h2>
+                <h2 style={{textAlign:'center'}}>Center for Development of Advanced Computing, Noida</h2>
                 <div className='form-container'>
                     <form className='login-form' onSubmit={handleSubmit}>
                         <label htmlFor="role">Role: </label>

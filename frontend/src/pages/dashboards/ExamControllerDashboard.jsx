@@ -7,7 +7,7 @@ const ExamControllerDashboard = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const user = location.state?.user;
+    const user = location.state?.employee;
     // Security Check
     // If no user data is found redirect to login
     React.useEffect(
@@ -27,7 +27,7 @@ const ExamControllerDashboard = () => {
     return(
         <div>
             <header className='header'>
-                <h1>Inderprastha Engineering College</h1>
+                <h1>Center for Development of Advanced Computing, Noida</h1>
                 <button onClick={handleLogout} className='logoutBtn'>Logout</button>
             </header>
             <main className='main'>
