@@ -1,7 +1,7 @@
 // StudentDashboard.jsx
 import React, { useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import './DashboardStyling.css';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import '../DashboardStyling.css';
 
 const StudentDashboard = () => {
   const location = useLocation();
@@ -44,7 +44,18 @@ const StudentDashboard = () => {
         <p><strong>Course:</strong> {student.course.toUpperCase()}</p>
         <p><strong>Branch:</strong> {student.branch.toUpperCase()}</p>
       </main>
-      <hr/>
+      <hr/><br/>
+      <p><Link to="/studentProfile">Profile</Link></p><br/>
+      <p><Link to="/notice">Notice Board</Link></p><br/>
+      <p><Link to="/studentMarks">View Marks</Link></p><br/>
+      <p><Link to="/studentAttendance">View Attendance</Link></p><br/>
+      <p><Link to="/studentAssignment">View Assignments</Link></p><br/>
+      <p><Link to="/studentClassSchedule">View Class Schedule</Link></p><br/>
+      <p><Link to="/studentExamSchedule">View Exam Schedule</Link></p><br/>
+      <p><Link to="/studyMaterial">Study Material</Link></p><br/>
+      <p><Link to="/studentFeedback">Feedback</Link></p><br/>
+      <p><Link to="/changePassword">Change Password</Link></p><br/>
+
     </div>
   );
 };

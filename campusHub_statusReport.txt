@@ -76,3 +76,6 @@ NEXT WORK TO BE DONE
 
 Jan 24, 2026
 - Login issue resolved just have to make changes in Home.jsx
+- all dashboard links and their pages are created, user can navigate further from there dashboard.
+- registrar, tpo dashboards are yet to be made!
+- logic behind each functionality of user are yet to be implemented in backend.

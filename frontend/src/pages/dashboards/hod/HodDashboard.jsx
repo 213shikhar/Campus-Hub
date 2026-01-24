@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 // these are router hooks for managing url state
 import { useLocation, useNavigate } from "react-router-dom";
-import './DashboardStyling.css';
+import '../DashboardStyling.css';
 
 const HodDashboard = () => {
     const location = useLocation();

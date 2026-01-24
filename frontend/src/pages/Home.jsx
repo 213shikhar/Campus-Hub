@@ -67,6 +67,11 @@ const Home = () => {
                         // FIX: Send key 'employee'
                         navigate('/registrar-dashboard', { state: { employee: userData } });
                         break;
+
+                    case "tpo":
+                        // FIX: Send key 'employee'
+                        navigate('/tpo-dashboard', { state: { employee: userData } });
+                        break;
                     
                     case "examController":
                         // FIX: Send key 'employee'
@@ -104,6 +109,7 @@ const Home = () => {
                             <option value="faculty" >Faculty</option>
                             <option value="hod" >HOD</option>
                             <option value="examController" >Exam Controller</option>
+                            <option value="tpo" >Training & Placement (TPO)</option>
                         </select>
                     
                         <label htmlFor="userid">User ID: </label>
