@@ -22,8 +22,10 @@ public class Student {
 	private String session;
 	private String course;
     private String branch;
-    // Mapping JSON 'admissionNo' to this field
-    @Column(name = "admission_no")
+ // ✅ FIX: Add 'unique = true' and 'nullable = false'
+    // This tells the DB: "No two students can have the same Admission Number"
+    // Now it can be used as a Foreign Key reference.
+    @Column(name = "admission_no", unique = true, nullable = false)
     private String admissionNo;
     private String studentname;
     private String mobile;

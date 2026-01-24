@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-// these are router hooks for managing url state
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import '../DashboardStyling.css';
+// these are router hooks for managing url state
 
 const FacultyDashboard = () => {
     const location = useLocation();
@@ -36,7 +36,17 @@ const FacultyDashboard = () => {
                 <p><strong>Employee ID: </strong>{faculty.eid}</p>
                 <p><strong>Department: </strong>{faculty.department}</p>
             </main>
-            <hr/>
+            <hr/><br/>
+            <p><Link to="/facultyProfile">Profile</Link></p><br/>
+            <p><Link to="">View Schedule</Link></p><br/>
+            <p><Link to="">Feedback</Link></p><br/>
+            <p><Link to="">View Marks</Link></p><br/>
+            <p><Link to="">View Attendance</Link></p><br/>
+            <p><Link to="">Upload Study Material</Link></p><br/>
+            <p><Link to="">Upload Marks</Link></p><br/>
+            <p><Link to="">Upload Attendance</Link></p><br/>
+            <p><Link to="">Notice</Link></p><br/>
+            <p><Link to="/changePassword">Change Password</Link></p><br/>
         </div>
     );
 }

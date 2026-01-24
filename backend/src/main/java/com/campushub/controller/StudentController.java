@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import com.campushub.dto.ChangePasswordRequest;
+import com.campushub.dto.StudentProfileDTO;
 import com.campushub.dto.StudentRequest;
 import com.campushub.model.Student;
 import com.campushub.service.StudentService;
@@ -22,5 +25,29 @@ public class StudentController {
 
         Student savedStudent = studentService.registerStudent(request);
         return ResponseEntity.ok(savedStudent);
+    }
+    
+ // 1. GET Profile Endpoint
+    @GetMapping("/profile/{admissionNo}")
+    public ResponseEntity<StudentProfileDTO> getStudentProfile(@PathVariable String admissionNo) {
+        StudentProfileDTO profile = studentService.getStudentProfile(admissionNo);
+        return ResponseEntity.ok(profile);
+    }
+    
+ // 2. UPDATE Profile Endpoint
+    @PutMapping("/profile/{admissionNo}")
+    public ResponseEntity<String> updateStudentProfile(@PathVariable String admissionNo, @RequestBody StudentProfileDTO studentProfileDTO) {
+        studentService.updateStudentInfo(admissionNo, studentProfileDTO);
+        return ResponseEntity.ok("Profile updated successfully");
+    }
+    
+    @PostMapping("/change-password/{admissionNo}")
+    public ResponseEntity<String> changePassword(@PathVariable String admissionNo, @RequestBody ChangePasswordRequest request) {
+        boolean success = studentService.changePassword(admissionNo, request);
+        if (success) {
+            return ResponseEntity.ok("Password changed successfully");
+        } else {
+            return ResponseEntity.status(400).body("Incorrect old password");
+        }
     }
 }

@@ -24,6 +24,10 @@ import CreateExamSchedule from './pages/dashboards/examController/CreateExamSche
 import CreateSeatingPlan from './pages/dashboards/examController/CreateSeatingPlan';
 import GenerateAdmitCard from './pages/dashboards/examController/GenerateAdmitCard';
 
+import UpdateStudentForm from './pages/UpdateStudentForm';
+import FacultyProfile from './pages/dashboards/faculty/FacultyProfile';
+import UpdateEmployeeForm from './pages/UpdateEmployeeForm';
+
 function App() {
   return (
     // 1. You MUST wrap everything in BrowserRouter
@@ -64,6 +68,11 @@ function App() {
         <Route path="/createSeatingPlan" element={<CreateSeatingPlan />} />
         <Route path="/generateAdmitCard" element={<GenerateAdmitCard />} />
         <Route path="/changePassword" element={<ChangePassword />} />
+
+        <Route path="/facultyProfile" element={<FacultyProfile />} />
+
+        <Route path="/update-student-profile" element={<UpdateStudentForm />} />
+        <Route path="/update-employee-profile" element={<UpdateEmployeeForm />} />
         
         {/* <Route path="*" element={<h2>Page Not Found</h2>} /> */}
       </Routes>

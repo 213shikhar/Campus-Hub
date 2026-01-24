@@ -13,4 +13,9 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
 	// specific method for finding student by user id and password
 	// This is a custom query method. findByAdmissionNoAndPassword is a custom method name, but should have Student field names.
 	Optional <Student> findByAdmissionNoAndPassword(String admissionNo, String password);
+
+	// ✅ ADD THIS NEW METHOD
+    // This allows the Service to find a student by admission number 
+    // to fetch or update their profile data.
+    Optional<Student> findByAdmissionNo(String admissionNo);
 }

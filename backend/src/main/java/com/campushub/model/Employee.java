@@ -1,10 +1,6 @@
 package com.campushub.model;
-import jakarta.annotation.Generated;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,15 +11,20 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "employees")
 public class Employee {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-	private String type;
-	private String course;
-	private String department;
-	private String eid;
-	private String employeeName;
-	private String mobile;
-	private String email;
-	private String password;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    
+    private String type; // e.g., Faculty, HOD
+    private String course;
+    private String department;
+    
+    // ✅ FIX: Mark eid as Unique to link with EmployeeInfo
+    @Column(unique = true, nullable = false)
+    private String eid;
+    
+    private String employeeName;
+    private String mobile;
+    private String email;
+    private String password;
 }

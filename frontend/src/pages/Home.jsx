@@ -43,38 +43,43 @@ const Home = () => {
 
             // 3. Send Request
             const response = await axios.post("http://localhost:8080/api/login", loginPayload);
-            const userData = response.data; // Renamed to userData for clarity
+            const userData = response.data; 
 
             if (userData) {
-                // 4. Dynamic Navigation with CORRECT KEYS
+                
+                // ✅ KEY UPDATE: Save Admission No to Local Storage
+                if (credentials.role === "student") {
+                    localStorage.setItem('admissionNo', userData.admissionNo);
+                }
+
+                // ✅ KEY UPDATE: Save Admission No to Local Storage
+                if (credentials.role !== "student") {
+                    localStorage.setItem('eid', userData.eid);
+                }
+
+                // 4. Dynamic Navigation
                 switch (credentials.role) {
                     case "student":
-                        // FIX: Send key 'student'
                         navigate('/student-dashboard', { state: { student: userData } });
                         break;
                     
                     case "faculty":
-                        // FIX: Send key 'employee'
                         navigate('/faculty-dashboard', { state: { employee: userData } });
                         break;
                     
                     case "hod":
-                        // FIX: Send key 'employee'
                         navigate('/hod-dashboard', { state: { employee: userData } });
                         break;
                     
                     case "registrar":
-                        // FIX: Send key 'employee'
                         navigate('/registrar-dashboard', { state: { employee: userData } });
                         break;
 
                     case "tpo":
-                        // FIX: Send key 'employee'
                         navigate('/tpo-dashboard', { state: { employee: userData } });
                         break;
                     
                     case "examController":
-                        // FIX: Send key 'employee'
                         navigate('/exam-contr-dashboard', { state: { employee: userData } });
                         break;
 
@@ -92,6 +97,7 @@ const Home = () => {
             }
         }
     };
+
     return(
         <div>
             {/* <Header/> */}

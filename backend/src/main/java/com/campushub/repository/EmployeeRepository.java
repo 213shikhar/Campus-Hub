@@ -11,4 +11,7 @@ import com.campushub.model.Employee;
 public interface EmployeeRepository extends JpaRepository<Employee, Integer>{
 	// custom query
 	Optional<Employee> findByTypeAndEidAndPassword(String type, String eid, String password);
+	
+	// ✅ ADD THIS: Needed for finding employee without password
+    Optional<Employee> findByEid(String eid);
 }

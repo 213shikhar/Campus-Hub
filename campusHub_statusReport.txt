@@ -79,3 +79,10 @@ Jan 24, 2026
 - all dashboard links and their pages are created, user can navigate further from there dashboard.
 - registrar, tpo dashboards are yet to be made!
 - logic behind each functionality of user are yet to be implemented in backend.
+
+- profile page (CReadUD) done for student and employees. just need some modification and styling in form fields.
+- profile updation (CRUpdateD) done for some additional fields (new fields added like (personal details, etc.)
+- change password successfully done for student, but issue with that of faculty (or employee in general), will check tomorrow.
+- a lot of changes and modification is to be done, faculty dashboard to be made properly. Need to work on other dashboards and styling.
+I AM LAGGING BEHIND !!
+==================================================================
