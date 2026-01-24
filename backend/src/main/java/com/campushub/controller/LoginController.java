@@ -56,12 +56,6 @@ public class LoginController {
                 return ResponseEntity.status(401).body("Invalid Employee Credentials");
             }
         }
-
-        // 3. PARENT LOGIN (Placeholder)
-        else if ("parent".equalsIgnoreCase(loginRequest.getRole())) {
-            // Optional<Parent> parent = parentRepository.findBy...
-            return ResponseEntity.status(503).body("Parent login logic not implemented yet in Controller");
-        }
         
         return ResponseEntity.badRequest().body("Role category not recognized");
 	}

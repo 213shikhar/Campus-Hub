@@ -75,3 +75,4 @@ NEXT WORK TO BE DONE
 ==================================================================
 
 Jan 24, 2026
+- Login issue resolved just have to make changes in Home.jsx

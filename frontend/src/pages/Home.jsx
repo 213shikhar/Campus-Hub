@@ -8,7 +8,7 @@ const Home = () => {
     // 1. State to hold form data
     const [credentials, setCredentials] = useState({
         role: "",
-        userid: "", // This will map to 'admissionNo' for students
+        userid: "", 
         password: ""
     });
 
@@ -30,45 +30,49 @@ const Home = () => {
 
         try {
             // 2. Prepare the Payload
-            // We need to tell the backend TWO things:
-            // A. The "Category" (Student vs Employee) -> mapped to 'role'
-            // B. The "Specific Type" (Faculty, HOD, etc.) -> mapped to 'type'
-
-            let category = "employee"; // Default category
+            let category = "employee"; 
             if (credentials.role === "student") category = "student";
             else if (credentials.role === "parent") category = "parent";
+
             const loginPayload = {
-                role: category,            // "student", "employee", or "parent"
-                type: credentials.role,    // "faculty", "hod", "registrar", etc.
+                role: category,            
+                type: credentials.role,    
                 userid: credentials.userid,
                 password: credentials.password
             };
 
             // 3. Send Request
             const response = await axios.post("http://localhost:8080/api/login", loginPayload);
-            const user = response.data;
+            const userData = response.data; // Renamed to userData for clarity
 
-            if (user) {
-                // 4. Dynamic Navigation based on specific selection
+            if (userData) {
+                // 4. Dynamic Navigation with CORRECT KEYS
                 switch (credentials.role) {
                     case "student":
-                        navigate('/student-dashboard', { state: { user: user } });
+                        // FIX: Send key 'student'
+                        navigate('/student-dashboard', { state: { student: userData } });
                         break;
+                    
                     case "faculty":
-                        navigate('/faculty-dashboard', { state: { user: user } });
+                        // FIX: Send key 'employee'
+                        navigate('/faculty-dashboard', { state: { employee: userData } });
                         break;
+                    
                     case "hod":
-                        navigate('/hod-dashboard', { state: { user: user } });
+                        // FIX: Send key 'employee'
+                        navigate('/hod-dashboard', { state: { employee: userData } });
                         break;
+                    
                     case "registrar":
-                        navigate('/registrar-dashboard', { state: { user: user } });
+                        // FIX: Send key 'employee'
+                        navigate('/registrar-dashboard', { state: { employee: userData } });
                         break;
+                    
                     case "examController":
-                        navigate('/exam-contr-dashboard', { state: { user: user } });
+                        // FIX: Send key 'employee'
+                        navigate('/exam-contr-dashboard', { state: { employee: userData } });
                         break;
-                    case "parent":
-                        navigate('/parent-dashboard', { state: { user: user } });
-                        break;
+
                     default:
                         alert("Dashboard not found for this role.");
                 }
@@ -76,7 +80,11 @@ const Home = () => {
         }
         catch (error) {
             console.error("Login Error:", error);
-            alert("Invalid Credentials or Server Error");
+            if(error.response && error.response.status === 401) {
+                 alert("Invalid Credentials. Please check your ID and Password.");
+            } else {
+                 alert("Login Failed: Server Error");
+            }
         }
     };
     return(
@@ -96,7 +104,6 @@ const Home = () => {
                             <option value="faculty" >Faculty</option>
                             <option value="hod" >HOD</option>
                             <option value="examController" >Exam Controller</option>
-                            <option value="parent" >Parent</option>
                         </select>
                     
                         <label htmlFor="userid">User ID: </label>
