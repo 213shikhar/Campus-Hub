@@ -30,7 +30,6 @@ const RegistrarDashboard = () => {
             <p><Link to="/addCourse">Add/Modify Course</Link></p><br/>
             <p><Link to="/addDepartment">Add/Modify Department</Link></p><br/>
             <p><Link to="/addSubjects">Add/Modify Subjects</Link></p><br/>
-            <p><Link to="/updateSemester">Update Semester</Link></p><br/>
             <p><Link to="/viewEmployees">View Employees</Link></p><br/>
             <p><Link to="/viewStudents">View Students</Link></p><br/>
             <p><Link to="/viewFeedback">View Feedback</Link></p><br/>

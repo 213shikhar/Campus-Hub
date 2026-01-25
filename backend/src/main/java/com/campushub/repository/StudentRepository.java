@@ -1,5 +1,6 @@
 package com.campushub.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,4 +19,8 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
     // This allows the Service to find a student by admission number 
     // to fetch or update their profile data.
     Optional<Student> findByAdmissionNo(String admissionNo);
+    
+ // Add inside StudentRepository interface
+    List<Student> findByIsPlacedTrue();
+    List<Student> findByCourseAndSemesterIn(String course, List<Integer> semesters);
 }

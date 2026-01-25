@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-// import './StudentProfile.css'; // Reusing your existing CSS
 
 const UpdateStudentForm = () => {
     const location = useLocation();
@@ -38,6 +37,7 @@ const UpdateStudentForm = () => {
 
         // Mother
         motherName: initialData.motherName || '',
+        motherMobile: initialData.motherMobile || '',
 
         // Guardian
         guardianName: initialData.guardianName || '',
@@ -77,7 +77,7 @@ const UpdateStudentForm = () => {
             <form className='register-form' onSubmit={handleSubmit}>
 
                 {/* --- SECTION 1: IMMUTABLE ACADEMIC DATA --- */}
-                <h3 className="section-title">Academic Details (Read Only)</h3>
+                <h3 className="section-title">General Details</h3>
                 
                 <label>Session:</label>
                 <input type="text" value={formData.session} readOnly className="readonly-field" />
@@ -144,6 +144,9 @@ const UpdateStudentForm = () => {
 
                 <label htmlFor="motherName">Mother's Name:</label>
                 <input type="text" name="motherName" value={formData.motherName} onChange={handleChange} />
+
+                <label htmlFor="fatherMobile">Mother's Mobile:</label>
+                <input type="text" name="motherMobile" value={formData.motherMobile} onChange={handleChange} />
 
                 <h3 className="section-title">Guardian Details (If applicable)</h3>
                 

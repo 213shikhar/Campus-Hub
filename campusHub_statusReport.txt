@@ -94,3 +94,5 @@ Jan 25, 2026
 - profile, change password, feedback work is to be done next.
 
 - change password, feedback done. profile, update form styling remaining.
+- registrar, tpo work done.
+- student, faculty, hod, exam controller work remaining.

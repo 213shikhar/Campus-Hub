@@ -47,7 +47,6 @@ import ViewBatchList from './pages/dashboards/tpo/ViewBatchList'
 import AddCourse from './pages/dashboards/registrar/AddCourse'
 import AddDepartment from './pages/dashboards/registrar/AddDepartment'
 import AddSubjects from './pages/dashboards/registrar/AddSubjects'
-import UpdateSemester from './pages/dashboards/registrar/UpdateSemester'
 import ViewStudents from './pages/dashboards/registrar/ViewStudents'
 import ViewEmployees from './pages/dashboards/registrar/ViewEmployees'
 import ViewFeedback from './pages/dashboards/registrar/ViewFeedback'
@@ -116,7 +115,6 @@ function App() {
         <Route path="/addCourse" element={<AddCourse />} />
         <Route path="/addDepartment" element={<AddDepartment />} />
         <Route path="/addSubjects" element={<AddSubjects />} />
-        <Route path="/updateSemester" element={<UpdateSemester />} />
         <Route path="/viewEmployees" element={<ViewEmployees />} />
         <Route path="/viewStudents" element={<ViewStudents />} />
         <Route path="/viewFeedback" element={<ViewFeedback />} />

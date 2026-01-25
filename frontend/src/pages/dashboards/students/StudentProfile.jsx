@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import '../DashboardStyling.css';
 
 const StudentProfile = () => {
     const navigate = useNavigate();
@@ -40,7 +41,7 @@ const StudentProfile = () => {
             <h2>Student Profile</h2>
             
             <div className="profile-section">
-                <h3>Academic Details (Immutable)</h3>
+                <h3>Personal Details</h3>
                 <div className="details-grid">
                     <div className="detail-item"><strong>Name:</strong> {profile.studentName}</div>
                     <div className="detail-item"><strong>Admission No:</strong> {profile.admissionNo}</div>
@@ -49,21 +50,14 @@ const StudentProfile = () => {
                     <div className="detail-item"><strong>Session:</strong> {profile.session}</div>
                     <div className="detail-item"><strong>Email:</strong> {profile.email}</div>
                     <div className="detail-item"><strong>Mobile:</strong> {profile.mobile}</div>
-                    <div className="detail-item"><strong>Address:</strong> {profile.address}</div>
-                </div>
-            </div>
-
-            <div className="profile-section">
-                <h3>Personal & Parent Details</h3>
-                {/* These fields check if data exists, otherwise show "Not Updated" */}
-                <div className="details-grid">
                     <div className="detail-item"><strong>Date of Birth:</strong> {profile.dob || <span className="empty-field">Not Updated</span>}</div>
                     <div className="detail-item"><strong>Gender:</strong> {profile.gender || <span className="empty-field">Not Updated</span>}</div>
                     <div className="detail-item"><strong>Father's Name:</strong> {profile.fatherName || <span className="empty-field">Not Updated</span>}</div>
                     <div className="detail-item"><strong>Father's Mobile:</strong> {profile.fatherMobile || <span className="empty-field">Not Updated</span>}</div>
-                    <div className="detail-item"><strong>Guardian Name:</strong> {profile.guardianName || <span className="empty-field">Not Updated</span>}</div>
-                    
-                    {/* Add all other extended fields here following the same pattern */}
+                    <div className="detail-item"><strong>Mother's Name:</strong> {profile.motherName || <span className="empty-field">Not Updated</span>}</div>
+                    <div className="detail-item"><strong>Mother's Mobile:</strong> {profile.motherMobile || <span className="empty-field">Not Updated</span>}</div>
+
+                    <div className="detail-item"><strong>Address:</strong> {profile.address}</div>
                 </div>
             </div>
 
