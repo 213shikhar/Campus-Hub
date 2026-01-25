@@ -13,7 +13,6 @@ import StudentAttendance from './pages/dashboards/students/StudentAttendance';
 import ViewAssignment from './pages/dashboards/students/ViewAssignment';
 import StudentClassSchedule from './pages/dashboards/students/StudentClassSchedule';
 import StudentExamSchedule from './pages/dashboards/students/StudentExamSchedule';
-import StudentFeedback from './pages/dashboards/students/StudentFeedback';
 import StudentMarks from './pages/dashboards/students/StudentMarks';
 import StudyMaterial from './pages/dashboards/students/StudyMaterial';
 import ViewNotice from './pages/dashboards/students/ViewNotice';
@@ -55,7 +54,7 @@ import ViewFeedback from './pages/dashboards/registrar/ViewFeedback'
 
 // comman
 import UpdateEmployeeForm from './pages/dashboards/comman/UpdateEmployeeForm';
-import EmployeeFeedback from './pages/dashboards/comman/EmployeeFeedback';
+import Feedback from './pages/dashboards/comman/Feedback';
 import Notice from './pages/dashboards/comman/Notice';
 import ChangePassword from './pages/dashboards/comman/ChangePassword';
 
@@ -87,7 +86,6 @@ function App() {
         <Route path="/studentClassSchedule" element={<StudentClassSchedule />} />
         <Route path="/studentExamSchedule" element={<StudentExamSchedule />} />
         <Route path="/studyMaterial" element={<StudyMaterial />} />
-        <Route path="/studentFeedback" element={<StudentFeedback />} />
 
         {/* The Exam Controller's Pages Route */}
         <Route path="/examContrProfile" element={<ExamControllerProfile />} />
@@ -125,7 +123,7 @@ function App() {
 
         {/* Comman Routes */}
         <Route path="/uploadNotice" element={<Notice />} />
-        <Route path="/employeeFeedback" element={<EmployeeFeedback />} />
+        <Route path="/feedback" element={<Feedback />} />
         <Route path="/changePassword" element={<ChangePassword />} />
 
         <Route path="/update-student-profile" element={<UpdateStudentForm />} />

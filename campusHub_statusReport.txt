@@ -92,3 +92,5 @@ Jan 25, 2026
 - dashboards links and navigation are now complete
 - registrar and tpo can login.
 - profile, change password, feedback work is to be done next.
+
+- change password, feedback done. profile, update form styling remaining.

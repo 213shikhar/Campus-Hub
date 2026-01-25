@@ -53,7 +53,7 @@ const StudentDashboard = () => {
       <p><Link to="/studentClassSchedule">View Class Schedule</Link></p><br/>
       <p><Link to="/studentExamSchedule">View Exam Schedule</Link></p><br/>
       <p><Link to="/studyMaterial">Study Material</Link></p><br/>
-      <p><Link to="/studentFeedback">Feedback</Link></p><br/>
+      <p><Link to="/feedback">Feedback</Link></p><br/>
       <p><Link to="/changePassword">Change Password</Link></p><br/>
 
     </div>

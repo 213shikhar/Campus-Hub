@@ -42,7 +42,7 @@ const HodDashboard = () => {
             <p><Link to="/createFacultySchedule">Create Faculty Schedule</Link></p><br/>
             <p><Link to="/studentMarks">View Student Marks</Link></p><br/>
             <p><Link to="/studentAttendance">View Student Attendance</Link></p><br/>
-            <p><Link to="/employeeFeedback">Feedback</Link></p><br/>
+            <p><Link to="/feedback">Feedback</Link></p><br/>
             <p><Link to="/changePassword">Change Password</Link></p><br/>
         </div>
     );

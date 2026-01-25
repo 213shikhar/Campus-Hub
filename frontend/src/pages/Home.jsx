@@ -21,6 +21,9 @@ const Home = () => {
     // 3. Handle Form Submission
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // ✅ ADD THIS: Clear old session data before starting a new login
+        localStorage.clear();
         
         // 1. Basic Validation
         if (!credentials.role || !credentials.userid || !credentials.password) {
