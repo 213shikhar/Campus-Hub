@@ -3,7 +3,7 @@ import React from 'react'
 const CreateSeatingPlan = () => {
     return(
         <div>
-            <p>under construction!</p>
+            <p>CreateSeatingPlan under construction!</p>
         </div>
     )
 }

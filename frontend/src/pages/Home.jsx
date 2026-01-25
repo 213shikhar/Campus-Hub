@@ -46,15 +46,24 @@ const Home = () => {
             const userData = response.data; 
 
             if (userData) {
-                
-                // ✅ KEY UPDATE: Save Admission No to Local Storage
+                // LOCAL STORAGE
+                // 1. Student Login
                 if (credentials.role === "student") {
                     localStorage.setItem('admissionNo', userData.admissionNo);
+                    localStorage.setItem('userType', 'student');
                 }
 
-                // ✅ KEY UPDATE: Save Admission No to Local Storage
-                if (credentials.role !== "student") {
+                // 2. Admin Login (Registrar & TPO)
+                else if (credentials.role === "registrar" || credentials.role === "tpo") {
+                    // AdminUser entity returns 'userId', not 'eid'
+                    localStorage.setItem('userId', userData.userId); 
+                    localStorage.setItem('userType', credentials.role);
+                }
+
+                // 3. Regular Employee Login (Faculty, HOD, etc.)
+                else {
                     localStorage.setItem('eid', userData.eid);
+                    localStorage.setItem('userType', 'employee');
                 }
 
                 // 4. Dynamic Navigation
@@ -71,16 +80,18 @@ const Home = () => {
                         navigate('/hod-dashboard', { state: { employee: userData } });
                         break;
                     
-                    case "registrar":
-                        navigate('/registrar-dashboard', { state: { employee: userData } });
-                        break;
-
-                    case "tpo":
-                        navigate('/tpo-dashboard', { state: { employee: userData } });
-                        break;
-                    
                     case "examController":
                         navigate('/exam-contr-dashboard', { state: { employee: userData } });
+                        break;
+                    
+                    // ✅ CHANGED: Send as 'admin' to avoid confusion with Employee fields
+                    case "registrar":
+                        navigate('/registrar-dashboard', { state: { admin: userData } });
+                        break;
+                                
+                    // ✅ CHANGED: Send as 'admin'
+                    case "tpo":
+                        navigate('/tpo-dashboard', { state: { admin: userData } });
                         break;
 
                     default:

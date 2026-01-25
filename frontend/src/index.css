@@ -69,3 +69,29 @@ body {
 .asterik{
     color: red;
 }
+
+.header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+}
+
+.logoutBtn{
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+.main{
+    margin: 20px;
+}
+
+.type-specific-tasks {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import { validateRegistrationForm } from './studentFormValidator'; 
+import { validateRegistrationForm } from '../pages/studentFormValidator'; 
 
 const StudentRegister = () => {
     const navigate = useNavigate();

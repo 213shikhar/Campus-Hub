@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 // these are router hooks for managing url state
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import '../DashboardStyling.css';
 
 const HodDashboard = () => {
@@ -35,7 +35,15 @@ const HodDashboard = () => {
                 <p>Department: {hod.department}</p>
                 <p>Employee ID: {hod.eid}</p>
             </main>
-            <hr/>
+            <hr/><br/>
+            <p><Link to="/hodProfile">Profile</Link></p><br/>
+            <p><Link to="/uploadNotice">Notice</Link></p><br/>
+            <p><Link to="/createClassSchedule">Create Class Schedule</Link></p><br/>
+            <p><Link to="/createFacultySchedule">Create Faculty Schedule</Link></p><br/>
+            <p><Link to="/studentMarks">View Student Marks</Link></p><br/>
+            <p><Link to="/studentAttendance">View Student Attendance</Link></p><br/>
+            <p><Link to="/employeeFeedback">Feedback</Link></p><br/>
+            <p><Link to="/changePassword">Change Password</Link></p><br/>
         </div>
     );
 

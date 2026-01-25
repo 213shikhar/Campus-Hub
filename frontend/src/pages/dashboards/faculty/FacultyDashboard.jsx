@@ -38,14 +38,14 @@ const FacultyDashboard = () => {
             </main>
             <hr/><br/>
             <p><Link to="/facultyProfile">Profile</Link></p><br/>
-            <p><Link to="">View Schedule</Link></p><br/>
-            <p><Link to="">Feedback</Link></p><br/>
-            <p><Link to="">View Marks</Link></p><br/>
-            <p><Link to="">View Attendance</Link></p><br/>
-            <p><Link to="">Upload Study Material</Link></p><br/>
-            <p><Link to="">Upload Marks</Link></p><br/>
-            <p><Link to="">Upload Attendance</Link></p><br/>
-            <p><Link to="">Notice</Link></p><br/>
+            <p><Link to="/viewSchedule">View Schedule</Link></p><br/>
+            <p><Link to="/uploadNotice">Notice</Link></p><br/>
+            <p><Link to="/uploadAttendance">Upload Attendance</Link></p><br/>
+            <p><Link to="/uploadMarks">Upload Student Marks</Link></p><br/>
+            <p><Link to="/uploadMaterial">Upload Study Material</Link></p><br/>
+            <p><Link to="/studentMarks">View Student Marks</Link></p><br/>
+            <p><Link to="/studentAttendance">View Student Attendance</Link></p><br/>
+            <p><Link to="/employeeFeedback">Feedback</Link></p><br/>
             <p><Link to="/changePassword">Change Password</Link></p><br/>
         </div>
     );

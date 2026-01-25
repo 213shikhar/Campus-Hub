@@ -3,7 +3,7 @@ import React from 'react'
 const GenerateAdmitCard = () => {
     return(
         <div>
-            <p>under construction!</p>
+            <p>GenerateAdmitCard under construction!</p>
         </div>
     )
 }

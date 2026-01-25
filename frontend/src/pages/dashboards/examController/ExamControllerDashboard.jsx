@@ -36,7 +36,7 @@ const ExamControllerDashboard = () => {
             </main>
             <hr/><br/>
             <p><Link to="/examContrProfile">Profile</Link></p><br/>
-            <p><Link to="/notice">Notice Board</Link></p><br/>
+            <p><Link to="/uploadNotice">Notice Board</Link></p><br/>
             <p><Link to="/createExamSchedule">Create Exam Schedule</Link></p><br/>
             <p><Link to="/studentExamSchedule">View Exam Schedule</Link></p><br/>
             <p><Link to="/createSeatingPlan">Create Seating Plan</Link></p><br/>

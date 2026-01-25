@@ -3,7 +3,7 @@ import React from 'react'
 const ExamControllerProfile = () => {
     return(
         <div>
-            <p>under construction!</p>
+            <p>ExamControllerProfile under construction!</p>
         </div>
     )
 }

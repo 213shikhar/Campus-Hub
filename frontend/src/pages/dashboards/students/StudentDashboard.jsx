@@ -46,7 +46,7 @@ const StudentDashboard = () => {
       </main>
       <hr/><br/>
       <p><Link to="/studentProfile">Profile</Link></p><br/>
-      <p><Link to="/notice">Notice Board</Link></p><br/>
+      <p><Link to="/viewNotice">Notice Board</Link></p><br/>
       <p><Link to="/studentMarks">View Marks</Link></p><br/>
       <p><Link to="/studentAttendance">View Attendance</Link></p><br/>
       <p><Link to="/studentAssignment">View Assignments</Link></p><br/>

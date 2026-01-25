@@ -86,3 +86,9 @@ Jan 24, 2026
 - a lot of changes and modification is to be done, faculty dashboard to be made properly. Need to work on other dashboards and styling.
 I AM LAGGING BEHIND !!
 ==================================================================
+
+Jan 25, 2026
+- files and folders are properly arranged!
+- dashboards links and navigation are now complete
+- registrar and tpo can login.
+- profile, change password, feedback work is to be done next.

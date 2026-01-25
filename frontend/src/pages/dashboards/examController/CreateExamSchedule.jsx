@@ -3,7 +3,7 @@ import React from 'react'
 const CreateExamSchedule = () => {
     return(
         <div>
-            <p>under construction!</p>
+            <p>CreateExamSchedule under construction!</p>
         </div>
     )
 }

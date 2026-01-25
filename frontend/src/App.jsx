@@ -1,32 +1,63 @@
 // src/App.jsx
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
-import StudentRegister from './pages/StudentRegister';
-import EmployeeRegister from './pages/EmployeeRegister';
+import StudentRegister from './components/StudentRegister';
+import EmployeeRegister from './components/EmployeeRegister';
+import RegistrarDashboard from './pages/dashboards/registrar/RegistrarDashboard';
+import TpoDashboard from './pages/dashboards/tpo/TpoDashboard';
+
+// student
 import StudentDashboard from './pages/dashboards/students/StudentDashboard';
-import FacultyDashboard from './pages/dashboards/faculty/FacultyDashboard';
-import HodDashboard from './pages/dashboards/hod/HodDashboard';
-import ExamControllerDashboard from './pages/dashboards/examController/ExamControllerDashboard';
-// import RegistrarDashboard from './pages/dashboards/registrar/RegistrarDashboard';
-// import TpoDashboard from './pages/dashboards/tpo/TpoDashboard';
-import Notice from './pages/dashboards/Notice';
-import ChangePassword from './pages/dashboards/ChangePassword';
 import StudentProfile from './pages/dashboards/students/StudentProfile';
-import StudentAttendance from './pages/dashboards/StudentAttendance';
+import StudentAttendance from './pages/dashboards/students/StudentAttendance';
 import ViewAssignment from './pages/dashboards/students/ViewAssignment';
 import StudentClassSchedule from './pages/dashboards/students/StudentClassSchedule';
-import StudentExamSchedule from './pages/dashboards/StudentExamSchedule';
+import StudentExamSchedule from './pages/dashboards/students/StudentExamSchedule';
 import StudentFeedback from './pages/dashboards/students/StudentFeedback';
 import StudentMarks from './pages/dashboards/students/StudentMarks';
 import StudyMaterial from './pages/dashboards/students/StudyMaterial';
+import ViewNotice from './pages/dashboards/students/ViewNotice';
+import UpdateStudentForm from './pages/dashboards/students/UpdateStudentForm';
+
+// exam controller
+import ExamControllerDashboard from './pages/dashboards/examController/ExamControllerDashboard';
 import ExamControllerProfile from './pages/dashboards/examController/ExamControllerProfile';
 import CreateExamSchedule from './pages/dashboards/examController/CreateExamSchedule';
 import CreateSeatingPlan from './pages/dashboards/examController/CreateSeatingPlan';
 import GenerateAdmitCard from './pages/dashboards/examController/GenerateAdmitCard';
 
-import UpdateStudentForm from './pages/UpdateStudentForm';
+// faculty
+import FacultyDashboard from './pages/dashboards/faculty/FacultyDashboard';
 import FacultyProfile from './pages/dashboards/faculty/FacultyProfile';
-import UpdateEmployeeForm from './pages/UpdateEmployeeForm';
+import FacultySchedule from './pages/dashboards/faculty/FacultySchedule';
+import UploadAttendance from './pages/dashboards/faculty/UploadAttendance';
+import UploadMarks from './pages/dashboards/faculty/UploadMarks';
+import UploadMaterial from './pages/dashboards/faculty/UploadMaterial';
+
+// hod
+import HodDashboard from './pages/dashboards/hod/HodDashboard';
+import HodProfile from './pages/dashboards/hod/HodProfile';
+import CreateClassSchedule from './pages/dashboards/hod/CreateClassSchedule';
+import CreateFacultySchedule from './pages/dashboards/hod/CreateFacultySchedule';
+
+// tpo
+import ViewPlacementRecord from './pages/dashboards/tpo/ViewPlacementRecord'
+import ViewBatchList from './pages/dashboards/tpo/ViewBatchList'
+
+// registrar
+import AddCourse from './pages/dashboards/registrar/AddCourse'
+import AddDepartment from './pages/dashboards/registrar/AddDepartment'
+import AddSubjects from './pages/dashboards/registrar/AddSubjects'
+import UpdateSemester from './pages/dashboards/registrar/UpdateSemester'
+import ViewStudents from './pages/dashboards/registrar/ViewStudents'
+import ViewEmployees from './pages/dashboards/registrar/ViewEmployees'
+import ViewFeedback from './pages/dashboards/registrar/ViewFeedback'
+
+// comman
+import UpdateEmployeeForm from './pages/dashboards/comman/UpdateEmployeeForm';
+import EmployeeFeedback from './pages/dashboards/comman/EmployeeFeedback';
+import Notice from './pages/dashboards/comman/Notice';
+import ChangePassword from './pages/dashboards/comman/ChangePassword';
 
 function App() {
   return (
@@ -44,13 +75,12 @@ function App() {
         <Route path="/faculty-dashboard" element={<FacultyDashboard />} />
         <Route path="/hod-dashboard" element={<HodDashboard />} />
         <Route path="/exam-contr-dashboard" element={<ExamControllerDashboard />} />
-        {/* <Route path="/registrar-dashboard" element={<RegistrarDashboard />} /> */}
-        {/* <Route path="/tpo-dashboard" element={<TpoDashboard />} /> */}
-
+        <Route path="/registrar-dashboard" element={<RegistrarDashboard />} />
+        <Route path="/tpo-dashboard" element={<TpoDashboard />} />
         
         {/* The Student's Pages Route */}
         <Route path="/studentProfile" element={<StudentProfile />} />
-        <Route path="/notice" element={<Notice />} />
+        <Route path="/viewNotice" element={<ViewNotice />} />
         <Route path="/studentMarks" element={<StudentMarks />} />
         <Route path="/studentAttendance" element={<StudentAttendance />} />
         <Route path="/studentAssignment" element={<ViewAssignment />} />
@@ -58,18 +88,45 @@ function App() {
         <Route path="/studentExamSchedule" element={<StudentExamSchedule />} />
         <Route path="/studyMaterial" element={<StudyMaterial />} />
         <Route path="/studentFeedback" element={<StudentFeedback />} />
-        <Route path="/changePassword" element={<ChangePassword />} />
 
         {/* The Exam Controller's Pages Route */}
         <Route path="/examContrProfile" element={<ExamControllerProfile />} />
-        <Route path="/notice" element={<Notice />} />
         <Route path="/createExamSchedule" element={<CreateExamSchedule />} />
         <Route path="/studentExamSchedule" element={<StudentExamSchedule />} />
         <Route path="/createSeatingPlan" element={<CreateSeatingPlan />} />
         <Route path="/generateAdmitCard" element={<GenerateAdmitCard />} />
-        <Route path="/changePassword" element={<ChangePassword />} />
 
+        {/* The Faculty Pages Route */}
         <Route path="/facultyProfile" element={<FacultyProfile />} />
+        <Route path="/viewSchedule" element={<FacultySchedule />} />
+        <Route path="/uploadAttendance" element={<UploadAttendance />} />
+        <Route path="/uploadMarks" element={<UploadMarks />} />
+        <Route path="/uploadMaterial" element={<UploadMaterial />} />
+        <Route path="/studentMarks" element={<StudentMarks />} />
+        <Route path="/studentAttendance" element={<StudentAttendance />} />
+
+        {/* The HOD Pages Route */}
+        <Route path="/hodProfile" element={<HodProfile />} />
+        <Route path="/createClassSchedule" element={<CreateClassSchedule />} />
+        <Route path="/createFacultySchedule" element={<CreateFacultySchedule />} />
+
+        {/* TPO Routes */}
+        <Route path="/viewBatchList" element={<ViewBatchList />} />
+        <Route path="/viewPlacementRecord" element={<ViewPlacementRecord />} />
+
+        {/* Registrar Routes */}
+        <Route path="/addCourse" element={<AddCourse />} />
+        <Route path="/addDepartment" element={<AddDepartment />} />
+        <Route path="/addSubjects" element={<AddSubjects />} />
+        <Route path="/updateSemester" element={<UpdateSemester />} />
+        <Route path="/viewEmployees" element={<ViewEmployees />} />
+        <Route path="/viewStudents" element={<ViewStudents />} />
+        <Route path="/viewFeedback" element={<ViewFeedback />} />
+
+        {/* Comman Routes */}
+        <Route path="/uploadNotice" element={<Notice />} />
+        <Route path="/employeeFeedback" element={<EmployeeFeedback />} />
+        <Route path="/changePassword" element={<ChangePassword />} />
 
         <Route path="/update-student-profile" element={<UpdateStudentForm />} />
         <Route path="/update-employee-profile" element={<UpdateEmployeeForm />} />
