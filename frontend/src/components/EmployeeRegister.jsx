@@ -8,7 +8,7 @@ const EmployeeRegister = () => {
     
     const [formData, setFormData] = useState({
         type: "",
-        course: "",
+        course: "", // Only relevant for Faculty/HOD
         department: "",
         eid: "",
         employeeName: "",
@@ -16,12 +16,12 @@ const EmployeeRegister = () => {
         email: "",
         address: "",
         password: "",
-        confirmPassword: "" // Ensure this exists in state
+        confirmPassword: ""
     });
 
     const [errors, setErrors] = useState({});
 
-    // Dynamic Dropdown
+    // Dynamic Dropdowns
     const [availableCourses, setAvailableCourses] = useState([]);
     const [departments, setDepartments] = useState([]);
 
@@ -31,7 +31,7 @@ const EmployeeRegister = () => {
             .then(res => setAvailableCourses(res.data))
             .catch(err => console.error("Error loading courses", err));
         
-        // Fetching Deparment
+        // Fetch Departments
         axios.get('http://localhost:8080/api/registrar/departments')
             .then(res => setDepartments(res.data))
             .catch(err => console.error(err));
@@ -56,7 +56,7 @@ const EmployeeRegister = () => {
             return;
         }
 
-        // 2. Prepare JSON data (exclude confirmPassword)
+        // 2. Prepare JSON data
         const dataToSend = {
             type: formData.type,
             course: formData.course,
@@ -94,19 +94,27 @@ const EmployeeRegister = () => {
                     case "examController":
                         targetDashboard = "/exam-contr-dashboard";
                         break;
+                    case "registrar":
+                        targetDashboard = "/registrar-dashboard";
+                        break;
+                    case "tpo":
+                        targetDashboard = "/tpo-dashboard";
+                        break;
                     default:
-                        // Fallback if type is unknown
                         targetDashboard = "/"; 
-                        alert("Unknown Employee Type. Redirecting to home.");
                 }
 
-                // 4. Navigate with state
                 navigate(targetDashboard, { state: { employee: employeeData } });
             }
         }
         catch (error) {
             console.error("Error:", error);
-            if (error.response && error.response.data) {
+            
+            // ✅ DETECT DUPLICATE ID / BAD REQUEST
+            // This catches the specific text "Error: Employee ID ... already exists!"
+            if (error.response && error.response.status === 400) {
+                alert(error.response.data); 
+            } else if (error.response && error.response.data) {
                 alert("Registration Failed: " + (error.response.data.message || "Unknown Error"));
             } else {
                 alert("Registration Failed! Please check your server.");

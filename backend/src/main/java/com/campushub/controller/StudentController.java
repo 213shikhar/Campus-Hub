@@ -9,6 +9,7 @@ import com.campushub.dto.ChangePasswordRequest;
 import com.campushub.dto.StudentProfileDTO;
 import com.campushub.dto.StudentRequest;
 import com.campushub.model.Student;
+import com.campushub.repository.StudentRepository;
 import com.campushub.service.StudentService;
 import jakarta.validation.Valid;
 
@@ -18,11 +19,19 @@ public class StudentController {
 
     @Autowired
     private StudentService studentService;
+    @Autowired private StudentRepository studentRepository;
 
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> registerStudent(
-            @Valid @RequestBody StudentRequest request) {
+    public ResponseEntity<?> registerStudent(@Valid @RequestBody StudentRequest request) {
+        
+        // ✅ 1. Check for Duplicate Admission No
+        if (studentRepository.existsByAdmissionNo(request.getAdmissionNo())) {
+            return ResponseEntity
+                .badRequest()
+                .body("Error: Admission Number " + request.getAdmissionNo() + " already exists!");
+        }
 
+        // 3. Proceed if no duplicates found
         Student savedStudent = studentService.registerStudent(request);
         return ResponseEntity.ok(savedStudent);
     }

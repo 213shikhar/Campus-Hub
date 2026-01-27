@@ -15,6 +15,7 @@ import com.campushub.dto.ChangePasswordRequest;
 import com.campushub.dto.EmployeeProfileDTO;
 import com.campushub.dto.EmployeeRequest;
 import com.campushub.model.Employee;
+import com.campushub.repository.EmployeeRepository;
 import com.campushub.service.EmployeeService;
 import jakarta.validation.Valid;
 
@@ -24,14 +25,22 @@ public class EmployeeController {
 	
 	@Autowired
 	private EmployeeService employeeService;
+	@Autowired EmployeeRepository employeeRepository;
 	
 	@PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> registerEmployee(
-            @Valid @RequestBody EmployeeRequest request) {
+	public ResponseEntity<?> registerEmployee(@Valid @RequestBody EmployeeRequest request) {
 
-        Employee savedEmployee = employeeService.registerEmployee(request);
-        return ResponseEntity.ok(savedEmployee);
-    }
+	    // ✅ 1. Check for Duplicate Employee ID
+	    if (employeeRepository.existsByEid(request.getEid())) {
+	        return ResponseEntity
+	            .badRequest()
+	            .body("Error: Employee ID " + request.getEid() + " already exists!");
+	    }
+
+	    // 3. Proceed
+	    Employee savedEmployee = employeeService.registerEmployee(request);
+	    return ResponseEntity.ok(savedEmployee);
+	}
 	
 	// ✅ New: Get Profile
     @GetMapping("/profile/{eid}")

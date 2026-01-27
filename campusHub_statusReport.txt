@@ -96,3 +96,16 @@ Jan 25, 2026
 - change password, feedback done. profile, update form styling remaining.
 - registrar, tpo work done.
 - student, faculty, hod, exam controller work remaining.
+==================================================================
+
+Jan 27, 2026
+PROMPT FOR ATTENDANCE:
+i want to implement the attendance module now, in this a faculty uploads attendance of students in a class. for that faculty choses course, branch and then class (for example, for marking the attendance of section A of CSE 1st year (semester 1, semester 2) the class name should be CSE1A, for section B of DS 3rd year class name is DS3B, and similarly other classes (Branch Year Section).) After choosing the correct class, all students of that class should be listed and two action button 'P' for Present and 'A' for Absent should be there to mark the attendance. by default keep every student's attendance to 'A' help me with this, how should i begin. The frontend file name is UploadAttendance.jsx inside 'faculty' folder.
+Tell me what files to make where to make in backend. how database tables are made, and everything.
+
+- A LOT HAD HAPPENED IN PAST COUPLE OF DAYS.
+- I AM REMOVING TPO FUNCTIONALITY.
+- WORK DONE TILL NOW:
+	- REGISTRAR ALL FUNCTIONALITY ADDED ARE DONE!
+	- UNIQUE ADMISSION NUMBER AND PASSWORD HASHING DONE!
+ 	-  A LOT OF THINGS IS STILL LEFT ALSO, ONLY 1 DAY LEFT TO DEPLOY (probably less than few hours!)

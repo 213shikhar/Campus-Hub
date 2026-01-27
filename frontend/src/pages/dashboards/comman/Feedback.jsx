@@ -53,7 +53,7 @@ const Feedback = () => {
         <div className="form-container" style={{maxWidth: '600px', margin: '50px auto'}}>
             <h2>Submit Feedback</h2>
             <p style={{color: '#666', fontSize: '0.9em', marginBottom: '20px'}}>
-                Your feedback is anonymous. We only record that you are a <strong>{userRole}</strong>.
+                Your feedback is anonymous!.
             </p>
 
             {status.text && (

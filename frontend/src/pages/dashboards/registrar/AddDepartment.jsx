@@ -28,18 +28,54 @@ const AddDepartment = () => {
         } catch (error) { setMessage('Error adding department.'); }
     };
 
+    const deptOptions = [
+        "Artificial Intelligence & Machine Learning",
+        "Biotechnology",
+        "Chemistry",
+        "Civil Engineering",
+        "Cloud Computing",
+        "Computer Applications",
+        "Computer Science and Engineering",
+        "Cyber Security",
+        "Data Science",
+        "Electrical Engineering",
+        "Electronics and Communication Engineering",
+        "Information Technology",
+        "Mathematics",
+        "Mechanical Engineering",
+        "Mobile Application Development",
+        "Physics",
+        "Software Engineering",
+        "Statistics",
+        "Web Technologies"
+    ];
+
     return (
         <div className="form-container-registrar">
             <h2>Manage Departments</h2>
             {message && <p className="success-msg">{message}</p>}
             
             <form onSubmit={handleSubmit}>
-                <label>Department Name: </label>
-                <input type="text" value={formData.deptName} onChange={e => setFormData({...formData, deptName: e.target.value})} required />
-                
+                <label>Department Name:</label>
+                <select 
+                    value={formData.deptName} 
+                    onChange={e => setFormData({...formData, deptName: e.target.value})} 
+                    required
+                >
+                    <option value="">-- Select Department --</option>
+                    {deptOptions.map((dept, index) => (
+                        <option key={index} value={dept}>
+                            {dept}
+                        </option>
+                    ))}
+                </select>
                 <label>Dept Code: </label>
-                <input type="text" value={formData.deptCode} onChange={e => setFormData({...formData, deptCode: e.target.value})} required />
-                
+                <input 
+                    type="text" 
+                    value={formData.deptCode} 
+                    onChange={e => setFormData({...formData, deptCode: e.target.value})} 
+                    required 
+                />
                 <button type="submit">Add Department</button>
             </form>
 

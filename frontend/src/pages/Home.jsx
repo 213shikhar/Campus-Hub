@@ -129,7 +129,7 @@ const Home = () => {
                             <option value="faculty" >Faculty</option>
                             <option value="hod" >HOD</option>
                             <option value="examController" >Exam Controller</option>
-                            <option value="tpo" >Training & Placement (TPO)</option>
+                            {/* <option value="tpo" >Training & Placement (TPO)</option> */}
                         </select>
                     
                         <label htmlFor="userid">User ID: </label>

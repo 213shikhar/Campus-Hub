@@ -87,13 +87,13 @@ const ChangePassword = () => {
             )}
 
             <form className='register-form' onSubmit={handleSubmit}>
-                <label>Old Password:</label>
+                <label><span className='asterik'>*</span>Old Password:</label>
                 <input type="password" name="oldPassword" value={formData.oldPassword} onChange={handleChange} required />
 
-                <label>New Password:</label>
+                <label><span className='asterik'>*</span>New Password:</label>
                 <input type="password" name="newPassword" value={formData.newPassword} onChange={handleChange} required />
 
-                <label>Confirm New Password:</label>
+                <label><span className='asterik'>*</span>Confirm New Password:</label>
                 <input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required />
 
                 <div className='btn-row'>

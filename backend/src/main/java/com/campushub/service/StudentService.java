@@ -1,6 +1,7 @@
 package com.campushub.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.campushub.dto.ChangePasswordRequest;
@@ -14,11 +15,9 @@ import com.campushub.repository.StudentRepository;
 @Service
 public class StudentService {
 
-    @Autowired
-    private StudentRepository studentRepository;
-    
-    @Autowired
-    private StudentInfoRepository studentInfoRepository; // Ensure this is injected
+    @Autowired private StudentRepository studentRepository;
+    @Autowired private StudentInfoRepository studentInfoRepository; // Ensure this is injected
+    @Autowired private PasswordEncoder passwordEncoder; // ✅ Inject Encoder
 
     // method 1
     public Student registerStudent(StudentRequest request) {
@@ -33,8 +32,8 @@ public class StudentService {
         student.setEmail(request.getEmail());
         student.setAddress(request.getAddress());
 
-        // Password hashing SHOULD be done here
-        student.setPassword(request.getPassword());
+     // ✅ HASH THE PASSWORD BEFORE SAVING
+        student.setPassword(passwordEncoder.encode(request.getPassword()));
 
         return studentRepository.save(student);
     }

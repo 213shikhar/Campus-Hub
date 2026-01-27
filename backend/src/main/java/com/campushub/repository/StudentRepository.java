@@ -26,4 +26,6 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
     
  // Add this method ()
     List<Student> findByCourseAndBranch(String course, String branch);
+
+    boolean existsByAdmissionNo(String admissionNo);
 }

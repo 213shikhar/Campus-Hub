@@ -18,4 +18,9 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer>{
     
  // Add this method
     List<Employee> findByDepartment(String department);
+    
+    boolean existsByEid(String eid);
+    
+ // Add this if it's missing
+    Optional<Employee> findByTypeAndEid(String type, String eid);
 }

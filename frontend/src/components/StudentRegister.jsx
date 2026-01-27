@@ -6,11 +6,12 @@ import { validateRegistrationForm } from '../pages/studentFormValidator';
 const StudentRegister = () => {
     const navigate = useNavigate();
 
-    // 1. Unified State
+    // 1. Unified State (Added 'section')
     const [formData, setFormData] = useState({
         session: "",
         course: "",
         branch: "",
+        section: "", // ✅ NEW FIELD
         admissionNo: "",
         studentname: "",
         mobile: "",
@@ -22,11 +23,11 @@ const StudentRegister = () => {
 
     const [errors, setErrors] = useState({});
 
-    // 1. Add State for Dynamic Dropdowns
+    // Dynamic Dropdowns State
     const [availableCourses, setAvailableCourses] = useState([]);
     const [availableBranches, setAvailableBranches] = useState([]);
 
-    // 2. Fetch Data from Registrar API on Page Load
+    // Fetch Data from Registrar API on Page Load
     useEffect(() => {
         // Fetch Courses
         axios.get('http://localhost:8080/api/registrar/courses')
@@ -39,7 +40,7 @@ const StudentRegister = () => {
             .catch(err => console.error("Error loading branches", err));
     }, []);
 
-    // 2. Handle Change
+    // Handle Change
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
@@ -50,7 +51,7 @@ const StudentRegister = () => {
         }
     };
 
-    // 3. Handle Submission
+    // Handle Submission
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -61,11 +62,12 @@ const StudentRegister = () => {
             return; 
         }
 
-        // B. Prepare JSON payload (Exclude confirmPassword)
+        // B. Prepare JSON payload (Include 'section')
         const dataToSend = {
             session: formData.session,
             course: formData.course,
             branch: formData.branch,
+            section: formData.section, // ✅ SEND SECTION
             admissionNo: formData.admissionNo,
             studentname: formData.studentname,
             mobile: formData.mobile,
@@ -79,24 +81,31 @@ const StudentRegister = () => {
                 headers: { "Content-Type": "application/json" }
             });
 
-            // DEBUGGING: Log the response to see what the backend actually sent
             console.log("Backend Response:", response.data);
 
-            // C. CRITICAL CHECK: Ensure response has data before navigating
             if (response.data && response.status === 200) {
                 alert("Student Registered Successfully!");
-                
-                // Pass the 'response.data' (which contains the full student object with ID)
                 navigate('/student-dashboard', { state: { student: response.data } });
             }
 
         } catch (error) {
             console.error("Error:", error);
-            // Check if backend sent a specific error message
-            if (error.response && error.response.data) {
-                alert("Registration Failed: " + (error.response.data.message || "Unknown Error"));
+            
+            if (error.response) {
+                // Case 1: The backend sent a JSON Object (The [object Object] case)
+                if (typeof error.response.data === 'object') {
+                    // Extract the specific message from the object
+                    // Spring Boot usually sends errors in 'message' or 'error' fields
+                    const errorMsg = error.response.data.message || error.response.data.error || JSON.stringify(error.response.data);
+                    alert("Registration Failed: " + errorMsg);
+                } 
+                // Case 2: The backend sent a plain String
+                else {
+                    alert(error.response.data); 
+                }
             } else {
-                alert("Registration Failed! Please check your server.");
+                // Case 3: Server is down or network error
+                alert("Registration Failed! Please check your server connection.");
             }
         }
     };
@@ -117,10 +126,7 @@ const StudentRegister = () => {
                             <option value="2029-2033">2029-2033</option>
                             <option value="2033-2037">2033-2037</option>
                         </select>
-
-                        <span className='error'>
-                            {errors.session && <span>{errors.session}</span>}
-                        </span>
+                        <span className='error'>{errors.session && <span>{errors.session}</span>}</span>
 
                         {/* Dynamic Course Dropdown */}
                         <label htmlFor="course"><span className='asterik'>*</span>Course: </label>
@@ -132,11 +138,9 @@ const StudentRegister = () => {
                                 </option>
                             ))}
                         </select>
-                        <span className='error'>
-                            {errors.course && <span>{errors.course}</span>}
-                        </span>
+                        <span className='error'>{errors.course && <span>{errors.course}</span>}</span>
 
-                        {/* Dynamic Branch Dropdown (Mapped from Departments) */}
+                        {/* Dynamic Branch Dropdown */}
                         <label htmlFor="branch"><span className='asterik'>*</span>Branch: </label>
                         <select name="branch" id="branch" value={formData.branch} onChange={handleChange} required>
                             <option value="">-- select branch --</option>
@@ -146,48 +150,43 @@ const StudentRegister = () => {
                                 </option>
                             ))}
                         </select>
-                        <span className='error'>
-                            {errors.branch && <span>{errors.branch}</span>}
-                        </span>
+                        <span className='error'>{errors.branch && <span>{errors.branch}</span>}</span>
 
+                        {/* ✅ NEW SECTION DROPDOWN */}
+                        <label htmlFor="section"><span className='asterik'>*</span>Section: </label>
+                        <select name="section" id="section" value={formData.section} onChange={handleChange} required>
+                            <option value="">-- select section --</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                        </select>
+                        
                         <label htmlFor="admissionNo"><span className='asterik'>*</span>Admission No: </label>
                         <input type="text" name="admissionNo" id="admissionNo" value={formData.admissionNo} onChange={handleChange} />
-                        <span className='error'>
-                            {errors.admissionNo && <span>{errors.admissionNo}</span>}
-                        </span>
+                        <span className='error'>{errors.admissionNo && <span>{errors.admissionNo}</span>}</span>
 
                         <label htmlFor="studentname"><span className='asterik'>*</span>Student Name: </label>
                         <input type="text" name="studentname" id="studentname" value={formData.studentname} onChange={handleChange} />
-                        <span className='error'>
-                            {errors.studentname && <span>{errors.studentname}</span>}
-                        </span>
+                        <span className='error'>{errors.studentname && <span>{errors.studentname}</span>}</span>
 
                         <label htmlFor="mobile"><span className='asterik'>*</span>Mobile No: </label>
                         <input type="text" name="mobile" id="mobile" value={formData.mobile} onChange={handleChange} />
-                        <span className='error'>
-                            {errors.mobile && <span>{errors.mobile}</span>}
-                        </span>
+                        <span className='error'>{errors.mobile && <span>{errors.mobile}</span>}</span>
 
                         <label htmlFor="email"><span className='asterik'>*</span>Email: </label>
                         <input type="email" name="email" id="email" value={formData.email} onChange={handleChange} />
-                        <span className='error'>
-                            {errors.email && <span>{errors.email}</span>}
-                        </span>
+                        <span className='error'>{errors.email && <span>{errors.email}</span>}</span>
 
                         <label htmlFor="address"><span className='asterik'>*</span>Address: </label>
                         <textarea name="address" id="address" rows={5} cols={30} value={formData.address} onChange={handleChange} />
 
                         <label htmlFor="password"><span className='asterik'>*</span>Password: </label>
                         <input type="password" name="password" id="password" value={formData.password} onChange={handleChange} />
-                        <span className='error'>
-                            {errors.password && <span>{errors.password}</span>}
-                        </span>
+                        <span className='error'>{errors.password && <span>{errors.password}</span>}</span>
 
                         <label htmlFor="confirmPassword"><span className='asterik'>*</span>Confirm Password: </label>
                         <input type="password" name="confirmPassword" id="confirmPassword" value={formData.confirmPassword} onChange={handleChange} />
-                        <span className='error'>
-                            {errors.confirmPassword && <span>{errors.confirmPassword}</span>}
-                        </span>
+                        <span className='error'>{errors.confirmPassword && <span>{errors.confirmPassword}</span>}</span>
 
                         <div className='btn-row'>
                             <button type='submit'>Submit</button>
@@ -197,9 +196,9 @@ const StudentRegister = () => {
                 <br /><p>Already a User? <Link style={{ textDecoration: 'none' }} to="/">Login Here</Link>!</p>
             </div>
             <hr />
-            <br /> <p style={{ textAlign: 'center', fontSize: 'small' }}>&copy; Shikhar Sharma 2026</p>
+            <br /> <p style={{ textAlign: 'center', fontSize: 'small' }}>&copy; CampusHub 2026</p>
         </div>
     );
 }
 
-export default StudentRegister;
+export default StudentRegister; 

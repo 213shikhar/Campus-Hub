@@ -1,6 +1,7 @@
 package com.campushub.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.campushub.dto.EmployeeRequest;
 import com.campushub.dto.ChangePasswordRequest;
@@ -13,11 +14,9 @@ import com.campushub.repository.EmployeeInfoRepository;
 @Service
 public class EmployeeService {
     
-    @Autowired
-    private EmployeeRepository employeeRepository;
-
-    @Autowired
-    private EmployeeInfoRepository employeeInfoRepository;
+    @Autowired private EmployeeRepository employeeRepository;
+    @Autowired private EmployeeInfoRepository employeeInfoRepository;
+    @Autowired private PasswordEncoder passwordEncoder; // ✅ Inject Encoder
     
     // Existing Registration Method
     public Employee registerEmployee(EmployeeRequest request) {
@@ -29,7 +28,8 @@ public class EmployeeService {
         employee.setEmployeeName(request.getEmployeeName());
         employee.setMobile(request.getMobile());
         employee.setEmail(request.getEmail());
-        employee.setPassword(request.getPassword()); // Remember to hash this in real apps!
+     // ✅ HASH PASSWORD
+        employee.setPassword(passwordEncoder.encode(request.getPassword()));
         return employeeRepository.save(employee);
     }
 

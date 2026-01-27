@@ -5,6 +5,7 @@ import com.campushub.repository.EmployeeInfoRepository;
 import com.campushub.repository.EmployeeRepository;
 import com.campushub.repository.StudentInfoRepository;
 import com.campushub.repository.StudentRepository;
+import com.campushub.repository.SubjectRepository;
 import com.campushub.service.RegistrarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ public class RegistrarController {
     @Autowired private StudentInfoRepository studentInfoRepository;
     @Autowired private EmployeeRepository employeeRepository;
     @Autowired private EmployeeInfoRepository employeeInfoRepository;
+    @Autowired private SubjectRepository subjectRepository; // Ensure this is autowired
 
     // --- Courses ---
     @PostMapping("/course/add")
@@ -46,6 +48,16 @@ public class RegistrarController {
     }
     @GetMapping("/subjects")
     public List<Subject> getSubjects() { return registrarService.getAllSubjects(); }
+    
+ // --- DELETE Subject End point ---
+    @DeleteMapping("/subject/delete/{id}")
+    public ResponseEntity<?> deleteSubject(@PathVariable Long id) {
+        if (!subjectRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        subjectRepository.deleteById(id);
+        return ResponseEntity.ok("Subject deleted successfully");
+    }
 
     // --- Update Semester ---
     @PutMapping("/promote/{admissionNo}")

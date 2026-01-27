@@ -66,6 +66,7 @@ const HodProfile = () => {
                 >
                     Update Profile
                 </button>
+                <button className="back-btn" onClick={() => navigate(-1)}>Back</button>
             </div>
         </div>
     )

@@ -64,16 +64,15 @@ const Notice = () => {
 
             {/* --- Upload Section --- */}
             <form onSubmit={handleSubmit} style={{borderBottom: '2px solid #eee', paddingBottom: '20px', marginBottom: '20px'}}>
-                <label>Notice Title:</label>
+                <label>Notice Title: </label>
                 <input 
                     type="text" 
                     value={title} 
                     onChange={(e) => setTitle(e.target.value)} 
-                    placeholder="e.g., Exam Schedule 2026 or Placement Drive"
                     required 
-                />
+                /><br/>
 
-                <label>Select Document (PDF):</label>
+                <label>Select Document (PDF): </label>
                 <input 
                     type="file" 
                     onChange={handleFileChange} 
