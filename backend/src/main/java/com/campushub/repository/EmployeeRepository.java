@@ -1,5 +1,6 @@
 package com.campushub.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,4 +15,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer>{
 	
 	// ✅ ADD THIS: Needed for finding employee without password
     Optional<Employee> findByEid(String eid);
+    
+ // Add this method
+    List<Employee> findByDepartment(String department);
 }

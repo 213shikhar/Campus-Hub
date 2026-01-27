@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import './RegistrarStyling.css';
+
 
 const AddCourse = () => {
     const navigate = useNavigate();
@@ -31,12 +33,12 @@ const AddCourse = () => {
     };
 
     return (
-        <div className="form-container">
+        <div className="form-container-registrar">
             <h2>Manage Courses</h2>
             {message && <p className="success-msg">{message}</p>}
             
             <form onSubmit={handleSubmit}>
-                <label>Course Name (e.g., B.Tech):</label>
+                <label>Course Name: </label>
                 <input type="text" value={formData.courseName} onChange={e => setFormData({...formData, courseName: e.target.value})} required />
                 
                 <label>Duration (Years):</label>
@@ -47,7 +49,7 @@ const AddCourse = () => {
 
             <h3>Existing Courses</h3>
             <ul>
-                {courses.map(c => <li key={c.id}>{c.courseName} ({c.durationYears} Years)</li>)}
+                {courses.map(c => <li key={c.id}>{c.courseName.toUpperCase()} ({c.durationYears} Years)</li>)}
             </ul>
             <button className="back-btn" onClick={() => navigate(-1)}>Back</button>
         </div>

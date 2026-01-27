@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { validateRegistrationForm } from '../pages/studentFormValidator'; 
@@ -21,6 +21,23 @@ const StudentRegister = () => {
     });
 
     const [errors, setErrors] = useState({});
+
+    // 1. Add State for Dynamic Dropdowns
+    const [availableCourses, setAvailableCourses] = useState([]);
+    const [availableBranches, setAvailableBranches] = useState([]);
+
+    // 2. Fetch Data from Registrar API on Page Load
+    useEffect(() => {
+        // Fetch Courses
+        axios.get('http://localhost:8080/api/registrar/courses')
+            .then(res => setAvailableCourses(res.data))
+            .catch(err => console.error("Error loading courses", err));
+
+        // Fetch Branches (Departments)
+        axios.get('http://localhost:8080/api/registrar/departments')
+            .then(res => setAvailableBranches(res.data))
+            .catch(err => console.error("Error loading branches", err));
+    }, []);
 
     // 2. Handle Change
     const handleChange = (e) => {
@@ -105,26 +122,30 @@ const StudentRegister = () => {
                             {errors.session && <span>{errors.session}</span>}
                         </span>
 
+                        {/* Dynamic Course Dropdown */}
                         <label htmlFor="course"><span className='asterik'>*</span>Course: </label>
-                        <select name="course" id="course" value={formData.course} onChange={handleChange} >
+                        <select name="course" id="course" value={formData.course} onChange={handleChange} required>
                             <option value="">-- select course --</option>
-                            <option value="btech">B.Tech</option>
-                            <option value="mtech">M.Tech</option>
-                            <option value="bca">BCA</option>
-                            <option value="mca">MCA</option>
+                            {availableCourses.map(c => (
+                                <option key={c.id} value={c.courseName}>
+                                    {c.courseName.toUpperCase()}
+                                </option>
+                            ))}
                         </select>
                         <span className='error'>
                             {errors.course && <span>{errors.course}</span>}
                         </span>
 
+                        {/* Dynamic Branch Dropdown (Mapped from Departments) */}
                         <label htmlFor="branch"><span className='asterik'>*</span>Branch: </label>
-                        <select name="branch" id="branch" value={formData.branch} onChange={handleChange} >
+                        <select name="branch" id="branch" value={formData.branch} onChange={handleChange} required>
                             <option value="">-- select branch --</option>
-                            <option value="cse">Computer Science Engineering</option>
-                            <option value="ds">Data Science</option>
-                            <option value="aiml">AI & ML</option>
+                            {availableBranches.map(b => (
+                                <option key={b.id} value={b.deptName}>
+                                    {b.deptName.toUpperCase()} ({b.deptCode})
+                                </option>
+                            ))}
                         </select>
-
                         <span className='error'>
                             {errors.branch && <span>{errors.branch}</span>}
                         </span>

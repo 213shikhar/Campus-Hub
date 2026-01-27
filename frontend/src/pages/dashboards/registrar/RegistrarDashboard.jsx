@@ -27,9 +27,9 @@ const RegistrarDashboard = () => {
                 <h2><strong>Hello, </strong>{registrar ? registrar.userId : storedUserId}!</h2>
             </main>
             <hr/><br/>
-            <p><Link to="/addCourse">Add/Modify Course</Link></p><br/>
-            <p><Link to="/addDepartment">Add/Modify Department</Link></p><br/>
-            <p><Link to="/addSubjects">Add/Modify Subjects</Link></p><br/>
+            <p><Link to="/addCourse">Add Course</Link></p><br/>
+            <p><Link to="/addDepartment">Add Department</Link></p><br/>
+            <p><Link to="/addSubjects">Add Subject</Link></p><br/>
             <p><Link to="/viewEmployees">View Employees</Link></p><br/>
             <p><Link to="/viewStudents">View Students</Link></p><br/>
             <p><Link to="/viewFeedback">View Feedback</Link></p><br/>

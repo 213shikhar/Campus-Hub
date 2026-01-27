@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { validateRegistrationForm } from '../pages/employeeFormValidator';
@@ -20,6 +20,22 @@ const EmployeeRegister = () => {
     });
 
     const [errors, setErrors] = useState({});
+
+    // Dynamic Dropdown
+    const [availableCourses, setAvailableCourses] = useState([]);
+    const [departments, setDepartments] = useState([]);
+
+    useEffect(() => {
+        // Fetch Courses
+        axios.get('http://localhost:8080/api/registrar/courses')
+            .then(res => setAvailableCourses(res.data))
+            .catch(err => console.error("Error loading courses", err));
+        
+        // Fetching Deparment
+        axios.get('http://localhost:8080/api/registrar/departments')
+            .then(res => setDepartments(res.data))
+            .catch(err => console.error(err));
+    }, []);
 
     const handleChange = (e) => {
         const {name, value} = e.target;
@@ -119,29 +135,29 @@ const EmployeeRegister = () => {
                             {errors.type && <span>{errors.type}</span>}
                         </span>
 
+                        {/* Dynamic Course */}
                         <label htmlFor="course"><span className='asterik'>*</span>Course: </label>
-                        <select name="course" id="course" value={formData.course} onChange={handleChange}>
+                        <select name="course" id="course" value={formData.course} onChange={handleChange} required>
                             <option value="">-- select course --</option>
-                            <option value="btech" >B.Tech</option>
-                            <option value="mtech" >M.Tech</option>
-                            <option value="bca" >BCA</option>
-                            <option value="mca" >MCA</option>
+                            {availableCourses.map(c => (
+                                <option key={c.id} value={c.courseName}>
+                                    {c.courseName.toUpperCase()}
+                                </option>
+                            ))}
                         </select>
                         <span className='error'>
                             {errors.course && <span>{errors.course}</span>}
                         </span>
-                        
+
+                        {/* Dynamic Department */}
                         <label htmlFor="department"><span className='asterik'>*</span>Department: </label>
-                        <select name="department" id="department" value={formData.department} onChange={handleChange}>
-                            <option value="">-- select branch --</option>
-                            <option value="cse" >Computer Science Engineering</option>
-                            <option value="ds" >Data Science</option>
-                            <option value="aiml" >AI & ML</option>
-                            <option value="it" >Information Technology</option>
-                            <option value="ece" >Electronics & Communication Engineering</option>
-                            <option value="ee" >Electrical Engineering</option>
-                            <option value="me" >Mechanical Engineering</option>
-                            <option value="ce" >Civil Engineering</option>
+                        <select name="department" id="department" value={formData.department} onChange={handleChange} required>
+                            <option value="">-- Select Department --</option>
+                            {departments.map(dept => (
+                                <option key={dept.id} value={dept.deptName}>
+                                    {dept.deptName.toUpperCase()} ({dept.deptCode})
+                                </option>
+                            ))}
                         </select>
                         <span className='error'>
                             {errors.department && <span>{errors.department}</span>}

@@ -1,6 +1,10 @@
 package com.campushub.controller;
 
 import com.campushub.model.*;
+import com.campushub.repository.EmployeeInfoRepository;
+import com.campushub.repository.EmployeeRepository;
+import com.campushub.repository.StudentInfoRepository;
+import com.campushub.repository.StudentRepository;
 import com.campushub.service.RegistrarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +17,11 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:3000")
 public class RegistrarController {
 
-    @Autowired
-    private RegistrarService registrarService;
+    @Autowired private RegistrarService registrarService;
+    @Autowired private StudentRepository studentRepository;
+    @Autowired private StudentInfoRepository studentInfoRepository;
+    @Autowired private EmployeeRepository employeeRepository;
+    @Autowired private EmployeeInfoRepository employeeInfoRepository;
 
     // --- Courses ---
     @PostMapping("/course/add")
@@ -47,15 +54,62 @@ public class RegistrarController {
         return ResponseEntity.ok("Student promoted to next semester.");
     }
 
-    // --- View All Data ---
+    
+    // --- 1. FILTERED Students Endpoint ---
     @GetMapping("/students")
-    public List<Student> getAllStudents() {
-        return registrarService.getAllStudents();
+    public List<Student> getStudents(
+            @RequestParam(required = false) String course,
+            @RequestParam(required = false) String branch) {
+        
+        if (course != null && branch != null) {
+            return studentRepository.findByCourseAndBranch(course, branch);
+        } else {
+            return studentRepository.findAll();
+        }
+    }
+ // --- 2. FILTERED Employees Endpoint ---
+    @GetMapping("/employees")
+    public List<Employee> getEmployees(@RequestParam(required = false) String dept) {
+        if (dept != null && !dept.isEmpty()) {
+            return employeeRepository.findByDepartment(dept);
+        } else {
+            return employeeRepository.findAll();
+        }
     }
 
-    @GetMapping("/employees")
-    public List<Employee> getAllEmployees() {
-        return registrarService.getAllEmployees();
+ // --- 3. DELETE Student Endpoint (UPDATED) ---
+    @DeleteMapping("/student/delete/{admissionNo}")
+    public ResponseEntity<?> deleteStudent(@PathVariable String admissionNo) {
+        
+        // 1. Verify Student Exists
+        Student student = studentRepository.findByAdmissionNo(admissionNo)
+            .orElseThrow(() -> new RuntimeException("Student not found"));
+        
+        // 2. ✅ FIRST: Delete the linked profile info (The Child)
+        // This prevents the foreign key constraint error.
+        studentInfoRepository.deleteByStudent_AdmissionNo(admissionNo);
+
+        // 3. ✅ SECOND: Delete the main student record (The Parent)
+        studentRepository.delete(student);
+        
+        return ResponseEntity.ok("Student and their profile deleted successfully");
+    }
+
+ // --- 4. DELETE Employee Endpoint (UPDATED) ---
+    @DeleteMapping("/employee/delete/{eid}")
+    public ResponseEntity<?> deleteEmployee(@PathVariable String eid) {
+        
+        // 1. Check if employee exists
+        Employee emp = employeeRepository.findByEid(eid)
+            .orElseThrow(() -> new RuntimeException("Employee not found"));
+        
+        // 2. ✅ FIRST: Delete the detailed profile info (The Child)
+        employeeInfoRepository.deleteByEmployee_Eid(eid);
+
+        // 3. ✅ SECOND: Delete the main employee record (The Parent)
+        employeeRepository.delete(emp);
+        
+        return ResponseEntity.ok("Employee and deleted successfully");
     }
 
     @GetMapping("/feedbacks")

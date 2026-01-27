@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import './RegistrarStyling.css';
+
 
 const AddSubjects = () => {
     const navigate = useNavigate();
@@ -29,7 +31,7 @@ const AddSubjects = () => {
     const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
     return (
-        <div className="form-container">
+        <div className="form-container-registrar">
             <h2>Add Subject</h2>
             {message && <p className="success-msg">{message}</p>}
             
@@ -52,6 +54,7 @@ const AddSubjects = () => {
                 <label>Branch/Dept:</label>
                 <select name="branchName" value={formData.branchName} onChange={handleChange} required>
                     <option value="">-- Select Branch --</option>
+                    {/* VERY IMPORTANT LINE */}
                     {depts.map(d => <option key={d.id} value={d.deptName}>{d.deptName}</option>)}
                 </select>
 

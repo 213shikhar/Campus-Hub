@@ -10,6 +10,6 @@ import com.campushub.model.Subject;
 //SubjectRepository.java
 @Repository
 public interface SubjectRepository extends JpaRepository<Subject, Long> {
-// Helpful for fetching subjects for a specific class later
-List<Subject> findByCourseNameAndBranchNameAndSemester(String course, String branch, int semester);
+	// Helpful for fetching subjects for a specific class later
+	List<Subject> findByCourseNameAndBranchNameAndSemester(String course, String branch, int semester);
 }
