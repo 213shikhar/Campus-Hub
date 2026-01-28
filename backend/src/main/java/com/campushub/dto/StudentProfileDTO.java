@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class StudentProfileDTO {
-	// Core Data (From Student Table) - Read Only on Frontend
+
     private String studentName;
     private String admissionNo;
     private String branch;
@@ -15,8 +15,6 @@ public class StudentProfileDTO {
     private String email;
     private String mobile;
     private String address;
-    
- // --- Extended Data (Editable) with Validation ---
     private Integer semester;
 
     @NotBlank(message = "Date of Birth is required")
@@ -28,12 +26,8 @@ public class StudentProfileDTO {
     @NotBlank(message = "Category is required")
     private String category;
 
-    // Optional but strict if provided (allows empty string OR 12 digits)
-    // Regex explanation: ^$ matches empty string, | matches OR, ^\d{12}$ matches 12 digits
     @Pattern(regexp = "^$|^\\d{12}$", message = "Adhaar must be exactly 12 digits")
     private String adhaarCardNo;
-    
-    // --- Parents ---
     
     @NotBlank(message = "Father's Name is required")
     private String fatherName;
@@ -58,17 +52,14 @@ public class StudentProfileDTO {
     
     private String motherEmail;
     private String motherAdhaar;
-    
-    // --- Guardian (Optional) ---
     private String guardianName;
     private String guardianRelation;
     private String guardianAddress;
-
-    // Optional: Only validate if not empty
+    
     @Pattern(regexp = "^$|^\\d{10}$", message = "Guardian Mobile must be 10 digits")
     private String guardianMobile;
-
-    // URLs
+    
+    // to be added later
     private String photoUrl;
     private String signatureUrl;
     private String tenthMarksheetUrl;

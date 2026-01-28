@@ -5,14 +5,14 @@ import axios from 'axios';
 const Home = () => {
     const navigate = useNavigate();
 
-    // 1. State to hold form data
+    // State to hold form data
     const [credentials, setCredentials] = useState({
         role: "",
         userid: "", 
         password: ""
     });
 
-    // 2. Handle Input Change
+    // 2. Handle Input Change -> Its job is to take whatever the user types (or selects) in a form and save it into your credentials state object.
     const handleChange = (e) => {
         const { name, value } = e.target;
         setCredentials({ ...credentials, [name]: value });
@@ -22,7 +22,7 @@ const Home = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // ✅ ADD THIS: Clear old session data before starting a new login
+        // clears before new login
         localStorage.clear();
         
         // 1. Basic Validation
@@ -35,7 +35,7 @@ const Home = () => {
             // 2. Prepare the Payload
             let category = "employee"; 
             if (credentials.role === "student") category = "student";
-            else if (credentials.role === "parent") category = "parent";
+            // else if (credentials.role === "parent") category = "parent";
 
             const loginPayload = {
                 role: category,            
@@ -44,9 +44,9 @@ const Home = () => {
                 password: credentials.password
             };
 
-            // 3. Send Request
-            const response = await axios.post("http://localhost:8080/api/login", loginPayload);
-            const userData = response.data; 
+            // 3. Send Request -> await -> Pauses execution until the backend responds
+            const response = await axios.post("http://localhost:8080/api/login", loginPayload); // Response Stores the complete response object from the server (includes headers, status code, data, etc.)
+            const userData = response.data; // Extracts just the user data portion from the response (the actual user object returned by the backend, like employee details or student info)
 
             if (userData) {
                 // LOCAL STORAGE
@@ -56,9 +56,8 @@ const Home = () => {
                     localStorage.setItem('userType', 'student');
                 }
 
-                // 2. Admin Login (Registrar & TPO)
-                else if (credentials.role === "registrar" || credentials.role === "tpo") {
-                    // AdminUser entity returns 'userId', not 'eid'
+                // 2. Admin Login
+                else if (credentials.role === "registrar") {
                     localStorage.setItem('userId', userData.userId); 
                     localStorage.setItem('userType', credentials.role);
                 }
@@ -72,6 +71,7 @@ const Home = () => {
                 // 4. Dynamic Navigation
                 switch (credentials.role) {
                     case "student":
+                        // passing user data along the way
                         navigate('/student-dashboard', { state: { student: userData } });
                         break;
                     
@@ -87,14 +87,8 @@ const Home = () => {
                         navigate('/exam-contr-dashboard', { state: { employee: userData } });
                         break;
                     
-                    // ✅ CHANGED: Send as 'admin' to avoid confusion with Employee fields
                     case "registrar":
                         navigate('/registrar-dashboard', { state: { admin: userData } });
-                        break;
-                                
-                    // ✅ CHANGED: Send as 'admin'
-                    case "tpo":
-                        navigate('/tpo-dashboard', { state: { admin: userData } });
                         break;
 
                     default:
@@ -104,6 +98,7 @@ const Home = () => {
         }
         catch (error) {
             console.error("Login Error:", error);
+            // unauthorized - 401
             if(error.response && error.response.status === 401) {
                  alert("Invalid Credentials. Please check your ID and Password.");
             } else {
@@ -114,13 +109,13 @@ const Home = () => {
 
     return(
         <div>
-            {/* <Header/> */}
             <h1 style={{textAlign:'center'}}>Welcome to CampusHub</h1><br/>
             <hr/>
             <div className='main-container'>
                 <h2 style={{textAlign:'center'}}>Center for Development of Advanced Computing, Noida</h2>
                 <div className='form-container'>
                     <form className='login-form' onSubmit={handleSubmit}>
+                        
                         <label htmlFor="role">Role: </label>
                         <select name="role" id="role" value={credentials.role} onChange={handleChange} required>
                             <option value="">-- select role --</option>

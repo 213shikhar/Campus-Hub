@@ -1,6 +1,6 @@
 package com.campushub.service;
 
-import com.campushub.dto.LoginRequest; // ✅ Ensure this is imported
+import com.campushub.dto.LoginRequest;
 import com.campushub.model.AdminUser;
 import com.campushub.model.Employee;
 import com.campushub.model.Student;
@@ -19,7 +19,6 @@ public class LoginService {
     @Autowired private AdminUserRepository adminUserRepository;
     @Autowired private PasswordEncoder passwordEncoder;
 
-    // ✅ UPDATE THE METHOD SIGNATURE HERE
     public Object loginUser(LoginRequest request) {
         
         // Extract values from the request object
@@ -27,7 +26,7 @@ public class LoginService {
         String userId = request.getUserid();
         String rawPassword = request.getPassword();
 
-        // --- 1. STUDENT LOGIN ---
+        // STUDENT LOGIN
         if ("student".equalsIgnoreCase(role)) {
             Student student = studentRepository.findByAdmissionNo(userId)
                 .orElseThrow(() -> new RuntimeException("Invalid Student Credentials"));
@@ -43,13 +42,11 @@ public class LoginService {
         else if ("employee".equalsIgnoreCase(role)) {
             String type = request.getType(); 
 
-            // CASE A: Registrar & TPO
+            // CASE A: Registrar
             if ("registrar".equalsIgnoreCase(type) || "tpo".equalsIgnoreCase(type)) {
                 AdminUser admin = adminUserRepository.findByUserIdAndRole(userId, type)
                     .orElseThrow(() -> new RuntimeException("Invalid " + type + " Credentials"));
 
-                // Note: If your AdminUsers are not hashed yet, use .equals()
-                // If they ARE hashed, use passwordEncoder.matches()
                 if (passwordEncoder.matches(rawPassword, admin.getPassword())) {
                     return admin;
                 } else {

@@ -5,14 +5,12 @@ import { validateRegistrationForm } from '../pages/studentFormValidator';
 
 const StudentRegister = () => {
     const navigate = useNavigate();
-
-    // 1. Unified State (Added 'section')
     const [formData, setFormData] = useState({
         session: "",
         course: "",
         branch: "",
         semester: "",
-        section: "", // ✅ NEW FIELD
+        section: "",
         admissionNo: "",
         studentname: "",
         mobile: "",
@@ -35,7 +33,7 @@ const StudentRegister = () => {
             .then(res => setAvailableCourses(res.data))
             .catch(err => console.error("Error loading courses", err));
 
-        // Fetch Branches (Departments)
+        // Fetch Branches
         axios.get('http://localhost:8080/api/registrar/departments')
             .then(res => setAvailableBranches(res.data))
             .catch(err => console.error("Error loading branches", err));
@@ -56,14 +54,15 @@ const StudentRegister = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // A. Run Validations
         const validationErrors = validateRegistrationForm(formData);
+        // if errors present, stop form submission
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
+            // Exits the function early, stopping the form submission process
             return; 
         }
 
-        // B. Prepare JSON payload (Include 'section')
+        // preparing json
         const dataToSend = {
             session: formData.session,
             course: formData.course,
@@ -87,6 +86,13 @@ const StudentRegister = () => {
 
             if (response.data && response.status === 200) {
                 alert("Student Registered Successfully!");
+                // FIX: Save to Local Storage immediately!
+        // This ensures the Profile page can find the user.
+        localStorage.setItem("admissionNo", formData.admissionNo);
+        localStorage.setItem("userType", "student"); 
+        
+        // (Optional) If you use userId elsewhere
+        localStorage.setItem("userId", formData.admissionNo);
                 navigate('/student-dashboard', { state: { student: response.data } });
             }
 

@@ -8,16 +8,15 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:3000") // Ensure React can reach this
+@CrossOrigin(origins = "http://localhost:3000")
 public class LoginController {
 
-    @Autowired
-    private LoginService loginService; // ✅ Delegate to Service
+    @Autowired private LoginService loginService;
 
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
         try {
-            // The service handles all logic and DB lookups
+        	
             Object user = loginService.loginUser(loginRequest);
             return ResponseEntity.ok(user);
             

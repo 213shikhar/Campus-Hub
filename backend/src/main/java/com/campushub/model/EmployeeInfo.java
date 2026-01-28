@@ -1,5 +1,4 @@
 package com.campushub.model;
-import com.campushub.model.Employee;
 import jakarta.persistence.*;
 import lombok.Data;
 

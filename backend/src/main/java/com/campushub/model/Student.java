@@ -36,9 +36,5 @@ public class Student {
     @Column(nullable = false, columnDefinition = "integer default 1")
  // ✅ ADD THIS FIELD
     private Integer semester;
- // ✅ FIX: Add 'columnDefinition' to set a default value for existing rows
-    @Column(nullable = false, columnDefinition = "boolean default false")
-    private boolean isPlaced = false;
-    private String companyName;
-    private String packageLPA; // e.g., "12 LPA"
+ 
 }

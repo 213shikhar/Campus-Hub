@@ -89,7 +89,7 @@ public class EmployeeService {
         info.setFatherName(dto.getFatherName());
         info.setMotherName(dto.getMotherName());
         info.setSpouseName(dto.getSpouseName());
-        
+        	
         employeeInfoRepository.save(info);
     }
     

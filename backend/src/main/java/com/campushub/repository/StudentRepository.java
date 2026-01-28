@@ -21,7 +21,6 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
     Optional<Student> findByAdmissionNo(String admissionNo);
     
  // Add inside StudentRepository interface
-    List<Student> findByIsPlacedTrue();
     List<Student> findByCourseAndSemesterIn(String course, List<Integer> semesters);
     
  // Add this method ()

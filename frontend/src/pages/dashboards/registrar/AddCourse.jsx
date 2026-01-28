@@ -6,7 +6,7 @@ import './RegistrarStyling.css';
 
 const AddCourse = () => {
     const navigate = useNavigate();
-    const [courses, setCourses] = useState([]);
+    const [courses, setCourses] = useState([]); // for existing courses
     const [formData, setFormData] = useState({ courseName: '', durationYears: '' });
     const [message, setMessage] = useState('');
 

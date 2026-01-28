@@ -7,6 +7,7 @@ const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@
 // the function
 export const validateRegistrationForm = (formData) => {
     const errors = {};
+    
     // not empty
     if (!formData.session.trim()) {
     errors.session = "Session is required";
@@ -31,7 +32,7 @@ export const validateRegistrationForm = (formData) => {
       errors.studentname = "Name cannot exceed 20 characters";
     }
 
-    // student id / admission number validation
+    // admission number validation
     if (!formData.admissionNo.trim()) {
         errors.admissionNo = "ID is required";
     } 
@@ -67,22 +68,5 @@ export const validateRegistrationForm = (formData) => {
     if (formData.confirmPassword !== formData.password) {
         errors.confirmPassword = "Passwords do not match";
     }
-
-    // // file validation
-    // if (!formData.photo) {
-    //     errors.photo = "Profile picture is required";
-    // } 
-    // else {
-    //     // 1. Check File Size
-    //     if (formData.photo.size > MAX_FILE_SIZE) {
-    //         errors.photo = "File size exceeds 1MB limit";
-    //     }
-    
-    //     // 2. Check File Type (MIME type)
-    //     else if (!ALLOWED_FILE_TYPES.includes(formData.photo.type)) {
-    //         errors.photo = "Only JPEG and JPG files are allowed";
-    //     }
-    // }
-
     return errors;
 };

@@ -48,15 +48,14 @@ const EmployeeRegister = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
-        // 1. Run validations
+         
         const validationErrors = validateRegistrationForm(formData);
         if (Object.keys(validationErrors).length > 0){
             setErrors(validationErrors);
             return;
         }
 
-        // 2. Prepare JSON data
+        // preparing json
         const dataToSend = {
             type: formData.type,
             course: formData.course,
@@ -69,7 +68,7 @@ const EmployeeRegister = () => {
             password: formData.password,
         };
 
-        try{
+        try {
             const response = await axios.post("http://localhost:8080/api/employees/register", dataToSend, {
                 headers: {"Content-Type":"application/json"}
             });
@@ -81,6 +80,13 @@ const EmployeeRegister = () => {
 
                 const employeeData = response.data;
                 const employeeType = formData.type; 
+
+                // ✅ FIX: Save IDs to Local Storage immediately
+                // This ensures the Profile page works without needing to logout/login
+                localStorage.setItem("eid", formData.eid);
+                localStorage.setItem("userType", "employee");
+                localStorage.setItem("userRole", employeeType); // Important for Dashboard logic
+
                 let targetDashboard = "";
 
                 // 3. Logic: Determine Dashboard based on Type
@@ -110,8 +116,6 @@ const EmployeeRegister = () => {
         catch (error) {
             console.error("Error:", error);
             
-            // ✅ DETECT DUPLICATE ID / BAD REQUEST
-            // This catches the specific text "Error: Employee ID ... already exists!"
             if (error.response && error.response.status === 400) {
                 alert(error.response.data); 
             } else if (error.response && error.response.data) {
