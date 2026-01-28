@@ -45,7 +45,10 @@ public class StudentController {
     
  // 2. UPDATE Profile Endpoint
     @PutMapping("/profile/{admissionNo}")
-    public ResponseEntity<String> updateStudentProfile(@PathVariable String admissionNo, @RequestBody StudentProfileDTO studentProfileDTO) {
+    public ResponseEntity<String> updateStudentProfile(
+            @PathVariable String admissionNo, 
+            @Valid @RequestBody StudentProfileDTO studentProfileDTO // ✅ Added @Valid
+    ) {
         studentService.updateStudentInfo(admissionNo, studentProfileDTO);
         return ResponseEntity.ok("Profile updated successfully");
     }

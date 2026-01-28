@@ -66,7 +66,8 @@ const FacultyProfile = () => {
                     onClick={() => navigate('/update-employee-profile', { state: { profile } })}
                 >
                     Update Profile
-                </button>
+                </button><br/>
+                <button className="back-btn" onClick={() => navigate(-1)}>Back</button>
             </div>
         </div>
     );

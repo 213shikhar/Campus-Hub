@@ -1,4 +1,6 @@
 package com.campushub.dto;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 @Data
@@ -12,14 +14,26 @@ public class EmployeeProfileDTO {
     private String email;
     private String mobile;
 
-    // Extended Data (Editable)
+ // --- Extended Data (Editable) ---
+
+    @NotBlank(message = "Date of Birth is required")
     private String dob;
+
     private String gender;
     private String category;
     private String address;
+
+    @NotBlank(message = "Qualification is required")
     private String qualification;
+
+    @NotBlank(message = "Experience is required")
     private String experience;
+
+    @Pattern(regexp = "^$|^\\d{12}$", message = "Adhaar must be exactly 12 digits")
     private String adhaarCardNo;
+
+    // PAN Card Regex: 5 letters, 4 digits, 1 letter (e.g., ABCDE1234F)
+    @Pattern(regexp = "^[A-Z]{5}[0-9]{4}[A-Z]{1}$", message = "Invalid PAN Card format (e.g., ABCDE1234F)")
     private String panCardNo;
     
     private String fatherName;

@@ -95,6 +95,8 @@ public class StudentService {
         dto.setSignatureUrl(info.getSignatureUrl());
         dto.setTenthMarksheetUrl(info.getTenthMarksheetUrl());
         dto.setTwelfthMarksheetUrl(info.getTwelfthMarksheetUrl());
+        
+        dto.setSemester(student.getSemester());
 
         return dto;
     }

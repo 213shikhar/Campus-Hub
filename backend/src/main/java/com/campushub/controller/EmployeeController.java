@@ -23,9 +23,8 @@ import jakarta.validation.Valid;
 @RequestMapping("api/employees")
 public class EmployeeController {
 	
-	@Autowired
-	private EmployeeService employeeService;
-	@Autowired EmployeeRepository employeeRepository;
+	@Autowired private EmployeeService employeeService;
+	@Autowired private EmployeeRepository employeeRepository;
 	
 	@PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> registerEmployee(@Valid @RequestBody EmployeeRequest request) {
@@ -49,10 +48,12 @@ public class EmployeeController {
         return ResponseEntity.ok(profile);
     }
 
-    // ✅ New: Update Profile
     @PutMapping("/profile/{eid}")
-    public ResponseEntity<String> updateEmployeeProfile(@PathVariable String eid, @RequestBody EmployeeProfileDTO dto) {
-        employeeService.updateEmployeeInfo(eid, dto);
+    public ResponseEntity<String> updateEmployeeProfile(
+            @PathVariable String eid, 
+            @Valid @RequestBody EmployeeProfileDTO employeeProfileDTO // ✅ Added @Valid
+    ) {
+        employeeService.updateEmployeeInfo(eid, employeeProfileDTO);
         return ResponseEntity.ok("Profile updated successfully");
     }
     

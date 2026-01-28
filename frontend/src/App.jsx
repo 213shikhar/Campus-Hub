@@ -4,7 +4,6 @@ import Home from './pages/Home';
 import StudentRegister from './components/StudentRegister';
 import EmployeeRegister from './components/EmployeeRegister';
 import RegistrarDashboard from './pages/dashboards/registrar/RegistrarDashboard';
-import TpoDashboard from './pages/dashboards/tpo/TpoDashboard';
 
 // student
 import StudentDashboard from './pages/dashboards/students/StudentDashboard';
@@ -39,10 +38,6 @@ import HodProfile from './pages/dashboards/hod/HodProfile';
 import CreateClassSchedule from './pages/dashboards/hod/CreateClassSchedule';
 import CreateFacultySchedule from './pages/dashboards/hod/CreateFacultySchedule';
 
-// tpo
-import ViewPlacementRecord from './pages/dashboards/tpo/ViewPlacementRecord'
-import ViewBatchList from './pages/dashboards/tpo/ViewBatchList'
-
 // registrar
 import AddCourse from './pages/dashboards/registrar/AddCourse'
 import AddDepartment from './pages/dashboards/registrar/AddDepartment'
@@ -74,7 +69,6 @@ function App() {
         <Route path="/hod-dashboard" element={<HodDashboard />} />
         <Route path="/exam-contr-dashboard" element={<ExamControllerDashboard />} />
         <Route path="/registrar-dashboard" element={<RegistrarDashboard />} />
-        <Route path="/tpo-dashboard" element={<TpoDashboard />} />
         
         {/* The Student's Pages Route */}
         <Route path="/studentProfile" element={<StudentProfile />} />
@@ -106,10 +100,6 @@ function App() {
         <Route path="/hodProfile" element={<HodProfile />} />
         <Route path="/createClassSchedule" element={<CreateClassSchedule />} />
         <Route path="/createFacultySchedule" element={<CreateFacultySchedule />} />
-
-        {/* TPO Routes */}
-        <Route path="/viewBatchList" element={<ViewBatchList />} />
-        <Route path="/viewPlacementRecord" element={<ViewPlacementRecord />} />
 
         {/* Registrar Routes */}
         <Route path="/addCourse" element={<AddCourse />} />

@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+// ✅ IMPORT THE VALIDATOR
+import { validateUpdateForm } from './studentUpdateValidator';
 
 const UpdateStudentForm = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
     // 1. Initialize State
-    // We try to load data from the previous page (location.state) if available
     const initialData = location.state?.profile || {};
 
     const [formData, setFormData] = useState({
@@ -46,23 +47,37 @@ const UpdateStudentForm = () => {
         guardianMobile: initialData.guardianMobile || '',
     });
 
+    const [errors, setErrors] = useState({}); // ✅ Added Error State
     const [loading, setLoading] = useState(false);
 
-    // 2. Handle Input Change
+    // 3. Handle Input Change
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
+
+        // ✅ Clear error for this field when user types
+        if (errors[name]) {
+            setErrors({ ...errors, [name]: '' });
+        }
     };
 
-    // 3. Handle Submit
+    // 4. Handle Submit
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // ✅ USE THE IMPORTED FUNCTION
+        const validationErrors = validateUpdateForm(formData);
+        
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return; 
+        }
+
         setLoading(true);
         try {
-            // Adjust the URL to match your Controller
             await axios.put(`http://localhost:8080/api/students/profile/${formData.admissionNo}`, formData);
             alert("Profile Updated Successfully!");
-            navigate(-1); // Redirect back to profile view
+            navigate(-1); 
         } catch (error) {
             console.error("Update failed", error);
             alert("Failed to update profile.");
@@ -76,8 +91,7 @@ const UpdateStudentForm = () => {
             <h2>Update Profile</h2>
             <form className='register-form' onSubmit={handleSubmit}>
 
-                {/* --- SECTION 1: IMMUTABLE ACADEMIC DATA --- */}
-                <h3 className="section-title">General Details</h3>
+                <h3 className="section-title">General Details (Read Only)</h3>
                 
                 <label>Session:</label>
                 <input type="text" value={formData.session} readOnly className="readonly-field" />
@@ -109,6 +123,7 @@ const UpdateStudentForm = () => {
 
                 <label htmlFor="dob">Date of Birth:</label>
                 <input type="date" name="dob" value={formData.dob} onChange={handleChange} />
+                <span className='error'>{errors.dob && <span>{errors.dob}</span>}</span>
 
                 <label htmlFor="gender">Gender:</label>
                 <select name="gender" value={formData.gender} onChange={handleChange}>
@@ -117,6 +132,7 @@ const UpdateStudentForm = () => {
                     <option value="Female">Female</option>
                     <option value="Other">Other</option>
                 </select>
+                <span className='error'>{errors.gender && <span>{errors.gender}</span>}</span>
 
                 <label htmlFor="category">Category:</label>
                 <select name="category" value={formData.category} onChange={handleChange}>
@@ -125,9 +141,11 @@ const UpdateStudentForm = () => {
                     <option value="OBC">OBC</option>
                     <option value="SC/ST">SC/ST</option>
                 </select>
+                <span className='error'>{errors.category && <span>{errors.category}</span>}</span>
 
                 <label htmlFor="adhaarCardNo">Adhaar Card No:</label>
                 <input type="text" name="adhaarCardNo" value={formData.adhaarCardNo} onChange={handleChange} placeholder="XXXX-XXXX-XXXX" />
+                <span className='error'>{errors.adhaarCardNo && <span>{errors.adhaarCardNo}</span>}</span>
 
 
                 {/* --- SECTION 3: PARENTS & GUARDIAN --- */}
@@ -135,19 +153,25 @@ const UpdateStudentForm = () => {
 
                 <label htmlFor="fatherName">Father's Name:</label>
                 <input type="text" name="fatherName" value={formData.fatherName} onChange={handleChange} />
+                <span className='error'>{errors.fatherName && <span>{errors.fatherName}</span>}</span>
 
                 <label htmlFor="fatherOccupation">Father's Occupation:</label>
                 <input type="text" name="fatherOccupation" value={formData.fatherOccupation} onChange={handleChange} />
 
                 <label htmlFor="fatherMobile">Father's Mobile:</label>
-                <input type="text" name="fatherMobile" value={formData.fatherMobile} onChange={handleChange} />
+                <input type="text" name="fatherMobile" value={formData.fatherMobile} onChange={handleChange} maxLength={10} />
+                <span className='error'>{errors.fatherMobile && <span>{errors.fatherMobile}</span>}</span>
 
                 <label htmlFor="motherName">Mother's Name:</label>
                 <input type="text" name="motherName" value={formData.motherName} onChange={handleChange} />
+                <span className='error'>{errors.motherName && <span>{errors.motherName}</span>}</span>
 
-                <label htmlFor="fatherMobile">Mother's Mobile:</label>
-                <input type="text" name="motherMobile" value={formData.motherMobile} onChange={handleChange} />
+                <label htmlFor="motherMobile">Mother's Mobile:</label>
+                <input type="text" name="motherMobile" value={formData.motherMobile} onChange={handleChange} maxLength={10} />
+                <span className='error'>{errors.motherMobile && <span>{errors.motherMobile}</span>}</span>
 
+
+                {/* --- GUARDIAN --- */}
                 <h3 className="section-title">Guardian Details (If applicable)</h3>
                 
                 <label htmlFor="guardianName">Guardian Name:</label>
@@ -157,7 +181,8 @@ const UpdateStudentForm = () => {
                 <input type="text" name="guardianRelation" value={formData.guardianRelation} onChange={handleChange} />
 
                 <label htmlFor="guardianMobile">Guardian Mobile:</label>
-                <input type="text" name="guardianMobile" value={formData.guardianMobile} onChange={handleChange} />
+                <input type="text" name="guardianMobile" value={formData.guardianMobile} onChange={handleChange} maxLength={10} />
+                <span className='error'>{errors.guardianMobile && <span>{errors.guardianMobile}</span>}</span>
 
                 
                 {/* --- BUTTONS --- */}

@@ -20,5 +20,5 @@ public class AdminUser {
 
     private String password;
     
-    private String role; // "registrar" or "tpo"
+    private String role;
 }
