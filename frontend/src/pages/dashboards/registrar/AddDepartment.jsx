@@ -52,7 +52,7 @@ const AddDepartment = () => {
 
     return (
         <div className="form-container-registrar">
-            <h2>Manage Departments</h2>
+            <h2>Add Departments</h2>
             {message && <p className="success-msg">{message}</p>}
             
             <form onSubmit={handleSubmit}>

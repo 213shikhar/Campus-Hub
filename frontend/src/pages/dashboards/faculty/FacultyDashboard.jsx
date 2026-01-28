@@ -39,12 +39,12 @@ const FacultyDashboard = () => {
             <hr/><br/>
             <p><Link to="/facultyProfile">Profile</Link></p><br/>
             <p><Link to="/uploadNotice">Notice</Link></p><br/>
-            <p><Link to="/viewSchedule">View Schedule</Link></p><br/>
+            {/* <p><Link to="/viewSchedule">View Schedule</Link></p><br/>
             <p><Link to="/uploadAttendance">Upload Attendance</Link></p><br/>
-            <p><Link to="/uploadMarks">Upload Student Marks</Link></p><br/>
+            <p><Link to="/uploadMarks">Upload Student Marks</Link></p><br/> */}
             {/* <p><Link to="/uploadMaterial">Upload Study Material</Link></p><br/> */}
-            <p><Link to="/studentMarks">View Student Marks</Link></p><br/>
-            <p><Link to="/studentAttendance">View Student Attendance</Link></p><br/>
+            {/* <p><Link to="/studentMarks">View Student Marks</Link></p><br/>
+            <p><Link to="/studentAttendance">View Student Attendance</Link></p><br/> */}
             <p><Link to="/feedback">Feedback</Link></p><br/>
             <p><Link to="/changePassword">Change Password</Link></p><br/>
         </div>

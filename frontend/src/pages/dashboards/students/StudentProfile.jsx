@@ -55,8 +55,6 @@ const StudentProfile = () => {
                     <div className="detail-item"><strong>Father's Name:</strong> {profile.fatherName || <span className="empty-field">Not Updated</span>}</div>
                     <div className="detail-item"><strong>Father's Mobile:</strong> {profile.fatherMobile || <span className="empty-field">Not Updated</span>}</div>
                     <div className="detail-item"><strong>Mother's Name:</strong> {profile.motherName || <span className="empty-field">Not Updated</span>}</div>
-                    <div className="detail-item"><strong>Mother's Mobile:</strong> {profile.motherMobile || <span className="empty-field">Not Updated</span>}</div>
-
                     <div className="detail-item"><strong>Address:</strong> {profile.address}</div>
                 </div>
             </div>

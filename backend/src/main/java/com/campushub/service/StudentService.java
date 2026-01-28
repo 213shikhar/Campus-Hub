@@ -31,6 +31,8 @@ public class StudentService {
         student.setMobile(request.getMobile());
         student.setEmail(request.getEmail());
         student.setAddress(request.getAddress());
+     // ✅ ADD THIS LINE
+        student.setSemester(request.getSemester());
 
      // ✅ HASH THE PASSWORD BEFORE SAVING
         student.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -147,9 +149,12 @@ public class StudentService {
         Student student = studentRepository.findByAdmissionNo(admissionNo)
             .orElseThrow(() -> new RuntimeException("Student not found"));
 
-        // Check if old password matches
-        if (!student.getPassword().equals(request.getOldPassword())) {
-            return false; // Old password incorrect
+        if (passwordEncoder.matches(request.getOldPassword(), student.getPassword())) {
+            
+            // Hash the NEW password before saving
+            student.setPassword(passwordEncoder.encode(request.getNewPassword()));
+            studentRepository.save(student);
+            return true;
         }
 
         // Update password

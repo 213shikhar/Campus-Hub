@@ -54,7 +54,7 @@ const FacultyProfile = () => {
                     <div className="detail-item"><strong>Qualification:</strong> {profile.qualification || "Not Updated"}</div>
                     <div className="detail-item"><strong>Experience:</strong> {profile.experience || "Not Updated"}</div>
                     <div className="detail-item"><strong>Date of Birth:</strong> {profile.dob || "Not Updated"}</div>
-                    <div className="detail-item"><strong>Gender:</strong> {profile.gender || "Not Updated"}</div>
+                    {/* <div className="detail-item"><strong>Gender:</strong> {profile.gender || "Not Updated"}</div> */}
                     <div className="detail-item"><strong>Address:</strong> {profile.address || "Not Updated"}</div>
                     <div className="detail-item"><strong>PAN Card:</strong> {profile.panCardNo || "Not Updated"}</div>
                 </div>

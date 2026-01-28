@@ -38,10 +38,10 @@ const HodDashboard = () => {
             <hr/><br/>
             <p><Link to="/hodProfile">Profile</Link></p><br/>
             <p><Link to="/uploadNotice">Notice</Link></p><br/>
-            <p><Link to="/createClassSchedule">Create Class Schedule</Link></p><br/>
+            {/* <p><Link to="/createClassSchedule">Create Class Schedule</Link></p><br/>
             <p><Link to="/createFacultySchedule">Create Faculty Schedule</Link></p><br/>
             <p><Link to="/studentMarks">View Student Marks</Link></p><br/>
-            <p><Link to="/studentAttendance">View Student Attendance</Link></p><br/>
+            <p><Link to="/studentAttendance">View Student Attendance</Link></p><br/> */}
             <p><Link to="/feedback">Feedback</Link></p><br/>
             <p><Link to="/changePassword">Change Password</Link></p><br/>
         </div>

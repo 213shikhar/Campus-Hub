@@ -97,8 +97,12 @@ public class EmployeeService {
         Employee employee = employeeRepository.findByEid(eid)
             .orElseThrow(() -> new RuntimeException("Employee not found"));
 
-        if (!employee.getPassword().equals(request.getOldPassword())) {
-            return false;
+        if (passwordEncoder.matches(request.getOldPassword(), employee.getPassword())) {
+            
+            // Hash the NEW password before saving
+        	employee.setPassword(passwordEncoder.encode(request.getNewPassword()));
+            employeeRepository.save(employee);
+            return true;
         }
 
         employee.setPassword(request.getNewPassword());

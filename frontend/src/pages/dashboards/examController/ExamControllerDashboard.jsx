@@ -39,8 +39,8 @@ const ExamControllerDashboard = () => {
             <p><Link to="/uploadNotice">Notice Board</Link></p><br/>
             <p><Link to="/createExamSchedule">Create Exam Schedule</Link></p><br/>
             {/* <p><Link to="/studentExamSchedule">View Exam Schedule</Link></p><br/> */}
-            <p><Link to="/createSeatingPlan">Create Seating Plan</Link></p><br/>
-            <p><Link to="/generateAdmitCard">Generate Admit Card</Link></p><br/>
+            {/* <p><Link to="/createSeatingPlan">Create Seating Plan</Link></p><br/> */}
+            {/* <p><Link to="/generateAdmitCard">Generate Admit Card</Link></p><br/> */}
             <p><Link to="/feedback">Feedback</Link></p><br/>
             <p><Link to="/changePassword">Change Password</Link></p><br/>
         </div>

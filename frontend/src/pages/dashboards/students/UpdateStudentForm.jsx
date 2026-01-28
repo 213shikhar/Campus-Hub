@@ -91,7 +91,7 @@ const UpdateStudentForm = () => {
             <h2>Update Profile</h2>
             <form className='register-form' onSubmit={handleSubmit}>
 
-                <h3 className="section-title">General Details (Read Only)</h3>
+                <h3 className="section-title">General Details</h3>
                 
                 <label>Session:</label>
                 <input type="text" value={formData.session} readOnly className="readonly-field" />

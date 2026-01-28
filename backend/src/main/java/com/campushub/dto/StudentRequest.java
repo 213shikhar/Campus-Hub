@@ -12,6 +12,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudentRequest {
+	
+	// ✅ ADD THIS FIELD
+    private Integer semester;
 
     @NotBlank(message = "Session is required")
     private String session;

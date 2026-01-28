@@ -11,6 +11,7 @@ const StudentRegister = () => {
         session: "",
         course: "",
         branch: "",
+        semester: "",
         section: "", // ✅ NEW FIELD
         admissionNo: "",
         studentname: "",
@@ -67,6 +68,7 @@ const StudentRegister = () => {
             session: formData.session,
             course: formData.course,
             branch: formData.branch,
+            semester: parseInt(formData.semester), // ✅ Send as Integer
             section: formData.section, // ✅ SEND SECTION
             admissionNo: formData.admissionNo,
             studentname: formData.studentname,
@@ -151,6 +153,16 @@ const StudentRegister = () => {
                             ))}
                         </select>
                         <span className='error'>{errors.branch && <span>{errors.branch}</span>}</span>
+
+                        {/* ✅ NEW SEMESTER DROPDOWN */}
+                        <label htmlFor="semester"><span className='asterik'>*</span>Semester: </label>
+                        <select name="semester" id="semester" value={formData.semester} onChange={handleChange} required>
+                            <option value="">-- select semester --</option>
+                            {[1, 2, 3, 4, 5, 6, 7, 8].map(sem => (
+                                <option key={sem} value={sem}>{sem}</option>
+                            ))}
+                        </select>
+                        <span className='error'>{errors.semester && <span>{errors.semester}</span>}</span>
 
                         {/* ✅ NEW SECTION DROPDOWN */}
                         <label htmlFor="section"><span className='asterik'>*</span>Section: </label>

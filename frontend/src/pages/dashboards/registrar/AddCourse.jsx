@@ -44,7 +44,7 @@ const AddCourse = () => {
 
     return (
         <div className="form-container-registrar">
-            <h2>Manage Courses</h2>
+            <h2>Add Courses</h2>
             {message && <p className="success-msg">{message}</p>}
             
             <form onSubmit={handleSubmit}>
