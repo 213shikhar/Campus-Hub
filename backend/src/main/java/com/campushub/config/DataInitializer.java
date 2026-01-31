@@ -17,12 +17,11 @@ public class DataInitializer implements CommandLineRunner {
     public void run(String... args) throws Exception {
         
         // 1. Check if Registrar exists
-        // Note: Arguments are (UserId, Role)
         AdminUser registrar = adminUserRepository.findByUserIdAndRole("registrar", "registrar")
                 .orElse(null);
 
         if (registrar == null) {
-            // ✅ CASE 1: Create New Registrar
+            // Create New Registrar
             AdminUser newRegistrar = new AdminUser();
             newRegistrar.setUserId("registrar");
             newRegistrar.setRole("registrar");
@@ -34,13 +33,12 @@ public class DataInitializer implements CommandLineRunner {
             System.out.println("✅ Registrar account created with Hashed Password.");
         } 
         else {
-            // ✅ CASE 2: Update Existing Registrar (Migration Fix)
             // If password length is short (e.g., 12 chars), it is plain text. 
             // BCrypt hashes are always 60 chars long.
             if (registrar.getPassword().length() < 50) {
                 registrar.setPassword(passwordEncoder.encode("campushub123"));
                 adminUserRepository.save(registrar);
-                System.out.println("⚠️ Migrated Registrar password from Plain Text to Hash.");
+                System.out.println("Migrated Registrar password from Plain Text to Hash.");
             }
         }
     }

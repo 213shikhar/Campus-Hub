@@ -14,7 +14,7 @@ import java.util.Arrays;
 @Configuration
 public class SecurityConfig {
 
-    // ✅ 1. Add the Password Encoder Bean
+    // 1. Add the Password Encoder Bean
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

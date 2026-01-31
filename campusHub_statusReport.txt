@@ -109,8 +109,14 @@ Tell me what files to make where to make in backend. how database tables are mad
 	- REGISTRAR ALL FUNCTIONALITY ADDED ARE DONE!
 	- UNIQUE ADMISSION NUMBER AND PASSWORD HASHING DONE!
  	-  A LOT OF THINGS IS STILL LEFT ALSO, ONLY 1 DAY LEFT TO DEPLOY (probably less than few hours!)
+==================================================================
 
 Jan 28, 2026
 - exam schedule creation and viewing (for students only) done.
 - some updations in profile pages.
 - client and server side validations applied to the update forms of student and employee.
+==================================================================
+
+Jan 31, 2026
+- Bootstrap Styling added!
+- pages are looking nice!

@@ -108,44 +108,124 @@ const Home = () => {
     };
 
     return(
-        <div>
-            <h1 style={{textAlign:'center'}}>Welcome to CampusHub</h1><br/>
-            <hr/>
-            <div className='main-container'>
-                <h2 style={{textAlign:'center'}}>Center for Development of Advanced Computing, Noida</h2>
-                <div className='form-container'>
-                    <form className='login-form' onSubmit={handleSubmit}>
-                        
-                        <label htmlFor="role">Role: </label>
-                        <select name="role" id="role" value={credentials.role} onChange={handleChange} required>
-                            <option value="">-- select role --</option>
-                            <option value="registrar" >Registrar</option>
-                            <option value="student" >Student</option>
-                            <option value="faculty" >Faculty</option>
-                            <option value="hod" >HOD</option>
-                            <option value="examController" >Exam Controller</option>
-                            {/* <option value="tpo" >Training & Placement (TPO)</option> */}
-                        </select>
-                    
-                        <label htmlFor="userid">User ID: </label>
-                        <input type="text" name="userid" id="userid" value={credentials.userid} onChange={handleChange} required/>
-                    
-                        <label htmlFor="password">Password: </label>
-                        <input type="password" name="password" id="password" value={credentials.password} onChange={handleChange} required/>
-                        <br/>
-                        <div className='btn-row'>
-                            <button type='submit'>Login</button>
-                        </div>
-                    </form>
-                </div>
-                <br/><p><Link to="/studentRegister">Register New Student</Link></p><br/>
-                <p><Link to="/employeeRegister">Register New Employee</Link></p>
-                <br/>
-            </div>
-            <hr/>
-            <br/><p style={{textAlign:'center', fontSize:'small'}}>&copy; Shikhar Sharma 2026</p>
-            
+        <div className="min-vh-100 d-flex flex-column">
+    {/* Hero Section */}
+    <div className="bg-primary text-white py-5">
+        <div className="container">
+            <h1 className="display-4 fw-bold text-center mb-3">Welcome to CampusHub</h1>
+            <h3 className="text-center my-1 fw-bold myh3">Center for Development of Advanced Computing, Noida</h3>
         </div>
+    </div>
+
+    {/* Main Content */}
+    <div className="container my-5 flex-grow-1">
+        <div className="row justify-content-center">
+            <div className="col-12 col-md-8 col-lg-6">
+                <div className="card shadow-lg border-0 rounded-4">
+                    <div className="card-body p-4 p-md-5">
+                        <h2 className="card-title text-center mb-4 fw-semibold">Sign In</h2>
+                        
+                        <form onSubmit={handleSubmit}>
+                            {/* Role Selection */}
+                            <div className="mb-4">
+                                <label htmlFor="role" className="form-label fw-medium"><span className="text-danger">*</span>Role</label>
+                                <select 
+                                    name="role" 
+                                    id="role" 
+                                    className="form-select form-select-lg transition-all" 
+                                    value={credentials.role} 
+                                    onChange={handleChange} 
+                                    required
+                                    style={{transition: 'all 0.3s ease'}}
+                                >
+                                    <option value="">-- select role --</option>
+                                    <option value="registrar">Registrar</option>
+                                    <option value="student">Student</option>
+                                    <option value="faculty">Faculty</option>
+                                    <option value="hod">HOD</option>
+                                    <option value="examController">Exam Controller</option>
+                                </select>
+                            </div>
+
+                            {/* User ID */}
+                            <div className="mb-4">
+                                <label htmlFor="userid" className="form-label fw-medium"><span className="text-danger">*</span>User ID</label>
+                                <input 
+                                    type="text" 
+                                    name="userid" 
+                                    id="userid" 
+                                    className="form-control form-control-lg transition-all" 
+                                    value={credentials.userid} 
+                                    onChange={handleChange} 
+                                    placeholder="Enter your user ID"
+                                    required
+                                    style={{transition: 'all 0.3s ease'}}
+                                />
+                            </div>
+
+                            {/* Password */}
+                            <div className="mb-4">
+                                <label htmlFor="password" className="form-label fw-medium"><span className="text-danger">*</span>Password</label>
+                                <input 
+                                    type="password" 
+                                    name="password" 
+                                    id="password" 
+                                    className="form-control form-control-lg transition-all" 
+                                    value={credentials.password} 
+                                    onChange={handleChange} 
+                                    placeholder="Enter your password"
+                                    required
+                                    style={{transition: 'all 0.3s ease'}}
+                                />
+                            </div>
+
+                            {/* Login Button */}
+                            <div className="d-grid mb-4">
+                                <button 
+                                    type="submit" 
+                                    className="btn btn-primary btn-lg fw-semibold transition-all"
+                                    style={{transition: 'all 0.3s ease'}}
+                                >
+                                    Login
+                                </button>
+                            </div>
+                        </form>
+
+                        {/* Registration Links */}
+                        <hr className="my-4" />
+                        
+                        <div className="text-center">
+                            <p className="text-muted mb-2 small">New to CampusHub?</p>
+                            <div className="d-flex flex-column flex-sm-row gap-2 justify-content-center">
+                                <Link 
+                                    to="/studentRegister" 
+                                    className="btn btn-outline-primary transition-all"
+                                    style={{transition: 'all 0.3s ease'}}
+                                >
+                                    Register as Student
+                                </Link>
+                                <Link 
+                                    to="/employeeRegister" 
+                                    className="btn btn-outline-secondary transition-all"
+                                    style={{transition: 'all 0.3s ease'}}
+                                >
+                                    Register as Employee
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {/* Footer */}
+    <footer className="bg-light py-3 mt-auto">
+        <div className="container">
+            <p className="text-center text-muted mb-0 small">&copy; CampusHub 2026</p>
+        </div>
+    </footer>
+</div>
     )
 }
 

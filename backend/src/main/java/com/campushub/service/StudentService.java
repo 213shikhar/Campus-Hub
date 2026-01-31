@@ -31,7 +31,6 @@ public class StudentService {
         student.setMobile(request.getMobile());
         student.setEmail(request.getEmail());
         student.setAddress(request.getAddress());
-     // ✅ ADD THIS LINE
         student.setSemester(request.getSemester());
 
      // ✅ HASH THE PASSWORD BEFORE SAVING
@@ -114,7 +113,7 @@ public class StudentService {
             .orElse(new StudentInfo());
         
         // 3. Set/Update Fields
-        info.setStudent(student); // Important: Link to the main student table
+        info.setStudent(student);
         
         // Personal Details
         info.setDob(dto.getDob());

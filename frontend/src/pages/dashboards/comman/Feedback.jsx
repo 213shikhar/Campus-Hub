@@ -50,49 +50,110 @@ const Feedback = () => {
     };
 
     return (
-        <div className="form-container" style={{maxWidth: '600px', margin: '50px auto'}}>
-            <h2>Submit Feedback</h2>
-            <p style={{color: '#666', fontSize: '0.9em', marginBottom: '20px'}}>
-                Your feedback is anonymous!.
-            </p>
+        <div className="min-vh-100 d-flex flex-column bg-light py-5">
+    <div className="container flex-grow-1">
+        <div className="row justify-content-center">
+            <div className="col-12 col-sm-11 col-md-8 col-lg-6 px-3 px-sm-4">
+                {/* Back Button */}
+                <button 
+                    className="btn btn-outline-secondary mb-3 transition-all" 
+                    onClick={() => navigate(-1)}
+                    style={{transition: 'all 0.3s ease'}}
+                >
+                    <i className="bi bi-arrow-left me-2"></i>Back
+                </button>
 
-            {status.text && (
-                <div className={`message ${status.type}`} style={{
-                    padding: '10px', marginBottom: '15px', borderRadius: '5px',
-                    backgroundColor: status.type === 'error' ? '#f8d7da' : '#d4edda',
-                    color: status.type === 'error' ? '#721c24' : '#155724'
-                }}>
-                    {status.text}
+                {/* Feedback Form Card */}
+                <div className="card shadow-lg border-0 rounded-4">
+                    <div className="card-body p-4 p-md-5">
+                        <div className="text-center mb-4">
+                            <div className="mb-3">
+                                <i className="bi bi-chat-left-dots fs-1 text-primary"></i>
+                            </div>
+                            <h2 className="fw-semibold text-primary mb-2">Submit Feedback</h2>
+                            <p className="text-muted small mb-0">
+                                <i className="bi bi-incognito me-1"></i>
+                                Your feedback is anonymous!
+                            </p>
+                        </div>
+
+                        {/* Status Message */}
+                        {status.text && (
+                            <div 
+                                className={`alert ${status.type === 'error' ? 'alert-danger' : 'alert-success'} alert-dismissible fade show`} 
+                                role="alert"
+                            >
+                                <i className={`bi ${status.type === 'error' ? 'bi-exclamation-triangle-fill' : 'bi-check-circle-fill'} me-2`}></i>
+                                {status.text}
+                            </div>
+                        )}
+
+                        <form onSubmit={handleSubmit}>
+                            <div className="mb-4">
+                                <label htmlFor="feedback" className="form-label fw-medium">
+                                    Your Message
+                                </label>
+                                <textarea 
+                                    id="feedback"
+                                    name="feedback"
+                                    rows="8"
+                                    className="form-control transition-all"
+                                    value={message}
+                                    onChange={(e) => setMessage(e.target.value)}
+                                    placeholder="Write your suggestions, complaints, or feedback here..."
+                                    style={{
+                                        transition: 'all 0.3s ease',
+                                        resize: 'vertical',
+                                        minHeight: '200px'
+                                    }}
+                                    required
+                                />
+                                <div className="form-text">
+                                    <i className="bi bi-info-circle me-1"></i>
+                                    Share your honest thoughts. This helps us improve.
+                                </div>
+                            </div>
+
+                            {/* Action Buttons */}
+                            <div className="row g-3 mt-2">
+                                <div className="col-md-6">
+                                    <button 
+                                        type="button" 
+                                        onClick={() => navigate(-1)}
+                                        className="btn btn-secondary btn-lg w-100 fw-semibold transition-all"
+                                        style={{transition: 'all 0.3s ease'}}
+                                        disabled={isSubmitting}
+                                    >
+                                        <i className="bi bi-x-circle me-2"></i>Cancel
+                                    </button>
+                                </div>
+                                <div className="col-md-6">
+                                    <button 
+                                        type="submit" 
+                                        disabled={isSubmitting}
+                                        className="btn btn-primary btn-lg w-100 fw-semibold transition-all"
+                                        style={{transition: 'all 0.3s ease'}}
+                                    >
+                                        {isSubmitting ? (
+                                            <>
+                                                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                                                Submitting...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <i className="bi bi-send me-2"></i>Submit Feedback
+                                            </>
+                                        )}
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            )}
-
-            <form className='register-form' onSubmit={handleSubmit}>
-                <label htmlFor="feedback">Your Message:</label>
-                <textarea 
-                    id="feedback"
-                    name="feedback"
-                    rows="6"
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    placeholder="Write your suggestions or complaints here..."
-                    style={{
-                        width: '100%', 
-                        padding: '10px', 
-                        marginBottom: '20px', 
-                        borderRadius: '4px',
-                        border: '1px solid #ddd',
-                        resize: 'vertical' // Allow vertical resizing only
-                    }}
-                />
-
-                <div className='btn-row'>
-                    <button type='button' onClick={() => navigate(-1)} style={{backgroundColor: '#666'}}>Cancel</button>
-                    <button type='submit' disabled={isSubmitting}>
-                        {isSubmitting ? 'Submitting...' : 'Submit Feedback'}
-                    </button>
-                </div>
-            </form>
+            </div>
         </div>
+    </div>
+</div>
     );
 };
 

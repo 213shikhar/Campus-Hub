@@ -19,14 +19,12 @@ import UpdateStudentForm from './pages/dashboards/students/UpdateStudentForm';
 
 // exam controller
 import ExamControllerDashboard from './pages/dashboards/examController/ExamControllerDashboard';
-import ExamControllerProfile from './pages/dashboards/examController/ExamControllerProfile';
 import CreateExamSchedule from './pages/dashboards/examController/CreateExamSchedule';
 import CreateSeatingPlan from './pages/dashboards/examController/CreateSeatingPlan';
 import GenerateAdmitCard from './pages/dashboards/examController/GenerateAdmitCard';
 
 // faculty
 import FacultyDashboard from './pages/dashboards/faculty/FacultyDashboard';
-import FacultyProfile from './pages/dashboards/faculty/FacultyProfile';
 import FacultySchedule from './pages/dashboards/faculty/FacultySchedule';
 import UploadAttendance from './pages/dashboards/faculty/UploadAttendance';
 import UploadMarks from './pages/dashboards/faculty/UploadMarks';
@@ -34,7 +32,6 @@ import UploadMaterial from './pages/dashboards/faculty/UploadMaterial';
 
 // hod
 import HodDashboard from './pages/dashboards/hod/HodDashboard';
-import HodProfile from './pages/dashboards/hod/HodProfile';
 import CreateClassSchedule from './pages/dashboards/hod/CreateClassSchedule';
 import CreateFacultySchedule from './pages/dashboards/hod/CreateFacultySchedule';
 
@@ -51,6 +48,7 @@ import UpdateEmployeeForm from './pages/dashboards/comman/UpdateEmployeeForm';
 import Feedback from './pages/dashboards/comman/Feedback';
 import Notice from './pages/dashboards/comman/Notice';
 import ChangePassword from './pages/dashboards/comman/ChangePassword';
+import EmployeeProfile from './pages/dashboards/comman/EmployeeProfile';
 
 function App() {
   return (
@@ -81,14 +79,12 @@ function App() {
         <Route path="/studyMaterial" element={<StudyMaterial />} />
 
         {/* The Exam Controller's Pages Route */}
-        <Route path="/examContrProfile" element={<ExamControllerProfile />} />
         <Route path="/createExamSchedule" element={<CreateExamSchedule />} />
         <Route path="/studentExamSchedule" element={<StudentExamSchedule />} />
         <Route path="/createSeatingPlan" element={<CreateSeatingPlan />} />
         <Route path="/generateAdmitCard" element={<GenerateAdmitCard />} />
 
         {/* The Faculty Pages Route */}
-        <Route path="/facultyProfile" element={<FacultyProfile />} />
         <Route path="/viewSchedule" element={<FacultySchedule />} />
         <Route path="/uploadAttendance" element={<UploadAttendance />} />
         <Route path="/uploadMarks" element={<UploadMarks />} />
@@ -97,7 +93,6 @@ function App() {
         <Route path="/studentAttendance" element={<StudentAttendance />} />
 
         {/* The HOD Pages Route */}
-        <Route path="/hodProfile" element={<HodProfile />} />
         <Route path="/createClassSchedule" element={<CreateClassSchedule />} />
         <Route path="/createFacultySchedule" element={<CreateFacultySchedule />} />
 
@@ -110,6 +105,7 @@ function App() {
         <Route path="/viewFeedback" element={<ViewFeedback />} />
 
         {/* Comman Routes */}
+        <Route path="/employeeProfile" element={<EmployeeProfile />} />
         <Route path="/uploadNotice" element={<Notice />} />
         <Route path="/feedback" element={<Feedback />} />
         <Route path="/changePassword" element={<ChangePassword />} />

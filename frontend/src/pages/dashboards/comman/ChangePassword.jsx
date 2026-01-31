@@ -73,35 +73,147 @@ const ChangePassword = () => {
     };
 
     return (
-        <div className="form-container" style={{maxWidth: '500px', margin: '50px auto'}}>
-            <h2>Change Password</h2>
-            
-            {message.text && (
-                <div className={`message ${message.type}`} style={{
-                    padding: '10px', marginBottom: '10px', borderRadius: '5px',
-                    backgroundColor: message.type === 'error' ? '#f8d7da' : '#d4edda',
-                    color: message.type === 'error' ? '#721c24' : '#155724'
-                }}>
-                    {message.text}
+        <div className="min-vh-100 d-flex flex-column bg-light py-5">
+    <div className="container flex-grow-1">
+        <div className="row justify-content-center">
+            <div className="col-12 col-sm-11 col-md-8 col-lg-6 col-xl-5 px-3 px-sm-4">
+                {/* Back Button */}
+                <button 
+                    className="btn btn-outline-secondary mb-3 transition-all" 
+                    onClick={() => navigate(-1)}
+                    style={{transition: 'all 0.3s ease'}}
+                >
+                    <i className="bi bi-arrow-left me-2"></i>Back
+                </button>
+
+                {/* Change Password Card */}
+                <div className="card shadow-lg border-0 rounded-4">
+                    <div className="card-body p-4 p-md-5">
+                        <div className="text-center mb-4">
+                            <div className="mb-3">
+                                <i className="bi bi-key fs-1 text-primary"></i>
+                            </div>
+                            <h2 className="fw-semibold text-primary mb-2">Change Password</h2>
+                            <p className="text-muted small mb-0">
+                                <i className="bi bi-shield-lock me-1"></i>
+                                Keep your account secure
+                            </p>
+                        </div>
+
+                        {/* Status Message */}
+                        {message.text && (
+                            <div 
+                                className={`alert ${message.type === 'error' ? 'alert-danger' : 'alert-success'} alert-dismissible fade show`} 
+                                role="alert"
+                            >
+                                <i className={`bi ${message.type === 'error' ? 'bi-exclamation-triangle-fill' : 'bi-check-circle-fill'} me-2`}></i>
+                                {message.text}
+                            </div>
+                        )}
+
+                        <form onSubmit={handleSubmit}>
+                            {/* Old Password */}
+                            <div className="mb-4">
+                                <label htmlFor="oldPassword" className="form-label fw-medium">
+                                    <span className="text-danger">*</span> Old Password
+                                </label>
+                                <div className="input-group">
+                                    <span className="input-group-text bg-light border-end-0">
+                                        <i className="bi bi-lock"></i>
+                                    </span>
+                                    <input 
+                                        type="password" 
+                                        id="oldPassword"
+                                        name="oldPassword" 
+                                        className="form-control form-control-lg border-start-0 transition-all"
+                                        value={formData.oldPassword} 
+                                        onChange={handleChange} 
+                                        placeholder="Enter current password"
+                                        required
+                                        style={{transition: 'all 0.3s ease'}}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* New Password */}
+                            <div className="mb-4">
+                                <label htmlFor="newPassword" className="form-label fw-medium">
+                                    <span className="text-danger">*</span> New Password
+                                </label>
+                                <div className="input-group">
+                                    <span className="input-group-text bg-light border-end-0">
+                                        <i className="bi bi-lock-fill"></i>
+                                    </span>
+                                    <input 
+                                        type="password" 
+                                        id="newPassword"
+                                        name="newPassword" 
+                                        className="form-control form-control-lg border-start-0 transition-all"
+                                        value={formData.newPassword} 
+                                        onChange={handleChange} 
+                                        placeholder="Enter new password"
+                                        required
+                                        style={{transition: 'all 0.3s ease'}}
+                                    />
+                                </div>
+                                <div className="form-text">
+                                    <i className="bi bi-info-circle me-1"></i>
+                                    Use at least 8 characters with a mix of letters and numbers
+                                </div>
+                            </div>
+
+                            {/* Confirm New Password */}
+                            <div className="mb-4">
+                                <label htmlFor="confirmPassword" className="form-label fw-medium">
+                                    <span className="text-danger">*</span> Confirm New Password
+                                </label>
+                                <div className="input-group">
+                                    <span className="input-group-text bg-light border-end-0">
+                                        <i className="bi bi-shield-check"></i>
+                                    </span>
+                                    <input 
+                                        type="password" 
+                                        id="confirmPassword"
+                                        name="confirmPassword" 
+                                        className="form-control form-control-lg border-start-0 transition-all"
+                                        value={formData.confirmPassword} 
+                                        onChange={handleChange} 
+                                        placeholder="Re-enter new password"
+                                        required
+                                        style={{transition: 'all 0.3s ease'}}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Action Buttons */}
+                            <div className="row g-3 mt-3 pt-3 border-top">
+                                <div className="col-md-6">
+                                    <button 
+                                        type="button" 
+                                        onClick={() => navigate(-1)}
+                                        className="btn btn-secondary btn-lg w-100 fw-semibold transition-all"
+                                        style={{transition: 'all 0.3s ease'}}
+                                    >
+                                        <i className="bi bi-x-circle me-2"></i>Cancel
+                                    </button>
+                                </div>
+                                <div className="col-md-6">
+                                    <button 
+                                        type="submit" 
+                                        className="btn btn-primary btn-lg w-100 fw-semibold transition-all"
+                                        style={{transition: 'all 0.3s ease'}}
+                                    >
+                                        <i className="bi bi-check-circle me-2"></i>Update Password
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            )}
-
-            <form className='register-form' onSubmit={handleSubmit}>
-                <label><span className='asterik'>*</span>Old Password:</label>
-                <input type="password" name="oldPassword" value={formData.oldPassword} onChange={handleChange} required />
-
-                <label><span className='asterik'>*</span>New Password:</label>
-                <input type="password" name="newPassword" value={formData.newPassword} onChange={handleChange} required />
-
-                <label><span className='asterik'>*</span>Confirm New Password:</label>
-                <input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required />
-
-                <div className='btn-row'>
-                    <button type='button' onClick={() => navigate(-1)} style={{backgroundColor: '#666'}}>Cancel</button>
-                    <button type='submit'>Update Password</button>
-                </div>
-            </form>
+            </div>
         </div>
+    </div>
+</div>
     );
 };
 
