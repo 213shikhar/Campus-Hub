@@ -12,6 +12,8 @@ const Home = () => {
         password: ""
     });
 
+    const [showPassword, setShowPassword] = useState(false);
+
     // 2. Handle Input Change -> Its job is to take whatever the user types (or selects) in a form and save it into your credentials state object.
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -164,20 +166,35 @@ const Home = () => {
                             </div>
 
                             {/* Password */}
-                            <div className="mb-4">
-                                <label htmlFor="password" className="form-label fw-medium"><span className="text-danger">*</span>Password</label>
-                                <input 
-                                    type="password" 
-                                    name="password" 
-                                    id="password" 
-                                    className="form-control form-control-lg transition-all" 
-                                    value={credentials.password} 
-                                    onChange={handleChange} 
-                                    placeholder="Enter your password"
-                                    required
-                                    style={{transition: 'all 0.3s ease'}}
-                                />
-                            </div>
+<div className="mb-4">
+    <label htmlFor="password" className="form-label fw-medium">
+        <span className="text-danger">*</span>Password
+    </label>
+
+    <div className="input-group">
+        <input 
+            type={showPassword ? "text" : "password"}
+            name="password"
+            id="password"
+            className="form-control form-control-lg transition-all"
+            value={credentials.password}
+            onChange={handleChange}
+            placeholder="Enter your password"
+            required
+            style={{ transition: 'all 0.3s ease' }}
+        />
+
+        <button
+            type="button"
+            className="btn btn-outline-secondary"
+            onClick={() => setShowPassword(prev => !prev)}
+            aria-label="Toggle password visibility"
+        >
+            <i className={`bi ${showPassword ? "bi-eye-slash" : "bi-eye"}`}></i>
+        </button>
+    </div>
+</div>
+
 
                             {/* Login Button */}
                             <div className="d-grid mb-4">

@@ -10,6 +10,11 @@ const ChangePassword = () => {
     const admissionNo = localStorage.getItem('admissionNo');
     const eid = localStorage.getItem('eid');
     const userId = localStorage.getItem('userId'); // For Registrar/TPO
+
+    const [showOldPassword, setShowOldPassword] = useState(false);
+    const [showNewPassword, setShowNewPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
     
     const [formData, setFormData] = useState({
         oldPassword: '',
@@ -113,77 +118,106 @@ const ChangePassword = () => {
 
                         <form onSubmit={handleSubmit}>
                             {/* Old Password */}
-                            <div className="mb-4">
-                                <label htmlFor="oldPassword" className="form-label fw-medium">
-                                    <span className="text-danger">*</span> Old Password
-                                </label>
-                                <div className="input-group">
-                                    <span className="input-group-text bg-light border-end-0">
-                                        <i className="bi bi-lock"></i>
-                                    </span>
-                                    <input 
-                                        type="password" 
-                                        id="oldPassword"
-                                        name="oldPassword" 
-                                        className="form-control form-control-lg border-start-0 transition-all"
-                                        value={formData.oldPassword} 
-                                        onChange={handleChange} 
-                                        placeholder="Enter current password"
-                                        required
-                                        style={{transition: 'all 0.3s ease'}}
-                                    />
-                                </div>
-                            </div>
+<div className="mb-4">
+    <label htmlFor="oldPassword" className="form-label fw-medium">
+        <span className="text-danger">*</span> Old Password
+    </label>
 
-                            {/* New Password */}
-                            <div className="mb-4">
-                                <label htmlFor="newPassword" className="form-label fw-medium">
-                                    <span className="text-danger">*</span> New Password
-                                </label>
-                                <div className="input-group">
-                                    <span className="input-group-text bg-light border-end-0">
-                                        <i className="bi bi-lock-fill"></i>
-                                    </span>
-                                    <input 
-                                        type="password" 
-                                        id="newPassword"
-                                        name="newPassword" 
-                                        className="form-control form-control-lg border-start-0 transition-all"
-                                        value={formData.newPassword} 
-                                        onChange={handleChange} 
-                                        placeholder="Enter new password"
-                                        required
-                                        style={{transition: 'all 0.3s ease'}}
-                                    />
-                                </div>
-                                <div className="form-text">
-                                    <i className="bi bi-info-circle me-1"></i>
-                                    Use at least 8 characters with a mix of letters and numbers
-                                </div>
-                            </div>
+    <div className="input-group">
+        <span className="input-group-text bg-light border-end-0">
+            <i className="bi bi-lock"></i>
+        </span>
 
-                            {/* Confirm New Password */}
-                            <div className="mb-4">
-                                <label htmlFor="confirmPassword" className="form-label fw-medium">
-                                    <span className="text-danger">*</span> Confirm New Password
-                                </label>
-                                <div className="input-group">
-                                    <span className="input-group-text bg-light border-end-0">
-                                        <i className="bi bi-shield-check"></i>
-                                    </span>
-                                    <input 
-                                        type="password" 
-                                        id="confirmPassword"
-                                        name="confirmPassword" 
-                                        className="form-control form-control-lg border-start-0 transition-all"
-                                        value={formData.confirmPassword} 
-                                        onChange={handleChange} 
-                                        placeholder="Re-enter new password"
-                                        required
-                                        style={{transition: 'all 0.3s ease'}}
-                                    />
-                                </div>
-                            </div>
+        <input 
+            type={showOldPassword ? "text" : "password"}
+            id="oldPassword"
+            name="oldPassword"
+            className="form-control form-control-lg border-start-0"
+            value={formData.oldPassword}
+            onChange={handleChange}
+            placeholder="Enter current password"
+            required
+        />
+
+        <button
+            type="button"
+            className="btn btn-outline-secondary"
+            onClick={() => setShowOldPassword(p => !p)}
+        >
+            <i className={`bi ${showOldPassword ? "bi-eye-slash" : "bi-eye"}`}></i>
+        </button>
+    </div>
+</div>
+
+{/* New Password */}
+<div className="mb-4">
+    <label htmlFor="newPassword" className="form-label fw-medium">
+        <span className="text-danger">*</span> New Password
+    </label>
+
+    <div className="input-group">
+        <span className="input-group-text bg-light border-end-0">
+            <i className="bi bi-lock-fill"></i>
+        </span>
+
+        <input 
+            type={showNewPassword ? "text" : "password"}
+            id="newPassword"
+            name="newPassword"
+            className="form-control form-control-lg border-start-0"
+            value={formData.newPassword}
+            onChange={handleChange}
+            placeholder="Enter new password"
+            required
+        />
+
+        <button
+            type="button"
+            className="btn btn-outline-secondary"
+            onClick={() => setShowNewPassword(p => !p)}
+        >
+            <i className={`bi ${showNewPassword ? "bi-eye-slash" : "bi-eye"}`}></i>
+        </button>
+    </div>
+
+    <div className="form-text">
+        <i className="bi bi-info-circle me-1"></i>
+        Use at least 8 characters with a mix of letters and numbers
+    </div>
+</div>
+
+{/* Confirm New Password */}
+<div className="mb-4">
+    <label htmlFor="confirmPassword" className="form-label fw-medium">
+        <span className="text-danger">*</span> Confirm New Password
+    </label>
+
+    <div className="input-group">
+        <span className="input-group-text bg-light border-end-0">
+            <i className="bi bi-shield-check"></i>
+        </span>
+
+        <input 
+            type={showConfirmPassword ? "text" : "password"}
+            id="confirmPassword"
+            name="confirmPassword"
+            className="form-control form-control-lg border-start-0"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            placeholder="Re-enter new password"
+            required
+        />
+
+        <button
+            type="button"
+            className="btn btn-outline-secondary"
+            onClick={() => setShowConfirmPassword(p => !p)}
+        >
+            <i className={`bi ${showConfirmPassword ? "bi-eye-slash" : "bi-eye"}`}></i>
+        </button>
+    </div>
+</div>
+
 
                             {/* Action Buttons */}
                             <div className="row g-3 mt-3 pt-3 border-top">

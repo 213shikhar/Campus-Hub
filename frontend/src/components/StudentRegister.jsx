@@ -22,6 +22,9 @@ const StudentRegister = () => {
 
     const [errors, setErrors] = useState({});
 
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    
     // Dynamic Dropdowns State
     const [availableCourses, setAvailableCourses] = useState([]);
     const [availableBranches, setAvailableBranches] = useState([]);
@@ -339,41 +342,68 @@ const StudentRegister = () => {
                                     />
                                 </div>
 
-                                {/* Password */}
                                 <div className="col-md-6">
-                                    <label htmlFor="password" className="form-label fw-medium">
-                                        <span className="text-danger">*</span> Password
-                                    </label>
-                                    <input 
-                                        type="password" 
-                                        name="password" 
-                                        id="password" 
-                                        className="form-control form-control-lg transition-all" 
-                                        value={formData.password} 
-                                        onChange={handleChange}
-                                        placeholder="Create a password"
-                                        style={{transition: 'all 0.3s ease'}}
-                                    />
-                                    {errors.password && <div className="text-danger small mt-1">{errors.password}</div>}
-                                </div>
+    <label htmlFor="password" className="form-label fw-medium">
+        <span className="text-danger">*</span> Password
+    </label>
 
-                                {/* Confirm Password */}
-                                <div className="col-md-6">
-                                    <label htmlFor="confirmPassword" className="form-label fw-medium">
-                                        <span className="text-danger">*</span> Confirm Password
-                                    </label>
-                                    <input 
-                                        type="password" 
-                                        name="confirmPassword" 
-                                        id="confirmPassword" 
-                                        className="form-control form-control-lg transition-all" 
-                                        value={formData.confirmPassword} 
-                                        onChange={handleChange}
-                                        placeholder="Re-enter password"
-                                        style={{transition: 'all 0.3s ease'}}
-                                    />
-                                    {errors.confirmPassword && <div className="text-danger small mt-1">{errors.confirmPassword}</div>}
-                                </div>
+    <div className="input-group">
+        <input 
+            type={showPassword ? "text" : "password"}
+            name="password"
+            id="password"
+            className="form-control form-control-lg"
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="Create a password"
+        />
+
+        <button
+            type="button"
+            className="btn btn-outline-secondary"
+            onClick={() => setShowPassword(prev => !prev)}
+            aria-label="Toggle password visibility"
+        >
+            <i className={`bi ${showPassword ? "bi-eye-slash" : "bi-eye"}`}></i>
+        </button>
+    </div>
+
+    {errors.password && (
+        <div className="text-danger small mt-1">{errors.password}</div>
+    )}
+</div>
+
+{/* Confirm Password */}
+<div className="col-md-6">
+    <label htmlFor="confirmPassword" className="form-label fw-medium">
+        <span className="text-danger">*</span> Confirm Password
+    </label>
+
+    <div className="input-group">
+        <input 
+            type={showConfirmPassword ? "text" : "password"}
+            name="confirmPassword"
+            id="confirmPassword"
+            className="form-control form-control-lg"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            placeholder="Re-enter password"
+        />
+
+        <button
+            type="button"
+            className="btn btn-outline-secondary"
+            onClick={() => setShowConfirmPassword(prev => !prev)}
+            aria-label="Toggle confirm password visibility"
+        >
+            <i className={`bi ${showConfirmPassword ? "bi-eye-slash" : "bi-eye"}`}></i>
+        </button>
+    </div>
+
+    {errors.confirmPassword && (
+        <div className="text-danger small mt-1">{errors.confirmPassword}</div>
+    )}
+</div>
 
                                 {/* Submit Button */}
                                 <div className="col-12 mt-4">
