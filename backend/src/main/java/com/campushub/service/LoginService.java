@@ -10,6 +10,7 @@ import com.campushub.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class LoginService {
@@ -18,23 +19,24 @@ public class LoginService {
     @Autowired private EmployeeRepository employeeRepository;
     @Autowired private AdminUserRepository adminUserRepository;
     @Autowired private PasswordEncoder passwordEncoder;
-
+    
+    @Transactional
     public Object loginUser(LoginRequest request) {
         
-        // Extract values from the request object
         String role = request.getRole();
-        String userId = request.getUserid();
+        String userId = request.getUserId(); // ✅ Updated variable name
         String rawPassword = request.getPassword();
 
-        // STUDENT LOGIN
+        // --- 1. STUDENT LOGIN ---
         if ("student".equalsIgnoreCase(role)) {
             Student student = studentRepository.findByAdmissionNo(userId)
-                .orElseThrow(() -> new RuntimeException("Invalid Student Credentials"));
+                .orElseThrow(() -> new RuntimeException("Student not found with ID: " + userId));
 
             if (passwordEncoder.matches(rawPassword, student.getPassword())) {
+                student.setPassword(null); // 🔒 Security: Hide hash before sending to UI
                 return student;
             } else {
-                throw new RuntimeException("Invalid Student Credentials");
+                throw new RuntimeException("Invalid Password");
             }
         }
 
@@ -42,28 +44,30 @@ public class LoginService {
         else if ("employee".equalsIgnoreCase(role)) {
             String type = request.getType(); 
 
-            // CASE A: Registrar
+            // CASE A: Registrar or TPO (Stored in AdminUser Table)
             if ("registrar".equalsIgnoreCase(type) || "tpo".equalsIgnoreCase(type)) {
                 AdminUser admin = adminUserRepository.findByUserIdAndRole(userId, type)
-                    .orElseThrow(() -> new RuntimeException("Invalid " + type + " Credentials"));
+                    .orElseThrow(() -> new RuntimeException("Admin User not found"));
 
                 if (passwordEncoder.matches(rawPassword, admin.getPassword())) {
+                    admin.setPassword(null); // 🔒 Security
                     return admin;
                 } else {
-                    throw new RuntimeException("Invalid " + type + " Credentials");
+                    throw new RuntimeException("Invalid Password");
                 }
             }
 
-            // CASE B: Regular Employees
+            // CASE B: Regular Employees (Faculty, HOD, etc.)
             else {
-                // Ensure your EmployeeRepository has: findByTypeAndEid(String type, String eid)
+                // Assuming 'eid' is the column for Employee ID in your table
                 Employee employee = employeeRepository.findByTypeAndEid(type, userId)
-                    .orElseThrow(() -> new RuntimeException("Invalid Employee Credentials"));
+                    .orElseThrow(() -> new RuntimeException("Employee not found"));
 
                 if (passwordEncoder.matches(rawPassword, employee.getPassword())) {
+                    employee.setPassword(null); // 🔒 Security
                     return employee;
                 } else {
-                    throw new RuntimeException("Invalid Employee Credentials");
+                    throw new RuntimeException("Invalid Password");
                 }
             }
         }

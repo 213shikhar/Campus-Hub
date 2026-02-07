@@ -33,9 +33,11 @@ public class EmployeeProfileDTO {
     @Pattern(regexp = "^[A-Z]{5}[0-9]{4}[A-Z]{1}$", message = "Invalid PAN Card format (e.g., ABCDE1234F)")
     private String panCardNo;
     
+    // ✅ ADD THIS
+    private byte[] profileImage;
+    
     // to be added later
     private String fatherName;
     private String motherName;
     private String spouseName;
-    private String photoUrl;
 }

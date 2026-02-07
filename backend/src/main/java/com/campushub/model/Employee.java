@@ -27,4 +27,11 @@ public class Employee {
     private String mobile;
     private String email;
     private String password;
+ // ✅ NEW: Profile Image Storage
+    // @Lob tells Database this is a Large Object (BLOB)
+    // length = 1000000 is approx 1MB limit
+    @Lob
+    @Column(length = 1000000)
+    private byte[] profileImage;
+    private String address;
 }

@@ -64,4 +64,7 @@ public class StudentProfileDTO {
     private String signatureUrl;
     private String tenthMarksheetUrl;
     private String twelfthMarksheetUrl;
+    
+ // ✅ ADD THIS
+    private byte[] profileImage;
 }

@@ -1,7 +1,10 @@
 package com.campushub.dto;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -12,7 +15,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudentRequest {
-	
+    
+    // ✅ ADDED VALIDATION: Semester cannot be null and must be 1-8
+    @NotNull(message = "Semester is required")
+    @Min(value = 1, message = "Semester must be at least 1")
+    @Max(value = 8, message = "Semester must be at most 8")
     private Integer semester;
 
     @NotBlank(message = "Session is required")
@@ -23,6 +30,9 @@ public class StudentRequest {
 
     @NotBlank(message = "Branch is required")
     private String branch;
+     
+    @NotBlank(message = "Section is required")
+    private String section;  
 
     @NotBlank(message = "Admission number is required")
     @Size(min = 3, max = 20, message = "Admission number must be between 3 and 20 characters")
@@ -49,8 +59,8 @@ public class StudentRequest {
 
     @NotBlank(message = "Password is required")
     @Pattern(
-    	    regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$",
-    	    message = "Password must min 8 characters, 1 lowercase, 1 uppercase, 1 special character"
-    	)
+            regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9]).{8,}$",
+            message = "Password must be min 8 chars, with 1 uppercase, 1 lowercase & 1 special char"
+        )
     private String password;
 }

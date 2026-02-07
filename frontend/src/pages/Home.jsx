@@ -41,8 +41,8 @@ const Home = () => {
 
             const loginPayload = {
                 role: category,            
-                type: credentials.role,    
-                userid: credentials.userid,
+                type: credentials.role,
+                userId: credentials.userid,
                 password: credentials.password
             };
 
@@ -99,14 +99,16 @@ const Home = () => {
             }
         }
         catch (error) {
-            console.error("Login Error:", error);
-            // unauthorized - 401
-            if(error.response && error.response.status === 401) {
-                 alert("Invalid Credentials. Please check your ID and Password.");
-            } else {
-                 alert("Login Failed: Server Error");
-            }
-        }
+    console.error("Login Error:", error);
+    
+    // ✅ FIX: Alert the ACTUAL message from the backend
+    if (error.response && error.response.data) {
+        // This will print "Invalid Password" or "Admin User not found"
+        alert("Backend Error: " + error.response.data); 
+    } else {
+        alert("Login Failed: Server is not responding");
+    }
+}
     };
 
     return(

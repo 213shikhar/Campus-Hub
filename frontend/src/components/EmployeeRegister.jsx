@@ -8,7 +8,7 @@ const EmployeeRegister = () => {
     
     const [formData, setFormData] = useState({
         type: "",
-        course: "", // Only relevant for Faculty/HOD
+        course: "",
         department: "",
         eid: "",
         employeeName: "",
@@ -19,8 +19,10 @@ const EmployeeRegister = () => {
         confirmPassword: ""
     });
 
-    const [errors, setErrors] = useState({});
+    // ✅ 1. NEW: State for Image
+    const [profileImage, setProfileImage] = useState(null);
 
+    const [errors, setErrors] = useState({});
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -43,9 +45,28 @@ const EmployeeRegister = () => {
     const handleChange = (e) => {
         const {name, value} = e.target;
         setFormData({ ...formData, [name]: value });
+        if(errors[name]) setErrors({ ...errors, [name]: '' });
+    };
 
-        if(errors[name]){
-            setErrors({ ...errors, [name]: '' });
+    // ✅ 2. NEW: Handle Image Selection
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            // Validation: Type
+            if (!['image/jpeg', 'image/jpg'].includes(file.type)) {
+                setErrors({ ...errors, profileImage: "Only JPEG/JPG images are allowed." });
+                setProfileImage(null);
+                return;
+            }
+            // Validation: Size (1MB)
+            if (file.size > 1048576) {
+                setErrors({ ...errors, profileImage: "Image size must be less than 1MB." });
+                setProfileImage(null);
+                return;
+            }
+            
+            setErrors({ ...errors, profileImage: "" });
+            setProfileImage(file);
         }
     };
 
@@ -53,13 +74,19 @@ const EmployeeRegister = () => {
         e.preventDefault();
          
         const validationErrors = validateRegistrationForm(formData);
+        
+        // Validate Image presence
+        if (!profileImage) {
+            validationErrors.profileImage = "Profile Image is required.";
+        }
+
         if (Object.keys(validationErrors).length > 0){
             setErrors(validationErrors);
             return;
         }
 
-        // preparing json
-        const dataToSend = {
+        // ✅ 3. Prepare FormData (Multipart)
+        const dataPayload = {
             type: formData.type,
             course: formData.course,
             department: formData.department,
@@ -71,10 +98,13 @@ const EmployeeRegister = () => {
             password: formData.password,
         };
 
+        const formDataObj = new FormData();
+        formDataObj.append("employee", JSON.stringify(dataPayload)); // JSON as String
+        formDataObj.append("image", profileImage); // File
+
         try {
-            const response = await axios.post("http://localhost:8080/api/employees/register", dataToSend, {
-                headers: {"Content-Type":"application/json"}
-            });
+            // Note: Axios automatically sets Content-Type to multipart/form-data
+            const response = await axios.post("http://localhost:8080/api/employees/register", formDataObj);
             
             console.log("Backend Response: ", response.data);
 
@@ -84,33 +114,21 @@ const EmployeeRegister = () => {
                 const employeeData = response.data;
                 const employeeType = formData.type; 
 
-                // ✅ FIX: Save IDs to Local Storage immediately
-                // This ensures the Profile page works without needing to logout/login
+                // Save IDs to Local Storage
                 localStorage.setItem("eid", formData.eid);
                 localStorage.setItem("userType", "employee");
-                localStorage.setItem("userRole", employeeType); // Important for Dashboard logic
+                localStorage.setItem("userRole", employeeType);
 
                 let targetDashboard = "";
 
-                // 3. Logic: Determine Dashboard based on Type
+                // Logic: Determine Dashboard based on Type
                 switch (employeeType) {
-                    case "faculty":
-                        targetDashboard = "/faculty-dashboard";
-                        break;
-                    case "hod":
-                        targetDashboard = "/hod-dashboard";
-                        break;
-                    case "examController":
-                        targetDashboard = "/exam-contr-dashboard";
-                        break;
-                    case "registrar":
-                        targetDashboard = "/registrar-dashboard";
-                        break;
-                    case "tpo":
-                        targetDashboard = "/tpo-dashboard";
-                        break;
-                    default:
-                        targetDashboard = "/"; 
+                    case "faculty": targetDashboard = "/faculty-dashboard"; break;
+                    case "hod": targetDashboard = "/hod-dashboard"; break;
+                    case "examController": targetDashboard = "/exam-contr-dashboard"; break;
+                    case "registrar": targetDashboard = "/registrar-dashboard"; break;
+                    case "tpo": targetDashboard = "/tpo-dashboard"; break;
+                    default: targetDashboard = "/"; 
                 }
 
                 navigate(targetDashboard, { state: { employee: employeeData } });
@@ -118,11 +136,11 @@ const EmployeeRegister = () => {
         }
         catch (error) {
             console.error("Error:", error);
-            
-            if (error.response && error.response.status === 400) {
-                alert(error.response.data); 
-            } else if (error.response && error.response.data) {
-                alert("Registration Failed: " + (error.response.data.message || "Unknown Error"));
+            if (error.response) {
+                const msg = error.response.data && typeof error.response.data === 'object' 
+                    ? (error.response.data.message || JSON.stringify(error.response.data)) 
+                    : error.response.data;
+                alert("Registration Failed: " + msg);
             } else {
                 alert("Registration Failed! Please check your server.");
             }
@@ -131,278 +149,182 @@ const EmployeeRegister = () => {
 
     return(
         <div className="min-vh-100 d-flex flex-column bg-light">
-    {/* Header Section */}
-    <div className="bg-primary text-white py-4">
-        <div className="container">
-            <h1 className="h3 text-center mb-0 fw-bold">Center for Development of Advanced Computing, Noida</h1>
-        </div>
-    </div>
+            {/* Header Section */}
+            <div className="bg-primary text-white py-4">
+                <div className="container">
+                    <h1 className="h3 text-center mb-0 fw-bold">Center for Development of Advanced Computing, Noida</h1>
+                </div>
+            </div>
 
-    {/* Main Content */}
-    <div className="container my-5 flex-grow-1">
-        <div className="row justify-content-center">
-            <div className="col-12 col-lg-10 col-xl-9">
-                <div className="card shadow-lg border-0 rounded-4">
-                    <div className="card-body p-4 p-md-5">
-                        <h2 className="text-center mb-4 fw-semibold text-primary">Employee Registration</h2>
-                        
-                        <form onSubmit={handleSubmit}>
-                            <div className="row g-4">
-                                {/* Type */}
-                                <div className="col-md-6">
-                                    <label htmlFor="type" className="form-label fw-medium">
-                                        <span className="text-danger">*</span> Type
-                                    </label>
-                                    <select 
-                                        name="type" 
-                                        id="type" 
-                                        className="form-select form-select-lg transition-all" 
-                                        value={formData.type} 
-                                        onChange={handleChange}
-                                        style={{transition: 'all 0.3s ease'}}
-                                    >
-                                        <option value="">-- select type --</option>
-                                        <option value="faculty">Faculty</option>
-                                        <option value="hod">HOD</option>
-                                        <option value="examController">Exam Controller</option>
-                                    </select>
-                                    {errors.type && <div className="text-danger small mt-1">{errors.type}</div>}
-                                </div>
+            {/* Main Content */}
+            <div className="container my-5 flex-grow-1">
+                <div className="row justify-content-center">
+                    <div className="col-12 col-lg-10 col-xl-9">
+                        <div className="card shadow-lg border-0 rounded-4">
+                            <div className="card-body p-4 p-md-5">
+                                <h2 className="text-center mb-4 fw-semibold text-primary">Employee Registration</h2>
+                                
+                                <form onSubmit={handleSubmit}>
+                                    <div className="row g-4">
 
-                                {/* Course */}
-                                <div className="col-md-6">
-                                    <label htmlFor="course" className="form-label fw-medium">
-                                        <span className="text-danger">*</span> Course
-                                    </label>
-                                    <select 
-                                        name="course" 
-                                        id="course" 
-                                        className="form-select form-select-lg transition-all" 
-                                        value={formData.course} 
-                                        onChange={handleChange} 
-                                        required
-                                        style={{transition: 'all 0.3s ease'}}
-                                    >
-                                        <option value="">-- select course --</option>
-                                        {availableCourses.map(c => (
-                                            <option key={c.id} value={c.courseName}>
-                                                {c.courseName.toUpperCase()}
-                                            </option>
-                                        ))}
-                                    </select>
-                                    {errors.course && <div className="text-danger small mt-1">{errors.course}</div>}
-                                </div>
+                                        {/* Type */}
+                                        <div className="col-md-6">
+                                            <label htmlFor="type" className="form-label fw-medium">
+                                                <span className="text-danger">*</span> Type
+                                            </label>
+                                            <select name="type" id="type" className="form-select form-select-lg transition-all" value={formData.type} onChange={handleChange} style={{transition: 'all 0.3s ease'}}>
+                                                <option value="">-- select type --</option>
+                                                <option value="faculty">Faculty</option>
+                                                <option value="hod">HOD</option>
+                                                <option value="examController">Exam Controller</option>
+                                            </select>
+                                            {errors.type && <div className="text-danger small mt-1">{errors.type}</div>}
+                                        </div>
 
-                                {/* Department */}
-                                <div className="col-12">
-                                    <label htmlFor="department" className="form-label fw-medium">
-                                        <span className="text-danger">*</span> Department
-                                    </label>
-                                    <select 
-                                        name="department" 
-                                        id="department" 
-                                        className="form-select form-select-lg transition-all" 
-                                        value={formData.department} 
-                                        onChange={handleChange} 
-                                        required
-                                        style={{transition: 'all 0.3s ease'}}
-                                    >
-                                        <option value="">-- Select Department --</option>
-                                        {departments.map(dept => (
-                                            <option key={dept.id} value={dept.deptName}>
-                                                {dept.deptName.toUpperCase()} ({dept.deptCode})
-                                            </option>
-                                        ))}
-                                    </select>
-                                    {errors.department && <div className="text-danger small mt-1">{errors.department}</div>}
-                                </div>
+                                        {/* Course */}
+                                        <div className="col-md-6">
+                                            <label htmlFor="course" className="form-label fw-medium">
+                                                <span className="text-danger">*</span> Course
+                                            </label>
+                                            <select name="course" id="course" className="form-select form-select-lg transition-all" value={formData.course} onChange={handleChange} required style={{transition: 'all 0.3s ease'}}>
+                                                <option value="">-- select course --</option>
+                                                {availableCourses.map(c => (
+                                                    <option key={c.id} value={c.courseName}>{c.courseName.toUpperCase()}</option>
+                                                ))}
+                                            </select>
+                                            {errors.course && <div className="text-danger small mt-1">{errors.course}</div>}
+                                        </div>
 
-                                {/* Employee ID */}
-                                <div className="col-md-6">
-                                    <label htmlFor="eid" className="form-label fw-medium">
-                                        <span className="text-danger">*</span> Employee ID
-                                    </label>
-                                    <input 
-                                        type="text" 
-                                        name="eid" 
-                                        id="eid" 
-                                        className="form-control form-control-lg transition-all" 
-                                        value={formData.eid} 
-                                        onChange={handleChange}
-                                        placeholder="Enter employee ID"
-                                        style={{transition: 'all 0.3s ease'}}
-                                    />
-                                    {errors.eid && <div className="text-danger small mt-1">{errors.eid}</div>}
-                                </div>
+                                        {/* Department */}
+                                        <div className="col-12">
+                                            <label htmlFor="department" className="form-label fw-medium">
+                                                <span className="text-danger">*</span> Department
+                                            </label>
+                                            <select name="department" id="department" className="form-select form-select-lg transition-all" value={formData.department} onChange={handleChange} required style={{transition: 'all 0.3s ease'}}>
+                                                <option value="">-- Select Department --</option>
+                                                {departments.map(dept => (
+                                                    <option key={dept.id} value={dept.deptName}>{dept.deptName.toUpperCase()} ({dept.deptCode})</option>
+                                                ))}
+                                            </select>
+                                            {errors.department && <div className="text-danger small mt-1">{errors.department}</div>}
+                                        </div>
 
-                                {/* Employee Name */}
-                                <div className="col-md-6">
-                                    <label htmlFor="employeeName" className="form-label fw-medium">
-                                        <span className="text-danger">*</span> Employee Name
-                                    </label>
-                                    <input 
-                                        type="text" 
-                                        name="employeeName" 
-                                        id="employeeName" 
-                                        className="form-control form-control-lg transition-all" 
-                                        value={formData.employeeName} 
-                                        onChange={handleChange}
-                                        placeholder="Enter full name"
-                                        style={{transition: 'all 0.3s ease'}}
-                                    />
-                                    {errors.employeeName && <div className="text-danger small mt-1">{errors.employeeName}</div>}
-                                </div>
+                                        {/* Employee ID */}
+                                        <div className="col-md-6">
+                                            <label htmlFor="eid" className="form-label fw-medium">
+                                                <span className="text-danger">*</span> Employee ID
+                                            </label>
+                                            <input type="text" name="eid" id="eid" className="form-control form-control-lg transition-all" value={formData.eid} onChange={handleChange} placeholder="Enter employee ID" style={{transition: 'all 0.3s ease'}} />
+                                            {errors.eid && <div className="text-danger small mt-1">{errors.eid}</div>}
+                                        </div>
 
-                                {/* Mobile */}
-                                <div className="col-md-6">
-                                    <label htmlFor="mobile" className="form-label fw-medium">
-                                        <span className="text-danger">*</span> Mobile No
-                                    </label>
-                                    <input 
-                                        type="number" 
-                                        name="mobile" 
-                                        id="mobile" 
-                                        className="form-control form-control-lg transition-all" 
-                                        value={formData.mobile} 
-                                        onChange={handleChange}
-                                        placeholder="Enter mobile number"
-                                        style={{transition: 'all 0.3s ease'}}
-                                    />
-                                    {errors.mobile && <div className="text-danger small mt-1">{errors.mobile}</div>}
-                                </div>
+                                        {/* Employee Name */}
+                                        <div className="col-md-6">
+                                            <label htmlFor="employeeName" className="form-label fw-medium">
+                                                <span className="text-danger">*</span> Employee Name
+                                            </label>
+                                            <input type="text" name="employeeName" id="employeeName" className="form-control form-control-lg transition-all" value={formData.employeeName} onChange={handleChange} placeholder="Enter full name" style={{transition: 'all 0.3s ease'}} />
+                                            {errors.employeeName && <div className="text-danger small mt-1">{errors.employeeName}</div>}
+                                        </div>
 
-                                {/* Email */}
-                                <div className="col-md-6">
-                                    <label htmlFor="email" className="form-label fw-medium">
-                                        <span className="text-danger">*</span> Email
-                                    </label>
-                                    <input 
-                                        type="email" 
-                                        name="email" 
-                                        id="email" 
-                                        className="form-control form-control-lg transition-all" 
-                                        value={formData.email} 
-                                        onChange={handleChange}
-                                        placeholder="Enter email address"
-                                        style={{transition: 'all 0.3s ease'}}
-                                    />
-                                    {errors.email && <div className="text-danger small mt-1">{errors.email}</div>}
-                                </div>
+                                        {/* Mobile */}
+                                        <div className="col-md-6">
+                                            <label htmlFor="mobile" className="form-label fw-medium">
+                                                <span className="text-danger">*</span> Mobile No
+                                            </label>
+                                            <input type="number" name="mobile" id="mobile" className="form-control form-control-lg transition-all" value={formData.mobile} onChange={handleChange} placeholder="Enter mobile number" style={{transition: 'all 0.3s ease'}} />
+                                            {errors.mobile && <div className="text-danger small mt-1">{errors.mobile}</div>}
+                                        </div>
 
-                                {/* Address */}
-                                <div className="col-12">
-                                    <label htmlFor="address" className="form-label fw-medium">Address</label>
-                                    <textarea 
-                                        name="address" 
-                                        id="address" 
-                                        rows={4} 
-                                        className="form-control transition-all" 
-                                        value={formData.address} 
-                                        onChange={handleChange}
-                                        placeholder="Enter complete address (optional)"
-                                        style={{transition: 'all 0.3s ease'}}
-                                    />
-                                </div>
+                                        {/* Email */}
+                                        <div className="col-md-6">
+                                            <label htmlFor="email" className="form-label fw-medium">
+                                                <span className="text-danger">*</span> Email
+                                            </label>
+                                            <input type="email" name="email" id="email" className="form-control form-control-lg transition-all" value={formData.email} onChange={handleChange} placeholder="Enter email address" style={{transition: 'all 0.3s ease'}} />
+                                            {errors.email && <div className="text-danger small mt-1">{errors.email}</div>}
+                                        </div>
 
-                                {/* Password */}
-<div className="col-md-6">
-    <label htmlFor="password" className="form-label fw-medium">
-        <span className="text-danger">*</span> Password
-    </label>
+                                        {/* Address */}
+                                        <div className="col-12">
+                                            <label htmlFor="address" className="form-label fw-medium">Address</label>
+                                            <textarea name="address" id="address" rows={4} className="form-control transition-all" value={formData.address} onChange={handleChange} placeholder="Enter complete address (optional)" style={{transition: 'all 0.3s ease'}} />
+                                        </div>
 
-    <div className="input-group">
-        <input 
-            type={showPassword ? "text" : "password"}
-            name="password"
-            id="password"
-            className="form-control form-control-lg"
-            value={formData.password}
-            onChange={handleChange}
-            placeholder="Create a password"
-        />
+                                        {/* Password */}
+                                        <div className="col-md-6">
+                                            <label htmlFor="password" className="form-label fw-medium">
+                                                <span className="text-danger">*</span> Password
+                                            </label>
+                                            <div className="input-group">
+                                                <input type={showPassword ? "text" : "password"} name="password" id="password" className="form-control form-control-lg" value={formData.password} onChange={handleChange} placeholder="Create a password" />
+                                                <button type="button" className="btn btn-outline-secondary" onClick={() => setShowPassword(prev => !prev)}>
+                                                    <i className={`bi ${showPassword ? "bi-eye-slash" : "bi-eye"}`}></i>
+                                                </button>
+                                            </div>
+                                            {errors.password && <div className="text-danger small mt-1">{errors.password}</div>}
+                                        </div>
 
-        <button
-            type="button"
-            className="btn btn-outline-secondary"
-            onClick={() => setShowPassword(prev => !prev)}
-            aria-label="Toggle password visibility"
-        >
-            <i className={`bi ${showPassword ? "bi-eye-slash" : "bi-eye"}`}></i>
-        </button>
-    </div>
+                                        {/* Confirm Password */}
+                                        <div className="col-md-6">
+                                            <label htmlFor="confirmPassword" className="form-label fw-medium">
+                                                <span className="text-danger">*</span> Confirm Password
+                                            </label>
+                                            <div className="input-group">
+                                                <input type={showConfirmPassword ? "text" : "password"} name="confirmPassword" id="confirmPassword" className="form-control form-control-lg" value={formData.confirmPassword} onChange={handleChange} placeholder="Re-enter password" />
+                                                <button type="button" className="btn btn-outline-secondary" onClick={() => setShowConfirmPassword(prev => !prev)}>
+                                                    <i className={`bi ${showConfirmPassword ? "bi-eye-slash" : "bi-eye"}`}></i>
+                                                </button>
+                                            </div>
+                                            {errors.confirmPassword && <div className="text-danger small mt-1">{errors.confirmPassword}</div>}
+                                        </div>
 
-    {errors.password && (
-        <div className="text-danger small mt-1">{errors.password}</div>
-    )}
-</div>
+                                        {/* ✅ 4. NEW: Profile Image Input */}
+                                        <div className="col-12">
+                                            <label htmlFor="profileImage" className="form-label fw-medium">
+                                                <span className="text-danger">*</span> Profile Image (JPG/JPEG, Max 1MB)
+                                            </label>
+                                            <input 
+                                                type="file" 
+                                                className="form-control form-control-lg" 
+                                                id="profileImage" 
+                                                accept="image/jpeg, image/jpg"
+                                                onChange={handleImageChange}
+                                                required
+                                            />
+                                            {errors.profileImage && <div className="text-danger small mt-1">{errors.profileImage}</div>}
+                                        </div>
 
-{/* Confirm Password */}
-<div className="col-md-6">
-    <label htmlFor="confirmPassword" className="form-label fw-medium">
-        <span className="text-danger">*</span> Confirm Password
-    </label>
-
-    <div className="input-group">
-        <input 
-            type={showConfirmPassword ? "text" : "password"}
-            name="confirmPassword"
-            id="confirmPassword"
-            className="form-control form-control-lg"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            placeholder="Re-enter password"
-        />
-
-        <button
-            type="button"
-            className="btn btn-outline-secondary"
-            onClick={() => setShowConfirmPassword(prev => !prev)}
-            aria-label="Toggle confirm password visibility"
-        >
-            <i className={`bi ${showConfirmPassword ? "bi-eye-slash" : "bi-eye"}`}></i>
-        </button>
-    </div>
-
-    {errors.confirmPassword && (
-        <div className="text-danger small mt-1">{errors.confirmPassword}</div>
-    )}
-</div>
-
-
-                                {/* Submit Button */}
-                                <div className="col-12 mt-4">
-                                    <div className="d-grid">
-                                        <button 
-                                            type="submit" 
-                                            className="btn btn-primary btn-lg fw-semibold transition-all"
-                                            style={{transition: 'all 0.3s ease'}}
-                                        >
-                                            Submit Registration
-                                        </button>
+                                        {/* Submit Button */}
+                                        <div className="col-12 mt-4">
+                                            <div className="d-grid">
+                                                <button type="submit" className="btn btn-primary btn-lg fw-semibold transition-all" style={{transition: 'all 0.3s ease'}}>
+                                                    Submit Registration
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
+                                </form>
+
+                                {/* Login Link */}
+                                <div className="text-center mt-4 pt-3 border-top">
+                                    <p className="mb-0">
+                                        Already a User? <Link to="/" className="text-decoration-none fw-semibold transition-all" style={{transition: 'all 0.3s ease'}}>Login Here</Link>!
+                                    </p>
                                 </div>
                             </div>
-                        </form>
-
-                        {/* Login Link */}
-                        <div className="text-center mt-4 pt-3 border-top">
-                            <p className="mb-0">
-                                Already a User? <Link to="/" className="text-decoration-none fw-semibold transition-all" style={{transition: 'all 0.3s ease'}}>Login Here</Link>!
-                            </p>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    {/* Footer */}
-    <footer className="bg-dark text-white py-3 mt-auto">
-        <div className="container">
-            <p className="text-center mb-0 small">&copy; Shikhar Sharma 2026</p>
+            {/* Footer */}
+            <footer className="bg-dark text-white py-3 mt-auto">
+                <div className="container">
+                    <p className="text-center mb-0 small">&copy; Shikhar Sharma 2026</p>
+                </div>
+            </footer>
         </div>
-    </footer>
-</div>
     )
 }
 

@@ -47,4 +47,7 @@ public class EmployeeRequest {
 		    message = "Password must min 8 characters, 1 lowercase, 1 uppercase, 1 special character"
 		)
 	private String password;
+	
+	// ✅ ADD THIS MISSING FIELD
+    private String address;
 }

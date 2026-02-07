@@ -1,8 +1,12 @@
 package com.campushub.service;
 
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.campushub.dto.ChangePasswordRequest;
 import com.campushub.dto.StudentProfileDTO;
@@ -20,9 +24,10 @@ public class StudentService {
     @Autowired private PasswordEncoder passwordEncoder; // ✅ Inject Encoder
 
     // method 1
-    public Student registerStudent(StudentRequest request) {
-
+ // ✅ UPDATED: Accepts MultipartFile imageFile
+    public Student registerStudent(StudentRequest request, MultipartFile imageFile) throws IOException {
         Student student = new Student();
+        
         student.setSession(request.getSession());
         student.setCourse(request.getCourse());
         student.setBranch(request.getBranch());
@@ -32,14 +37,21 @@ public class StudentService {
         student.setEmail(request.getEmail());
         student.setAddress(request.getAddress());
         student.setSemester(request.getSemester());
+        student.setSection(request.getSection()); // Ensure this getter exists in StudentRequest
 
-     // ✅ HASH THE PASSWORD BEFORE SAVING
+        // ✅ NEW: Convert Image to Bytes
+        if (imageFile != null && !imageFile.isEmpty()) {
+            student.setProfileImage(imageFile.getBytes());
+        }
+
+        // Hash Password
         student.setPassword(passwordEncoder.encode(request.getPassword()));
 
         return studentRepository.save(student);
     }
 
     // method 2
+    @Transactional(readOnly = true)
     public StudentProfileDTO getStudentProfile(String admissionNo) {
         // 1. Fetch Core Data (Student Table)
         Student student = studentRepository.findByAdmissionNo(admissionNo)
@@ -98,11 +110,14 @@ public class StudentService {
         dto.setTwelfthMarksheetUrl(info.getTwelfthMarksheetUrl());
         
         dto.setSemester(student.getSemester());
+     // ✅ ADD THIS: Map the image
+        dto.setProfileImage(student.getProfileImage());
 
         return dto;
     }
     
     // method 3
+    @Transactional
     public void updateStudentInfo(String admissionNo, StudentProfileDTO dto) {
         // 1. Fetch the Core Student (to link the relationship)
         Student student = studentRepository.findByAdmissionNo(admissionNo)

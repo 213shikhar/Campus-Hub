@@ -20,6 +20,9 @@ const StudentRegister = () => {
         confirmPassword: "", 
     });
 
+    // 1. NEW: State for Image
+    const [profileImage, setProfileImage] = useState(null);
+    
     const [errors, setErrors] = useState({});
 
     const [showPassword, setShowPassword] = useState(false);
@@ -53,25 +56,49 @@ const StudentRegister = () => {
         }
     };
 
+    // 2. NEW: Handle Image Selection
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            // Validation: Type
+            if (!['image/jpeg', 'image/jpg'].includes(file.type)) {
+                setErrors({ ...errors, profileImage: "Only JPEG/JPG images are allowed." });
+                setProfileImage(null);
+                return;
+            }
+            // Validation: Size (1MB = 1048576 bytes)
+            if (file.size > 1048576) {
+                setErrors({ ...errors, profileImage: "Image size must be less than 1MB." });
+                setProfileImage(null);
+                return;
+            }
+            
+            setErrors({ ...errors, profileImage: "" });
+            setProfileImage(file);
+        }
+    };
+
     // Handle Submission
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         const validationErrors = validateRegistrationForm(formData);
-        // if errors present, stop form submission
+        if (!profileImage) {
+            validationErrors.profileImage = "Profile Image is required.";
+        }
+        
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
-            // Exits the function early, stopping the form submission process
             return; 
         }
 
-        // preparing json
-        const dataToSend = {
+        // 3. Prepare FormData (Replaces simple JSON object)
+        const dataPayload = {
             session: formData.session,
             course: formData.course,
             branch: formData.branch,
-            semester: parseInt(formData.semester), // ✅ Send as Integer
-            section: formData.section, // ✅ SEND SECTION
+            semester: parseInt(formData.semester),
+            section: formData.section,
             admissionNo: formData.admissionNo,
             studentname: formData.studentname,
             mobile: formData.mobile,
@@ -80,42 +107,35 @@ const StudentRegister = () => {
             password: formData.password
         };
 
+        const formDataObj = new FormData();
+        // Append JSON data as a String
+        formDataObj.append("student", JSON.stringify(dataPayload));
+        // Append File
+        formDataObj.append("image", profileImage);
+
         try {
-            const response = await axios.post("http://localhost:8080/api/students/register", dataToSend, {
-                headers: { "Content-Type": "application/json" }
-            });
+            // Note: content-type is NOT set manually for FormData, axios handles it
+            const response = await axios.post("http://localhost:8080/api/students/register", formDataObj);
 
             console.log("Backend Response:", response.data);
 
             if (response.data && response.status === 200) {
                 alert("Student Registered Successfully!");
-                // FIX: Save to Local Storage immediately!
-        // This ensures the Profile page can find the user.
-        localStorage.setItem("admissionNo", formData.admissionNo);
-        localStorage.setItem("userType", "student"); 
-        
-        // (Optional) If you use userId elsewhere
-        localStorage.setItem("userId", formData.admissionNo);
+                localStorage.setItem("admissionNo", formData.admissionNo);
+                localStorage.setItem("userType", "student"); 
+                
+                // IMPORTANT: Pass the full response data (including image bytes)
                 navigate('/student-dashboard', { state: { student: response.data } });
             }
 
         } catch (error) {
             console.error("Error:", error);
-            
             if (error.response) {
-                // Case 1: The backend sent a JSON Object (The [object Object] case)
-                if (typeof error.response.data === 'object') {
-                    // Extract the specific message from the object
-                    // Spring Boot usually sends errors in 'message' or 'error' fields
-                    const errorMsg = error.response.data.message || error.response.data.error || JSON.stringify(error.response.data);
-                    alert("Registration Failed: " + errorMsg);
-                } 
-                // Case 2: The backend sent a plain String
-                else {
-                    alert(error.response.data); 
-                }
+                const errorMsg = typeof error.response.data === 'object' 
+                    ? (error.response.data.message || JSON.stringify(error.response.data))
+                    : error.response.data;
+                alert("Registration Failed: " + errorMsg);
             } else {
-                // Case 3: Server is down or network error
                 alert("Registration Failed! Please check your server connection.");
             }
         }
@@ -404,6 +424,21 @@ const StudentRegister = () => {
         <div className="text-danger small mt-1">{errors.confirmPassword}</div>
     )}
 </div>
+                                        {/* 4. NEW: Image Input Field */}
+                                        <div className="col-12">
+                                            <label htmlFor="profileImage" className="form-label fw-medium">
+                                                <span className="text-danger">*</span> Profile Image (JPG/JPEG, Max 1MB)
+                                            </label>
+                                            <input 
+                                                type="file" 
+                                                className="form-control form-control-lg" 
+                                                id="profileImage" 
+                                                accept="image/jpeg, image/jpg"
+                                                onChange={handleImageChange}
+                                                required
+                                            />
+                                            {errors.profileImage && <div className="text-danger small mt-1">{errors.profileImage}</div>}
+                                        </div>
 
                                 {/* Submit Button */}
                                 <div className="col-12 mt-4">
