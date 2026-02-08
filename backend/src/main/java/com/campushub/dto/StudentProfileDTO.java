@@ -16,7 +16,8 @@ public class StudentProfileDTO {
     private String mobile;
     private String address;
     private Integer semester;
-
+    private String section;
+    
     @NotBlank(message = "Date of Birth is required")
     private String dob;
 
@@ -60,7 +61,6 @@ public class StudentProfileDTO {
     private String guardianMobile;
     
     // to be added later
-    private String photoUrl;
     private String signatureUrl;
     private String tenthMarksheetUrl;
     private String twelfthMarksheetUrl;

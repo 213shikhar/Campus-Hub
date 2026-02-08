@@ -139,14 +139,14 @@ const HodDashboard = () => {
                                         <div className="mb-3">
                                             <i className="bi bi-calendar2-event fs-1 text-info"></i>
                                         </div>
-                                        <h5 className="card-title text-dark mb-2">Create Faculty Schedule</h5>
-                                        <p className="card-text text-muted small">Assign faculty timetables</p>
+                                        <h5 className="card-title text-dark mb-2">View Faculty Workload</h5>
+                                        <p className="card-text text-muted small">Faculty timetables</p>
                                     </div>
                                 </Link>
                             </div>
 
                             {/* View Student Marks */}
-                            <div className="col-md-6 col-lg-4">
+                            {/* <div className="col-md-6 col-lg-4">
                                 <Link 
                                     to="/studentMarks" 
                                     className="card border-0 shadow-sm h-100 text-decoration-none transition-all hover-card"
@@ -160,10 +160,10 @@ const HodDashboard = () => {
                                         <p className="card-text text-muted small">Check student grades</p>
                                     </div>
                                 </Link>
-                            </div>
+                            </div> */}
 
                             {/* View Student Attendance */}
-                            <div className="col-md-6 col-lg-4">
+                            {/* <div className="col-md-6 col-lg-4">
                                 <Link 
                                     to="/studentAttendance" 
                                     className="card border-0 shadow-sm h-100 text-decoration-none transition-all hover-card"
@@ -177,7 +177,7 @@ const HodDashboard = () => {
                                         <p className="card-text text-muted small">Monitor attendance records</p>
                                     </div>
                                 </Link>
-                            </div>
+                            </div> */}
 
                             {/* Feedback */}
                             <div className="col-md-6 col-lg-4">
