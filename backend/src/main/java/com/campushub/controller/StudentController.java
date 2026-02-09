@@ -18,36 +18,36 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("api/students")
+@CrossOrigin(origins = "http://localhost:3000") // Ensure CORS is enabled here too
 public class StudentController {
 
-    @Autowired
-    private StudentService studentService;
+    @Autowired private StudentService studentService;
     @Autowired private StudentRepository studentRepository;
 
- // ✅ UPDATED: Accepts Multipart Data (JSON String + File)
+    // ✅ 1. REGISTER Endpoint
     @PostMapping(value = "/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> registerStudent(
             @RequestPart("student") String studentString, // JSON sent as String
             @RequestPart(value = "image", required = false) MultipartFile image
     ) {
         try {
-            // 1. Manually Convert JSON String to StudentRequest Object
+            // Convert JSON String to Object
             ObjectMapper mapper = new ObjectMapper();
             StudentRequest request = mapper.readValue(studentString, StudentRequest.class);
 
-            // 2. Check for Duplicate Admission No
+            // Check Duplicate
             if (studentRepository.existsByAdmissionNo(request.getAdmissionNo())) {
                 return ResponseEntity
                     .badRequest()
                     .body("Error: Admission Number " + request.getAdmissionNo() + " already exists!");
             }
             
-            // 3. Validate Image Size (Optional: e.g., max 1MB)
+            // Validate Image
             if (image != null && image.getSize() > 1048576) {
                 return ResponseEntity.badRequest().body("Error: Image size exceeds 1MB");
             }
 
-            // 4. Call Service with Image
+            // Call Service
             Student savedStudent = studentService.registerStudent(request, image);
             return ResponseEntity.ok(savedStudent);
 
@@ -57,23 +57,25 @@ public class StudentController {
         }
     }
     
- // 1. GET Profile Endpoint
+    // ✅ 2. GET Profile Endpoint (Fixes 403/LOB Error)
     @GetMapping("/profile/{admissionNo}")
     public ResponseEntity<StudentProfileDTO> getStudentProfile(@PathVariable String admissionNo) {
+        // Calls Service (which is @Transactional), so Image loads correctly
         StudentProfileDTO profile = studentService.getStudentProfile(admissionNo);
         return ResponseEntity.ok(profile);
     }
     
- // 2. UPDATE Profile Endpoint
+    // ✅ 3. UPDATE Profile Endpoint
     @PutMapping("/profile/{admissionNo}")
     public ResponseEntity<String> updateStudentProfile(
             @PathVariable String admissionNo, 
-            @Valid @RequestBody StudentProfileDTO studentProfileDTO // ✅ Added @Valid
+            @Valid @RequestBody StudentProfileDTO studentProfileDTO
     ) {
         studentService.updateStudentInfo(admissionNo, studentProfileDTO);
         return ResponseEntity.ok("Profile updated successfully");
     }
     
+    // ✅ 4. CHANGE PASSWORD Endpoint
     @PostMapping("/change-password/{admissionNo}")
     public ResponseEntity<String> changePassword(@PathVariable String admissionNo, @RequestBody ChangePasswordRequest request) {
         boolean success = studentService.changePassword(admissionNo, request);

@@ -14,17 +14,17 @@ const Home = () => {
 
     const [showPassword, setShowPassword] = useState(false);
 
-    // 2. Handle Input Change -> Its job is to take whatever the user types (or selects) in a form and save it into your credentials state object.
+    // Handle Input Change
     const handleChange = (e) => {
         const { name, value } = e.target;
         setCredentials({ ...credentials, [name]: value });
     };
 
-    // 3. Handle Form Submission
+    // Handle Form Submission
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // clears before new login
+        // Clears before new login
         localStorage.clear();
         
         // 1. Basic Validation
@@ -37,7 +37,6 @@ const Home = () => {
             // 2. Prepare the Payload
             let category = "employee"; 
             if (credentials.role === "student") category = "student";
-            // else if (credentials.role === "parent") category = "parent";
 
             const loginPayload = {
                 role: category,            
@@ -46,12 +45,15 @@ const Home = () => {
                 password: credentials.password
             };
 
-            // 3. Send Request -> await -> Pauses execution until the backend responds
-            const response = await axios.post("http://localhost:8080/api/login", loginPayload); // Response Stores the complete response object from the server (includes headers, status code, data, etc.)
-            const userData = response.data; // Extracts just the user data portion from the response (the actual user object returned by the backend, like employee details or student info)
+            // 3. Send Request
+            const response = await axios.post("http://localhost:8080/api/login", loginPayload);
+            
+            // ✅ REVERTED: Directly access data (No Token extraction)
+            const userData = response.data; 
 
             if (userData) {
-                // LOCAL STORAGE
+                // LOCAL STORAGE MAPPING
+                
                 // 1. Student Login
                 if (credentials.role === "student") {
                     localStorage.setItem('admissionNo', userData.admissionNo);
@@ -62,6 +64,7 @@ const Home = () => {
                 else if (credentials.role === "registrar") {
                     localStorage.setItem('userId', userData.userId); 
                     localStorage.setItem('userType', credentials.role);
+                    if(userData.eid) localStorage.setItem('eid', userData.eid);
                 }
 
                 // 3. Regular Employee Login (Faculty, HOD, etc.)
@@ -73,7 +76,6 @@ const Home = () => {
                 // 4. Dynamic Navigation
                 switch (credentials.role) {
                     case "student":
-                        // passing user data along the way
                         navigate('/student-dashboard', { state: { student: userData } });
                         break;
                     
@@ -99,16 +101,14 @@ const Home = () => {
             }
         }
         catch (error) {
-    console.error("Login Error:", error);
-    
-    // ✅ FIX: Alert the ACTUAL message from the backend
-    if (error.response && error.response.data) {
-        // This will print "Invalid Password" or "Admin User not found"
-        alert("Backend Error: " + error.response.data); 
-    } else {
-        alert("Login Failed: Server is not responding");
-    }
-}
+            console.error("Login Error:", error);
+            
+            if (error.response && error.response.data) {
+                alert("Login Failed: " + error.response.data); 
+            } else {
+                alert("Login Failed: Server is not responding");
+            }
+        }
     };
 
     return(
@@ -168,34 +168,34 @@ const Home = () => {
                             </div>
 
                             {/* Password */}
-<div className="mb-4">
-    <label htmlFor="password" className="form-label fw-medium">
-        <span className="text-danger">*</span>Password
-    </label>
+                            <div className="mb-4">
+                                <label htmlFor="password" className="form-label fw-medium">
+                                    <span className="text-danger">*</span>Password
+                                </label>
 
-    <div className="input-group">
-        <input 
-            type={showPassword ? "text" : "password"}
-            name="password"
-            id="password"
-            className="form-control form-control-lg transition-all"
-            value={credentials.password}
-            onChange={handleChange}
-            placeholder="Enter your password"
-            required
-            style={{ transition: 'all 0.3s ease' }}
-        />
+                                <div className="input-group">
+                                    <input 
+                                        type={showPassword ? "text" : "password"}
+                                        name="password"
+                                        id="password"
+                                        className="form-control form-control-lg transition-all"
+                                        value={credentials.password}
+                                        onChange={handleChange}
+                                        placeholder="Enter your password"
+                                        required
+                                        style={{ transition: 'all 0.3s ease' }}
+                                    />
 
-        <button
-            type="button"
-            className="btn btn-outline-secondary"
-            onClick={() => setShowPassword(prev => !prev)}
-            aria-label="Toggle password visibility"
-        >
-            <i className={`bi ${showPassword ? "bi-eye-slash" : "bi-eye"}`}></i>
-        </button>
-    </div>
-</div>
+                                    <button
+                                        type="button"
+                                        className="btn btn-outline-secondary"
+                                        onClick={() => setShowPassword(prev => !prev)}
+                                        aria-label="Toggle password visibility"
+                                    >
+                                        <i className={`bi ${showPassword ? "bi-eye-slash" : "bi-eye"}`}></i>
+                                    </button>
+                                </div>
+                            </div>
 
 
                             {/* Login Button */}

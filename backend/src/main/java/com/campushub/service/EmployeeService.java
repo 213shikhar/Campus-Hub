@@ -22,6 +22,7 @@ public class EmployeeService {
     @Autowired private EmployeeRepository employeeRepository;
     @Autowired private EmployeeInfoRepository employeeInfoRepository;
     @Autowired private PasswordEncoder passwordEncoder;
+    @Autowired private EmailService emailService;
     
     // ✅ UPDATED: Accepts MultipartFile for Image Upload
     public Employee registerEmployee(EmployeeRequest request, MultipartFile imageFile) throws IOException {
@@ -46,7 +47,20 @@ public class EmployeeService {
         // Hash Password
         employee.setPassword(passwordEncoder.encode(request.getPassword()));
         
-        return employeeRepository.save(employee);
+     // Save to Database
+        Employee savedEmployee = employeeRepository.save(employee);
+
+        // ✅ 2. Trigger Email Notification
+        if (savedEmployee.getEmail() != null && !savedEmployee.getEmail().isEmpty()) {
+            emailService.sendEmployeeWelcomeEmail(
+                savedEmployee.getEmail(),
+                savedEmployee.getEmployeeName(),
+                savedEmployee.getEid(),
+                savedEmployee.getType().toUpperCase() // "FACULTY", "HOD", etc.
+            );
+        }
+
+        return savedEmployee;
     }
 
     // ✅ UPDATED: Added @Transactional to fix "Unable to access lob stream"
@@ -118,6 +132,7 @@ public class EmployeeService {
     }
     
     // ✅ FIXED LOGIC: Previously it was resetting password even if match failed
+    @Transactional
     public boolean changePassword(String eid, ChangePasswordRequest request) {
         Employee employee = employeeRepository.findByEid(eid)
             .orElseThrow(() -> new RuntimeException("Employee not found"));

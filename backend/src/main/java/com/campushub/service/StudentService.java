@@ -15,16 +15,17 @@ import com.campushub.model.Student;
 import com.campushub.model.StudentInfo;
 import com.campushub.repository.StudentInfoRepository;
 import com.campushub.repository.StudentRepository;
+import com.campushub.service.EmailService;
 
 @Service
 public class StudentService {
 
     @Autowired private StudentRepository studentRepository;
-    @Autowired private StudentInfoRepository studentInfoRepository; // Ensure this is injected
-    @Autowired private PasswordEncoder passwordEncoder; // ✅ Inject Encoder
+    @Autowired private StudentInfoRepository studentInfoRepository; 
+    @Autowired private PasswordEncoder passwordEncoder; 
+    @Autowired private EmailService emailService;
 
-    // method 1
- // ✅ UPDATED: Accepts MultipartFile imageFile
+    // ✅ METHOD 1: REGISTER (With Image Handling)
     public Student registerStudent(StudentRequest request, MultipartFile imageFile) throws IOException {
         Student student = new Student();
         
@@ -37,35 +38,43 @@ public class StudentService {
         student.setEmail(request.getEmail());
         student.setAddress(request.getAddress());
         student.setSemester(request.getSemester());
-        student.setSection(request.getSection()); // Ensure this getter exists in StudentRequest
+        student.setSection(request.getSection());
 
-        // ✅ NEW: Convert Image to Bytes
+        // Handle Image
         if (imageFile != null && !imageFile.isEmpty()) {
             student.setProfileImage(imageFile.getBytes());
         }
 
         // Hash Password
         student.setPassword(passwordEncoder.encode(request.getPassword()));
+     // Save to Database
+        Student savedStudent = studentRepository.save(student);
 
-        return studentRepository.save(student);
+        // ✅ SEND EMAIL (Only if email exists)
+        if (savedStudent.getEmail() != null && !savedStudent.getEmail().isEmpty()) {
+            emailService.sendWelcomeEmail(
+                savedStudent.getEmail(), 
+                savedStudent.getStudentname(), 
+                savedStudent.getAdmissionNo(), 
+                "Student"
+            );}
+        return savedStudent;
     }
 
-    // method 2
     @Transactional(readOnly = true)
     public StudentProfileDTO getStudentProfile(String admissionNo) {
-        // 1. Fetch Core Data (Student Table)
+        // 1. Fetch Core Data
         Student student = studentRepository.findByAdmissionNo(admissionNo)
             .orElseThrow(() -> new RuntimeException("Student not found with admission no: " + admissionNo));
         
-        // 2. Fetch Extended Data (StudentInfo Table)
-        // If no info exists yet, we create a new empty StudentInfo object so the code below doesn't crash on nulls
+        // 2. Fetch Extended Data
         StudentInfo info = studentInfoRepository.findByStudent_AdmissionNo(admissionNo)
             .orElse(new StudentInfo()); 
 
-        // 3. Map Data to DTO
+        // 3. Map to DTO
         StudentProfileDTO dto = new StudentProfileDTO();
         
-        // --- Core Fields (Immutable, from Student Table) ---
+        // Core Fields
         dto.setStudentName(student.getStudentname());
         dto.setAdmissionNo(student.getAdmissionNo());
         dto.setBranch(student.getBranch());
@@ -74,14 +83,16 @@ public class StudentService {
         dto.setEmail(student.getEmail());
         dto.setMobile(student.getMobile());
         dto.setAddress(student.getAddress());
+        dto.setSemester(student.getSemester());
+        dto.setSection(student.getSection());
+        dto.setProfileImage(student.getProfileImage()); // ✅ Image Data
 
-        // --- Extended Fields (Mutable, from StudentInfo Table) ---
+        // Extended Fields
         dto.setDob(info.getDob());
         dto.setGender(info.getGender());
         dto.setCategory(info.getCategory());
         dto.setAdhaarCardNo(info.getAdhaarCardNo());
         
-        // Father's Details
         dto.setFatherName(info.getFatherName());
         dto.setFatherOccupation(info.getFatherOccupation());
         dto.setFatherQualification(info.getFatherQualification());
@@ -89,7 +100,6 @@ public class StudentService {
         dto.setFatherEmail(info.getFatherEmail());
         dto.setFatherAdhaar(info.getFatherAdhaar());
         
-        // Mother's Details (assuming you added these fields to StudentInfo/DTO)
         dto.setMotherName(info.getMotherName());
         dto.setMotherOccupation(info.getMotherOccupation());
         dto.setMotherQualification(info.getMotherQualification());
@@ -97,46 +107,31 @@ public class StudentService {
         dto.setMotherEmail(info.getMotherEmail());
         dto.setMotherAdhaar(info.getMotherAdhaar());
         
-        // Guardian's Details
         dto.setGuardianName(info.getGuardianName());
         dto.setGuardianRelation(info.getGuardianRelation());
         dto.setGuardianAddress(info.getGuardianAddress());
         dto.setGuardianMobile(info.getGuardianMobile());
 
-        // Document URLs
-        dto.setSignatureUrl(info.getSignatureUrl());
-        dto.setTenthMarksheetUrl(info.getTenthMarksheetUrl());
-        dto.setTwelfthMarksheetUrl(info.getTwelfthMarksheetUrl());
-        
-        dto.setSemester(student.getSemester());
-        dto.setSection(student.getSection());
-     // ✅ ADD THIS: Map the image
-        dto.setProfileImage(student.getProfileImage());
-
         return dto;
     }
     
-    // method 3
+    // ✅ METHOD 3: UPDATE PROFILE
     @Transactional
     public void updateStudentInfo(String admissionNo, StudentProfileDTO dto) {
-        // 1. Fetch the Core Student (to link the relationship)
         Student student = studentRepository.findByAdmissionNo(admissionNo)
             .orElseThrow(() -> new RuntimeException("Student not found"));
 
-        // 2. Fetch existing Info or Create New
         StudentInfo info = studentInfoRepository.findByStudent_AdmissionNo(admissionNo)
             .orElse(new StudentInfo());
         
-        // 3. Set/Update Fields
         info.setStudent(student);
         
-        // Personal Details
+        // Map DTO to Entity
         info.setDob(dto.getDob());
         info.setGender(dto.getGender());
         info.setCategory(dto.getCategory());
         info.setAdhaarCardNo(dto.getAdhaarCardNo());
 
-        // Father's Details
         info.setFatherName(dto.getFatherName());
         info.setFatherOccupation(dto.getFatherOccupation());
         info.setFatherQualification(dto.getFatherQualification());
@@ -144,36 +139,36 @@ public class StudentService {
         info.setFatherEmail(dto.getFatherEmail());
         info.setFatherAdhaar(dto.getFatherAdhaar());
 
-        // Mother's Details
         info.setMotherName(dto.getMotherName());
-        // (Add other mother fields here if you have them in DTO/Entity)
+        info.setMotherOccupation(dto.getMotherOccupation());
+        info.setMotherQualification(dto.getMotherQualification());
+        info.setMotherMobile(dto.getMotherMobile());
+        info.setMotherEmail(dto.getMotherEmail());
+        info.setMotherAdhaar(dto.getMotherAdhaar());
 
-        // Guardian's Details
         info.setGuardianName(dto.getGuardianName());
         info.setGuardianRelation(dto.getGuardianRelation());
         info.setGuardianAddress(dto.getGuardianAddress());
         info.setGuardianMobile(dto.getGuardianMobile());
 
-        // 4. Save to Database
         studentInfoRepository.save(info); 
     }
     
-    // method 4 - logic to verify the old password and save the new one
+    // ✅ METHOD 4: CHANGE PASSWORD (Logic Fixed)
+    @Transactional
     public boolean changePassword(String admissionNo, ChangePasswordRequest request) {
         Student student = studentRepository.findByAdmissionNo(admissionNo)
             .orElseThrow(() -> new RuntimeException("Student not found"));
 
+        // 1. Verify Old Password
         if (passwordEncoder.matches(request.getOldPassword(), student.getPassword())) {
-            
-            // Hash the NEW password before saving
+            // 2. Hash New Password & Save
             student.setPassword(passwordEncoder.encode(request.getNewPassword()));
             studentRepository.save(student);
             return true;
         }
 
-        // Update password
-        student.setPassword(request.getNewPassword());
-        studentRepository.save(student);
-        return true;
+        // 3. Return False if mismatch (Do NOT save plaintext password)
+        return false;
     }
 }

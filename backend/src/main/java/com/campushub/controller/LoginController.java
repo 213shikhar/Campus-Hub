@@ -16,12 +16,11 @@ public class LoginController {
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody LoginRequest loginRequest) {
         try {
-        	
+            // Simply return the user object (No Token)
             Object user = loginService.loginUser(loginRequest);
             return ResponseEntity.ok(user);
             
         } catch (RuntimeException e) {
-            // If any "throw new RuntimeException" triggers in Service, it lands here
             return ResponseEntity.status(401).body(e.getMessage());
         }
     }

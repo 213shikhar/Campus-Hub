@@ -106,7 +106,7 @@ const ExamControllerDashboard = () => {
                             </div>
 
                             {/* Create Exam Schedule */}
-                            <div className="col-md-6 col-lg-4">
+                            {/* <div className="col-md-6 col-lg-4">
                                 <Link 
                                     to="/createExamSchedule" 
                                     className="card border-0 shadow-sm h-100 text-decoration-none transition-all hover-card"
@@ -120,10 +120,10 @@ const ExamControllerDashboard = () => {
                                         <p className="card-text text-muted small">Schedule examinations</p>
                                     </div>
                                 </Link>
-                            </div>
+                            </div> */}
 
                             {/* View Exam Schedule */}
-                            <div className="col-md-6 col-lg-4">
+                            {/* <div className="col-md-6 col-lg-4">
                                 <Link 
                                     to="/studentExamSchedule" 
                                     className="card border-0 shadow-sm h-100 text-decoration-none transition-all hover-card"
@@ -137,10 +137,10 @@ const ExamControllerDashboard = () => {
                                         <p className="card-text text-muted small">Check exam timetables</p>
                                     </div>
                                 </Link>
-                            </div>
+                            </div> */}
 
                             {/* Create Seating Plan */}
-                            <div className="col-md-6 col-lg-4">
+                            {/* <div className="col-md-6 col-lg-4">
                                 <Link 
                                     to="/createSeatingPlan" 
                                     className="card border-0 shadow-sm h-100 text-decoration-none transition-all hover-card"
@@ -154,10 +154,10 @@ const ExamControllerDashboard = () => {
                                         <p className="card-text text-muted small">Arrange exam seating</p>
                                     </div>
                                 </Link>
-                            </div>
+                            </div> */}
 
                             {/* Generate Admit Card */}
-                            <div className="col-md-6 col-lg-4">
+                            {/* <div className="col-md-6 col-lg-4">
                                 <Link 
                                     to="/generateAdmitCard" 
                                     className="card border-0 shadow-sm h-100 text-decoration-none transition-all hover-card"
@@ -171,7 +171,7 @@ const ExamControllerDashboard = () => {
                                         <p className="card-text text-muted small">Issue hall tickets</p>
                                     </div>
                                 </Link>
-                            </div>
+                            </div> */}
 
                             {/* Feedback */}
                             <div className="col-md-6 col-lg-4">
