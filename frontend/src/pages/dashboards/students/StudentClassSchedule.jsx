@@ -77,6 +77,13 @@ const StudentClassSchedule = () => {
                     </div>
                 )}
             </div>
+            <button 
+                            className="btn btn-outline-secondary mb-3 transition-all" 
+                            onClick={() => navigate(-1)}
+                            style={{transition: 'all 0.3s ease'}}
+                        >
+                            <i className="bi bi-arrow-left me-2"></i>Back
+                        </button>
 
             {/* Timetable Grid */}
             <div className="card shadow-lg border-0 rounded-4 overflow-hidden">

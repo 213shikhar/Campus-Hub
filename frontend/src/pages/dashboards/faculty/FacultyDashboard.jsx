@@ -130,7 +130,7 @@ const FacultyDashboard = () => {
                             </div>
 
                             {/* Upload Attendance */}
-                            <div className="col-md-6 col-lg-4">
+                            {/* <div className="col-md-6 col-lg-4">
                                 <Link 
                                     to="/uploadAttendance" 
                                     className="card border-0 shadow-sm h-100 text-decoration-none transition-all hover-card"
@@ -144,10 +144,10 @@ const FacultyDashboard = () => {
                                         <p className="card-text text-muted small">Mark student attendance</p>
                                     </div>
                                 </Link>
-                            </div>
+                            </div> */}
 
                             {/* Upload Marks */}
-                            <div className="col-md-6 col-lg-4">
+                            {/* <div className="col-md-6 col-lg-4">
                                 <Link 
                                     to="/uploadMarks" 
                                     className="card border-0 shadow-sm h-100 text-decoration-none transition-all hover-card"
@@ -161,7 +161,7 @@ const FacultyDashboard = () => {
                                         <p className="card-text text-muted small">Enter exam results</p>
                                     </div>
                                 </Link>
-                            </div>
+                            </div> */}
 
                             {/* Upload Study Material */}
                             <div className="col-md-6 col-lg-4">
@@ -181,7 +181,7 @@ const FacultyDashboard = () => {
                             </div>
 
                             {/* View Student Marks */}
-                            <div className="col-md-6 col-lg-4">
+                            {/* <div className="col-md-6 col-lg-4">
                                 <Link 
                                     to="/studentMarks" 
                                     className="card border-0 shadow-sm h-100 text-decoration-none transition-all hover-card"
@@ -195,10 +195,10 @@ const FacultyDashboard = () => {
                                         <p className="card-text text-muted small">Check submitted marks</p>
                                     </div>
                                 </Link>
-                            </div>
+                            </div> */}
 
                             {/* View Student Attendance */}
-                            <div className="col-md-6 col-lg-4">
+                            {/* <div className="col-md-6 col-lg-4">
                                 <Link 
                                     to="/studentAttendance" 
                                     className="card border-0 shadow-sm h-100 text-decoration-none transition-all hover-card"
@@ -212,7 +212,7 @@ const FacultyDashboard = () => {
                                         <p className="card-text text-muted small">Track attendance records</p>
                                     </div>
                                 </Link>
-                            </div>
+                            </div> */}
 
                             {/* Feedback */}
                             <div className="col-md-6 col-lg-4">

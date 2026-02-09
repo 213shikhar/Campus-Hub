@@ -88,6 +88,7 @@ const StudentDashboard = () => {
                     <div className="card-body p-4 p-md-5">
                         <h3 className="text-center mb-4 fw-semibold text-primary">Student Dashboard</h3>
                         
+                        
                         <div className="row g-3">
                             {/* Profile */}
                             <div className="col-md-6 col-lg-4">
@@ -124,7 +125,7 @@ const StudentDashboard = () => {
                             </div>
 
                             {/* View Marks */}
-                            <div className="col-md-6 col-lg-4">
+                            {/* <div className="col-md-6 col-lg-4">
                                 <Link 
                                     to="/studentMarks" 
                                     className="card border-0 shadow-sm h-100 text-decoration-none transition-all hover-card"
@@ -138,10 +139,10 @@ const StudentDashboard = () => {
                                         <p className="card-text text-muted small">Check your grades</p>
                                     </div>
                                 </Link>
-                            </div>
+                            </div> */}
 
                             {/* View Attendance */}
-                            <div className="col-md-6 col-lg-4">
+                            {/* <div className="col-md-6 col-lg-4">
                                 <Link 
                                     to="/studentAttendance" 
                                     className="card border-0 shadow-sm h-100 text-decoration-none transition-all hover-card"
@@ -155,10 +156,10 @@ const StudentDashboard = () => {
                                         <p className="card-text text-muted small">Track your attendance</p>
                                     </div>
                                 </Link>
-                            </div>
+                            </div> */}
 
                             {/* View Assignments */}
-                            <div className="col-md-6 col-lg-4">
+                            {/* <div className="col-md-6 col-lg-4">
                                 <Link 
                                     to="/studentAssignment" 
                                     className="card border-0 shadow-sm h-100 text-decoration-none transition-all hover-card"
@@ -172,7 +173,7 @@ const StudentDashboard = () => {
                                         <p className="card-text text-muted small">Pending assignments</p>
                                     </div>
                                 </Link>
-                            </div>
+                            </div> */}
 
                             {/* View Class Schedule */}
                             <div className="col-md-6 col-lg-4">
@@ -192,7 +193,7 @@ const StudentDashboard = () => {
                             </div>
 
                             {/* View Exam Schedule */}
-                            <div className="col-md-6 col-lg-4">
+                            {/* <div className="col-md-6 col-lg-4">
                                 <Link 
                                     to="/studentExamSchedule" 
                                     className="card border-0 shadow-sm h-100 text-decoration-none transition-all hover-card"
@@ -206,7 +207,7 @@ const StudentDashboard = () => {
                                         <p className="card-text text-muted small">Upcoming exams</p>
                                     </div>
                                 </Link>
-                            </div>
+                            </div> */}
 
                             {/* Study Material */}
                             <div className="col-md-6 col-lg-4">

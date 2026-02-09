@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const CreateFacultySchedule = () => {
+    const navigate = useNavigate();
     const [faculties, setFaculties] = useState([]);
     const [selectedFacultyId, setSelectedFacultyId] = useState('');
     const [timetable, setTimetable] = useState([]);
@@ -56,6 +58,13 @@ const CreateFacultySchedule = () => {
                     </div>
                 </div>
             </div>
+            <button 
+                            className="btn btn-outline-secondary mb-3 transition-all" 
+                            onClick={() => navigate(-1)}
+                            style={{transition: 'all 0.3s ease'}}
+                        >
+                            <i className="bi bi-arrow-left me-2"></i>Back
+                        </button>
 
             {/* Timetable Grid */}
             {selectedFacultyId && (

@@ -7,6 +7,10 @@ import com.campushub.model.Student;
 import com.campushub.repository.AdminUserRepository;
 import com.campushub.repository.EmployeeRepository;
 import com.campushub.repository.StudentRepository;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,11 +24,15 @@ public class LoginService {
     @Autowired private AdminUserRepository adminUserRepository;
     @Autowired private PasswordEncoder passwordEncoder;
     
+ // ✅ Inject Entity Manager to control Hibernate's behavior
+    @PersistenceContext
+    private EntityManager entityManager;
+    
     @Transactional
     public Object loginUser(LoginRequest request) {
         
         String role = request.getRole();
-        String userId = request.getUserId(); // ✅ Updated variable name
+        String userId = request.getUserId();
         String rawPassword = request.getPassword();
 
         // --- 1. STUDENT LOGIN ---
@@ -33,7 +41,11 @@ public class LoginService {
                 .orElseThrow(() -> new RuntimeException("Student not found with ID: " + userId));
 
             if (passwordEncoder.matches(rawPassword, student.getPassword())) {
-                student.setPassword(null); // 🔒 Security: Hide hash before sending to UI
+                
+                // ✅ FIX: Stop watching this object so changes aren't saved to DB
+                entityManager.detach(student); 
+                
+                student.setPassword(null); // Now this only affects the Java object, not the DB
                 return student;
             } else {
                 throw new RuntimeException("Invalid Password");
@@ -44,27 +56,34 @@ public class LoginService {
         else if ("employee".equalsIgnoreCase(role)) {
             String type = request.getType(); 
 
-            // CASE A: Registrar or TPO (Stored in AdminUser Table)
+            // CASE A: Registrar or TPO
             if ("registrar".equalsIgnoreCase(type) || "tpo".equalsIgnoreCase(type)) {
                 AdminUser admin = adminUserRepository.findByUserIdAndRole(userId, type)
                     .orElseThrow(() -> new RuntimeException("Admin User not found"));
 
                 if (passwordEncoder.matches(rawPassword, admin.getPassword())) {
-                    admin.setPassword(null); // 🔒 Security
+                    
+                    // ✅ FIX: Detach Admin
+                    entityManager.detach(admin);
+                    
+                    admin.setPassword(null);
                     return admin;
                 } else {
                     throw new RuntimeException("Invalid Password");
                 }
             }
 
-            // CASE B: Regular Employees (Faculty, HOD, etc.)
+            // CASE B: Regular Employees
             else {
-                // Assuming 'eid' is the column for Employee ID in your table
                 Employee employee = employeeRepository.findByTypeAndEid(type, userId)
                     .orElseThrow(() -> new RuntimeException("Employee not found"));
 
                 if (passwordEncoder.matches(rawPassword, employee.getPassword())) {
-                    employee.setPassword(null); // 🔒 Security
+                    
+                    // ✅ FIX: Detach Employee
+                    entityManager.detach(employee);
+                    
+                    employee.setPassword(null);
                     return employee;
                 } else {
                     throw new RuntimeException("Invalid Password");

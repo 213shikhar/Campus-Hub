@@ -120,3 +120,20 @@ Jan 28, 2026
 Jan 31, 2026
 - Bootstrap Styling added!
 - pages are looking nice!
+
+==================================================================
+==================================================================
+==================================================================
+
+AN ERROR
+there is a problem, whenever i am registering password is being saved in the database (in hash), then, when i am logging in for first time, its successfully goes to the dashboard but then password field is emptied in the database, after using the password for logging in. so when i am logging in again with same credentials an alert box with "invalid password" is showing up.
+PASSWORD IS GONE FROM DATABASE AFTER LOGGING IN FOR THE FIRST TIME
+------------------
+This is a classic Spring Boot "Gotcha". It is happening because of the combination of two things we added earlier:
+@Transactional: We added this to fix the Image/LOB error. It keeps the database connection "alive" and watches the object.
+student.setPassword(null): We added this to hide the password from the frontend.
+The Logic Trap: When you are inside a @Transactional method, Hibernate "watches" every object you load. If you change a field (like setPassword(null)), Hibernate thinks: "Oh, the user changed the password to null! I better save this update to the database when the transaction finishes."
+So, it automatically runs an UPDATE query and wipes your password.
+The Fix: "Detach" the Object
+We need to tell Hibernate: "Stop watching this object before I wipe the password."
+Update your LoginService.java to inject the EntityManager and detach the user before modifying it.
